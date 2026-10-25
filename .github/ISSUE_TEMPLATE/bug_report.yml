@@ -1,0 +1,99 @@
+name: Bug report
+description: Report a reproducible problem with Volume Controller Pro
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting a problem. Please provide enough detail to reproduce it.
+  - type: textarea
+    id: summary
+    attributes:
+      label: Problem summary
+      description: What happened?
+      placeholder: Describe the problem clearly.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Steps to reproduce
+      description: List the steps needed to reproduce the problem.
+      placeholder: |
+        1. Open ...
+        2. Change ...
+        3. Observe ...
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+      description: What did you expect to happen?
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+      description: What happened instead?
+    validations:
+      required: true
+  - type: dropdown
+    id: browser
+    attributes:
+      label: Browser
+      options:
+        - Microsoft Edge
+        - Google Chrome
+        - Other Chromium-based browser
+    validations:
+      required: true
+  - type: input
+    id: browser-version
+    attributes:
+      label: Browser version
+      placeholder: e.g. Edge 130.0.2849.56
+    validations:
+      required: false
+  - type: input
+    id: extension-version
+    attributes:
+      label: Extension version
+      placeholder: e.g. 4.7.90
+    validations:
+      required: true
+  - type: dropdown
+    id: affected-feature
+    attributes:
+      label: Affected feature
+      options:
+        - Volume control
+        - Bass Boost
+        - Voice Boost
+        - Audio profiles
+        - Visualizer or spectrogram
+        - Night Mode
+        - Clipping detection
+        - Settings import or export
+        - Installation or startup
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Logs, screenshots, or other context
+      description: Do not include private information or sensitive data.
+    validations:
+      required: false
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Checklist
+      options:
+        - label: I checked that this issue has not already been reported.
+          required: true
+        - label: I included the steps and version information needed to investigate.
+          required: true
