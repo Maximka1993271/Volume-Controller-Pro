@@ -1,8 +1,8 @@
 import test, { before, after } from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtemp, rm } from 'node:fs/promises';
+import { cp, mkdir, mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
-import { join, resolve, dirname } from 'node:path';
+import { join, resolve, dirname, relative, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { chromium } from 'playwright';
 
@@ -12,6 +12,8 @@ const EXTENSION_URL_PREFIX = 'chrome-extension://';
 let context;
 let extensionId;
 let userDataDir;
+let tempRootDir;
+let extensionDir;
 
 function findExtensionWorker() {
   return context.serviceWorkers().find((worker) =>
@@ -52,13 +54,36 @@ async function openPopupPage(resetStorage = false) {
 }
 
 before(async () => {
-  userDataDir = await mkdtemp(join(tmpdir(), 'volume-controller-pro-e2e-'));
+  tempRootDir = await mkdtemp(join(tmpdir(), 'volume-controller-pro-e2e-'));
+  userDataDir = join(tempRootDir, 'profile');
+  extensionDir = join(tempRootDir, 'extension');
+  await mkdir(userDataDir, { recursive: true });
+
+  // Load a temporary copy of the production extension with only the test host
+  // permission needed to inspect the synthetic YouTube test tab. The shipped
+  // manifest is never modified and the added permission is not released.
+  const excludedDirectories = new Set(['.git', 'node_modules', '.github', 'tests']);
+  await cp(ROOT, extensionDir, {
+    recursive: true,
+    filter: (source) => {
+      const pathFromRoot = relative(ROOT, source);
+      return !pathFromRoot || !pathFromRoot.split(sep).some((part) => excludedDirectories.has(part));
+    }
+  });
+  const manifestPath = join(extensionDir, 'manifest.json');
+  const manifest = JSON.parse(await readFile(manifestPath, 'utf8'));
+  manifest.host_permissions = [...new Set([
+    ...(Array.isArray(manifest.host_permissions) ? manifest.host_permissions : []),
+    'https://www.youtube.com/*'
+  ])];
+  await writeFile(manifestPath, JSON.stringify(manifest, null, 2) + '\\n', 'utf8');
+
   context = await chromium.launchPersistentContext(userDataDir, {
     headless: false,
     channel: 'chromium',
     args: [
-      '--disable-extensions-except=' + ROOT,
-      '--load-extension=' + ROOT,
+      '--disable-extensions-except=' + extensionDir,
+      '--load-extension=' + extensionDir,
       '--autoplay-policy=no-user-gesture-required'
     ]
   });
@@ -75,7 +100,7 @@ before(async () => {
 
 after(async () => {
   if (context) await context.close();
-  if (userDataDir) await rm(userDataDir, { recursive: true, force: true });
+  if (tempRootDir) await rm(tempRootDir, { recursive: true, force: true });
 });
 
 test('Manifest V3 service worker starts and exposes the packaged version', async () => {
