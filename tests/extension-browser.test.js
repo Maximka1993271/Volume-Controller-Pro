@@ -208,8 +208,10 @@ test('tab audio capture starts, receives a synthetic tone, and stops cleanly', a
     });
   });
 
+  // Open the extension page before the player tab. The real toolbar popup is
+  // browser chrome and isn't exposed through Playwright's context.pages().
+  const popup = await openPopupPage();
   const player = await context.newPage();
-  let popup;
   let captureStarted = false;
 
   try {
@@ -226,29 +228,25 @@ test('tab audio capture starts, receives a synthetic tone, and stops cleanly', a
     assert.ok(activeTabBeforePopup, 'test player tab should be active');
     assert.equal(activeTabBeforePopup.url, playerUrl);
 
-    await worker.evaluate(async () => {
-      if (typeof chrome.action.openPopup !== 'function') {
-        throw new Error('This Chromium build does not support chrome.action.openPopup()');
-      }
-      await chrome.action.openPopup();
-    });
-
-    const popupDeadline = Date.now() + 10000;
-    while (Date.now() < popupDeadline) {
-      popup = context.pages().find((candidate) =>
-        candidate.url() === EXTENSION_URL_PREFIX + extensionId + '/popup.html'
-      );
-      if (popup) break;
-      await new Promise((resolve) => setTimeout(resolve, 100));
-    }
-    assert.ok(popup, 'opening the extension action should expose its popup to Playwright');
-
+    // Reload the extension page while the YouTube tab is active so popup.js
+    // resolves that tab as its target. Reloading a background tab must not
+    // switch the active media tab.
+    await popup.reload();
     await popup.waitForFunction(() => {
       const enableButton = document.querySelector('#enableExtensionBtn');
       return enableButton && !enableButton.disabled;
     }, null, { timeout: 20000 });
 
-    await popup.locator('#enableExtensionBtn').click();
+    const activeTabBeforeStart = await worker.evaluate(async () => {
+      const [tab] = await chrome.tabs.query({ active: true, lastFocusedWindow: true });
+      return tab ? { id: tab.id, url: tab.url } : null;
+    });
+    assert.equal(activeTabBeforeStart?.id, activeTabBeforePopup.id,
+      'the player tab should remain active while the extension page is inspected');
+
+    // Dispatch in-page clicks so Playwright doesn't focus the extension tab and
+    // accidentally change the active tab the service worker is required to capture.
+    await popup.evaluate(() => document.querySelector('#enableExtensionBtn')?.click());
     await popup.waitForFunction(() =>
       document.querySelector('#disableExtensionBtn')?.getAttribute('aria-pressed') === 'true'
     , null, { timeout: 20000 });
@@ -273,7 +271,7 @@ test('tab audio capture starts, receives a synthetic tone, and stops cleanly', a
     assert.equal(spectrum.hasSignal, true);
     assert.ok(spectrum.maxBand > 0.045, 'captured tone should produce a measurable spectrum');
 
-    await popup.locator('#disableExtensionBtn').click();
+    await popup.evaluate(() => document.querySelector('#disableExtensionBtn')?.click());
     await popup.waitForFunction(() =>
       document.querySelector('#disableExtensionBtn')?.getAttribute('aria-pressed') === 'false'
     , null, { timeout: 20000 });
