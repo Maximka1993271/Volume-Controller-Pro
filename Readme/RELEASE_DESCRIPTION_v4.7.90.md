@@ -24,9 +24,16 @@ Static checks were reported for JavaScript syntax, JSON files, HTML IDs, CSS, lo
 
 **Manual testing is still required:** verify real audio capture and playback in Microsoft Edge, tab switching and closing, Bass Boost and Voice Boost behavior, visualizers, and settings import/export.
 
+## Source and archive note
+
+The downloadable asset for this release is exactly `Volume.Controller.Pro.v4.7.90.zip` (606,220 bytes). The historical Git tag `v4.7.90` predates the unpacked source tree now present on `main`; its tag tree contains `Volume_Controller_Pro_GitHub_Ready.zip`. The existing tag is preserved to avoid silently rewriting release history. Future tags will be created from the reviewed source tree.
+
 ## Documentation
 
-See [Readme/Readme.md](https://github.com/Maximka1993271/Volume-Controller-Pro/blob/main/Readme/Readme.md) for the detailed audit report, fixes, and test checklist.
+- [Detailed audit report](https://github.com/Maximka1993271/Volume-Controller-Pro/blob/main/Readme/Readme.md)
+- [Privacy notes](https://github.com/Maximka1993271/Volume-Controller-Pro/blob/main/PRIVACY.md)
+- [Security policy](https://github.com/Maximka1993271/Volume-Controller-Pro/blob/main/SECURITY.md)
+- [Release process](https://github.com/Maximka1993271/Volume-Controller-Pro/blob/main/RELEASE_PROCESS.md)
 
 ---
 
