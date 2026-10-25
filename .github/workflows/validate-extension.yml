@@ -33,6 +33,14 @@ jobs:
       - name: Run automated functional tests
         run: node --test tests/extension-functions.test.js
 
+      - name: Install Playwright and Chromium
+        run: |
+          npm install --no-save --no-package-lock playwright
+          npx playwright install --with-deps chromium
+
+      - name: Run browser integration tests
+        run: xvfb-run -a node --test tests/extension-browser.test.js
+
       - name: Validate manifest, locales, HTML resources and safety invariants
         run: |
           python3 - <<'PY'
