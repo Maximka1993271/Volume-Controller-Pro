@@ -48,7 +48,7 @@ jobs:
           p = Path("README.md")
           content = p.read_text(encoding="utf-8")
           content, count = re.subn(
-              r"(?m)^> \\*\\*Repository status:\\*\\*.*$",
+              r"(?m)^> .*Repository status:.*$",
               "> **Repository status:** The complete extension source tree is available in the main branch, with manifest.json at the repository root. You can download the repository as a ZIP or use the Releases page for a versioned package.",
               content,
               count=1,
@@ -56,7 +56,7 @@ jobs:
           if count != 1:
               raise SystemExit("Could not find the repository status note in README.md.")
           content, count = re.subn(
-              r"Because the full source tree is not yet present in this repository, readers cannot independently verify the implementation from this repository alone\\. See the audit documentation and check the published source package when it becomes available\\.",
+              r"Because the full source tree is not yet present.*",
               "The extension source files are available in this repository for inspection. Audio processing is intended to run locally; review manifest.json and the source before installing.",
               content,
               count=1,
@@ -64,7 +64,7 @@ jobs:
           if count != 1:
               raise SystemExit("Could not find the outdated privacy note in README.md.")
           content, count = re.subn(
-              r"The main branch currently contains the README, screenshot assets, the audit report, and the MIT license\\. The complete extension source tree is not yet present here, so these steps will work only once a source package containing manifest\\.json is available\\.",
+              r"The main branch currently contains.*",
               "The main branch contains the unpacked extension source, including manifest.json, JavaScript, HTML, CSS, localized messages, and icons. You can install from a cloned repository or from the repository ZIP.",
               content,
               count=1,
