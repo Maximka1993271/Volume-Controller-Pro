@@ -76,7 +76,7 @@ before(async () => {
     ...(Array.isArray(manifest.host_permissions) ? manifest.host_permissions : []),
     'https://www.youtube.com/*'
   ])];
-  await writeFile(manifestPath, JSON.stringify(manifest, null, 2) + '\\n', 'utf8');
+  await writeFile(manifestPath, JSON.stringify(manifest, null, 2) + '\n', 'utf8');
 
   context = await chromium.launchPersistentContext(userDataDir, {
     headless: false,
