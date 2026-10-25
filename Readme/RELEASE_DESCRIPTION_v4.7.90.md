@@ -22,7 +22,7 @@ The attached release asset is named `Volume.Controller.Pro.v4.7.90.zip`. Extract
 
 Static checks were reported for JavaScript syntax, JSON files, HTML IDs, CSS, localization-key consistency, and ZIP integrity.
 
-**Manual testing is still required:** verify real audio capture and playback in Microsoft Edge, tab switching and closing, Bass Boost and Voice Boost behavior, visualizers, and settings import/export.
+**Manual test report (2026-10-25):** the maintainer reports successful use in Microsoft Edge on YouTube, including capture start/stop/restart, tab switching and closing, Bass Boost, Voice Boost, visualizers, and settings import/export. This is a maintainer-reported runtime check; CI provides static validation and does not itself reproduce audio playback.
 
 ## Source and archive note
 
