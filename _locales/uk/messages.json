@@ -1,0 +1,11 @@
+{
+  "extName": {
+    "message": "Регулятор гучності Pro"
+  },
+  "extDescription": {
+    "message": "Гучність до 600%, Bass/Voice Boost, спектр, спектрограма та підтримка Spotify Web Player"
+  },
+  "actionTitle": {
+    "message": "Регулятор гучності"
+  }
+}

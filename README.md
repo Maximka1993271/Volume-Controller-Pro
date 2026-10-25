@@ -44,7 +44,7 @@ This repository is the project's official GitHub home and the only distribution 
 - No official Chrome Web Store or Microsoft Edge Add-ons listing is currently announced by the author.
 - Be cautious with copies hosted elsewhere; use only files published through the official repository and its Releases page.
 
-> **Repository status:** the full extension source tree has not yet been synchronized into this repository. The repository currently contains documentation, screenshots, and the license; it is not yet a complete unpacked extension source directory. Check the Releases page for an available installable package.
+> **Repository status:** The complete extension source tree is available in the main branch, with manifest.json at the repository root. You can download the repository as a ZIP or use the Releases page for a versioned package.
 
 ---
 
@@ -78,7 +78,7 @@ For the detailed audit, fix rationale, and validation checklist, see [Readme/Rea
 
 The project is designed around local audio processing with the Web Audio API and does not intend to include ads, tracking, telemetry, analytics, or collection of personal data.
 
-Because the full source tree is not yet present in this repository, readers cannot independently verify the implementation from this repository alone. See the audit documentation and check the published source package when it becomes available.
+The extension source files are available in this repository for inspection. Audio processing is intended to run locally; review manifest.json and the source before installing.
 
 ---
 
@@ -142,7 +142,7 @@ The screenshots are arranged in a two-column gallery so you can compare the v4.7
 
 ### Current repository contents
 
-The main branch currently contains the README, screenshot assets, the audit report, and the MIT license. The complete extension source tree is not yet present here, so these steps will work only once a source package containing manifest.json is available.
+The main branch contains the unpacked extension source, including manifest.json, JavaScript, HTML, CSS, localized messages, and icons. You can install from a cloned repository or from the repository ZIP.
 
 ### Load unpacked in Microsoft Edge
 
@@ -159,16 +159,30 @@ Do not select the documentation-only repository directory unless it contains the
 ## 📁 Repository Structure
 
     Volume-Controller-Pro/
-    ├── Readme/
-    │   └── Readme.md                   # Audit report and detailed changelog
-    ├── screenshots/
-    │   ├── quick-settings-page.jpg
-    │   ├── visualizer-spectrogram.jpg
-    │   ├── voice-boost-auto-mode.jpg
-    │   ├── voice-boost-manual-mode.jpg
-    │   └── volume-200-clipping-warning.jpg
-    ├── LICENSE                         # MIT License
-    └── README.md                       # Project overview
+├── _locales/                      # Browser manifest localization
+│   ├── en/messages.json
+│   ├── ru/messages.json
+│   └── uk/messages.json
+├── icons/                         # Extension icons and favicons
+├── lang/                          # Interface translations
+│   ├── en.json
+│   ├── ru.json
+│   └── uk.json
+├── Readme/
+│   ├── Readme.md                 # Detailed audit and change report
+│   └── RELEASE_DESCRIPTION_v4.7.90.md
+├── screenshots/                   # Interface screenshots
+├── background.js                  # Extension service worker
+├── content.js                     # Page content integration
+├── offscreen.html
+├── offscreen.js                   # Audio processing
+├── popup.css
+├── popup.html
+├── popup.js
+├── styles.css
+├── manifest.json                  # Extension manifest (root)
+├── LICENSE
+└── README.md
 
 ### Technologies
 

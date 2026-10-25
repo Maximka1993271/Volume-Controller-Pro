@@ -1,0 +1,11 @@
+{
+  "extName": {
+    "message": "Volume Controller Pro"
+  },
+  "extDescription": {
+    "message": "Volume control up to 600%, Bass/Voice Boost, spectrum, spectrogram and Spotify Web Player support"
+  },
+  "actionTitle": {
+    "message": "Volume Controller"
+  }
+}

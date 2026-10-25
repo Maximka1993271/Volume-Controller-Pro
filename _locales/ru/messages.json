@@ -1,0 +1,11 @@
+{
+  "extName": {
+    "message": "Регулятор громкости Pro"
+  },
+  "extDescription": {
+    "message": "Громкость до 600%, Bass/Voice Boost, спектр, спектрограмма и поддержка Spotify Web Player"
+  },
+  "actionTitle": {
+    "message": "Регулятор громкости"
+  }
+}
