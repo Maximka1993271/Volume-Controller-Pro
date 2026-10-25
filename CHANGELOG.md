@@ -15,4 +15,4 @@ User-facing highlights for published releases. Older implementation and audit hi
 
 ### Validation status
 
-Static checks were reported and a repeatable GitHub Actions validation workflow is now included. Manual end-to-end verification of audio capture and playback in Microsoft Edge remains necessary.
+Static checks are now run by a repeatable GitHub Actions workflow. On 2026-10-25, the maintainer reported successful manual use in Microsoft Edge on YouTube, including capture lifecycle, tab changes/closing, Bass Boost, Voice Boost, visualizers, and settings import/export. This runtime report is separate from the automated static checks.
