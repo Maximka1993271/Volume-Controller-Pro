@@ -30,12 +30,14 @@ jobs:
             --output "$archive"
           mkdir -p "$extract_dir"
           unzip -q "$archive" -d "$extract_dir"
-          test -f "$extract_dir/manifest.json"
-          node -e "const m=require(process.argv[1]); if(m.version!=='4.7.90'||m.manifest_version!==3) process.exit(2)" "$extract_dir/manifest.json"
+          manifest_path="$(find "$extract_dir" -type f -name manifest.json -print -quit)"
+          test -n "$manifest_path" || { echo "manifest.json was not found in the downloaded archive"; unzip -l "$archive" | head -80; exit 2; }
+          source_root="$(dirname "$manifest_path")"
+          MANIFEST_PATH="$manifest_path" node -e "const fs=require('fs'); const m=JSON.parse(fs.readFileSync(process.env.MANIFEST_PATH,'utf8')); if(m.version!=='4.7.90'||m.manifest_version!==3) process.exit(2); console.log('Validated version',m.version,'from',process.env.MANIFEST_PATH)"
           for file in background.js content.js offscreen.html offscreen.js popup.css popup.html popup.js styles.css _locales/en/messages.json _locales/ru/messages.json _locales/uk/messages.json lang/en.json lang/ru.json lang/uk.json icons/icon16.png icons/icon48.png icons/icon128.png; do
-            test -f "$extract_dir/$file" || { echo "Missing required source file: $file"; exit 3; }
+            test -f "$source_root/$file" || { echo "Missing required source file: $source_root/$file"; find "$extract_dir" -maxdepth 3 -type f | sort | head -100; exit 3; }
           done
-          rsync -a "$extract_dir/" ./
+          rsync -a "$source_root/" ./
 
       - name: Update README for the synchronized source tree
         shell: bash
