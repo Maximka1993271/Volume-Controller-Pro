@@ -70,15 +70,15 @@ This repository is the project's official GitHub home and the only distribution 
 - **AudioContext lifecycle:** capture shutdown closes the audio context; a subsequent session waits for closure before creating a new context.
 - **Default profile tuning:** the default profile is tuned to a moderate starting point of +4 dB Bass and +2 dB Voice.
 
-For the detailed audit, fix rationale, and validation checklist, see [Readme/Readme.md](Readme/Readme.md). End-to-end audio capture behavior should still be tested in a real Edge installation before release.
+For the detailed audit, fix rationale, and validation checklist, see [Readme/Readme.md](Readme/Readme.md). The repeatable [Validate extension workflow](.github/workflows/validate-extension.yml) runs on pushes and pull requests. End-to-end audio capture behavior still needs testing in a real Edge installation before release.
 
 ---
 
 ## 🔒 Privacy
 
-The project is designed around local audio processing with the Web Audio API and does not intend to include ads, tracking, telemetry, analytics, or collection of personal data.
+The project is designed around local audio processing with the Web Audio API. A source-based description of permissions and local storage is available in [PRIVACY.md](PRIVACY.md). The reviewed JavaScript files contain no remote analytics endpoint or telemetry service; see the privacy notes for the limits of this static review.
 
-The extension source files are available in this repository for inspection. Audio processing is intended to run locally; review manifest.json and the source before installing.
+For vulnerability reporting, see [SECURITY.md](SECURITY.md). Contributors should read [CONTRIBUTING.md](CONTRIBUTING.md), and maintainers should follow [RELEASE_PROCESS.md](RELEASE_PROCESS.md).
 
 ---
 
@@ -174,6 +174,11 @@ Volume-Controller-Pro/
 │   ├── en.json
 │   ├── ru.json
 │   └── uk.json
+├── .github/
+│   ├── ISSUE_TEMPLATE/
+│   └── workflows/
+│       ├── sync-release-notes.yml
+│       └── validate-extension.yml
 ├── Readme/
 │   ├── Readme.md
 │   └── RELEASE_DESCRIPTION_v4.7.90.md
@@ -187,8 +192,13 @@ Volume-Controller-Pro/
 ├── popup.js
 ├── styles.css
 ├── manifest.json
+├── CHANGELOG.md
+├── CONTRIBUTING.md
 ├── LICENSE
-└── README.md
+├── PRIVACY.md
+├── README.md
+├── RELEASE_PROCESS.md
+└── SECURITY.md
 ```
 
 ### Technologies
@@ -202,6 +212,14 @@ Volume-Controller-Pro/
 | HTML & CSS | Popup and settings interface |
 
 ---
+
+## 📚 Project documentation
+
+- [Changelog](CHANGELOG.md)
+- [Privacy notes](PRIVACY.md)
+- [Security policy](SECURITY.md)
+- [Contributing](CONTRIBUTING.md)
+- [Release process](RELEASE_PROCESS.md)
 
 ## 📄 License
 
