@@ -42,7 +42,7 @@ jobs:
           root = Path(".").resolve()
           manifest = json.loads((root / "manifest.json").read_text(encoding="utf-8"))
           assert manifest.get("manifest_version") == 3, "Expected Manifest V3"
-          assert re.fullmatch(r"\\d+\\.\\d+\\.\\d+", manifest.get("version", "")), "Invalid version"
+          assert re.fullmatch(r"\d+\.\d+\.\d+", manifest.get("version", "")), "Invalid version"
           assert manifest.get("background", {}).get("service_worker") == "background.js"
           assert manifest.get("action", {}).get("default_popup") == "popup.html"
 
@@ -123,11 +123,11 @@ jobs:
 
           popup_ids = set(parsed["popup.html"].ids)
           popup_js = (root / "popup.js").read_text(encoding="utf-8")
-          js_ids = set(re.findall(r"""getElementById\\(\\s*['"]([^'"]+)['"]\\s*\\)""", popup_js))
+          js_ids = set(re.findall(r"""getElementById\(\s*['"]([^'"]+)['"]\s*\)""", popup_js))
           missing_ids = sorted(js_ids - popup_ids)
           assert not missing_ids, f"popup.js references absent HTML IDs: {missing_ids}"
 
-          used_keys = set(re.findall(r"""\\bt\\(\\s*['"]([^'"]+)['"]""", popup_js))
+          used_keys = set(re.findall(r"""\bt\(\s*['"]([^'"]+)['"]""", popup_js))
           for parser in parsed.values():
               used_keys.update(parser.i18n_keys)
           missing_keys = sorted(used_keys - base_keys)
@@ -136,9 +136,9 @@ jobs:
           for relative in ("background.js", "content.js", "offscreen.js", "popup.js"):
               source = (root / relative).read_text(encoding="utf-8")
               for pattern, label in [
-                  (r"\\beval\\s*\\(", "eval()"),
-                  (r"\\bnew\\s+Function\\b", "new Function()"),
-                  (r"\\.innerHTML\\s*=", "innerHTML assignment"),
+                  (r"\beval\s*\(", "eval()"),
+                  (r"\bnew\s+Function\b", "new Function()"),
+                  (r"\.innerHTML\s*=", "innerHTML assignment"),
               ]:
                   assert not re.search(pattern, source), f"Review unsafe pattern {label} in {relative}"
 
