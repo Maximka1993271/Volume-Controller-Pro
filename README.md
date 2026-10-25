@@ -1,4 +1,4 @@
-<h1 align="center">Volume Controller Pro</h1>
+<h1 align="center">Volume Controller Pro v4.7.90</h1>
 
 <p align="center">
   <a href="https://github.com/Maximka1993271/Volume-Controller-Pro/releases">
