@@ -99,7 +99,7 @@ Because the full source tree is not yet present in this repository, readers cann
 
 ## 📸 Screenshots
 
-The screenshots are arranged in a two-column gallery so you can compare the interface views side by side.
+The screenshots are arranged in a two-column gallery so you can compare the interface views side by side. The outdated v4.7.86 Voice Boost image has been removed.
 
 <table>
   <tr>
@@ -128,20 +128,6 @@ The screenshots are arranged in a two-column gallery so you can compare the inte
         <img src="screenshots/visualizer-spectrogram.jpg" alt="Visualizer and Spectrogram" width="100%"/>
       </a>
       <br/><strong>📊 Visualizer &amp; Spectrogram</strong>
-    </td>
-  </tr>
-  <tr>
-    <td align="center" width="50%">
-      <a href="screenshots/voice-boost-clean-ui.jpg">
-        <img src="screenshots/voice-boost-clean-ui.jpg" alt="Clean Bass Boost and Voice Boost interface" width="100%"/>
-      </a>
-      <br/><strong>✨ Clean Bass &amp; Voice Boost UI</strong>
-    </td>
-    <td align="center" width="50%">
-      <a href="screenshots/voice-boost-manual-mode.jpg">
-        <img src="screenshots/voice-boost-manual-mode.jpg" alt="Voice Boost — Manual Mode" width="100%"/>
-      </a>
-      <br/><strong>🎚️ Voice Boost — Manual Mode</strong>
     </td>
   </tr>
 </table>
@@ -177,7 +163,6 @@ Do not select the documentation-only repository directory unless it contains the
     │   ├── quick-settings-page.jpg
     │   ├── visualizer-spectrogram.jpg
     │   ├── voice-boost-auto-mode.jpg
-    │   ├── voice-boost-clean-ui.jpg
     │   ├── voice-boost-manual-mode.jpg
     │   └── volume-200-clipping-warning.jpg
     ├── LICENSE                         # MIT License
