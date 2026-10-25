@@ -37,7 +37,9 @@ jobs:
           for file in background.js content.js offscreen.html offscreen.js popup.css popup.html popup.js styles.css _locales/en/messages.json _locales/ru/messages.json _locales/uk/messages.json lang/en.json lang/ru.json lang/uk.json icons/icon16.png icons/icon48.png icons/icon128.png; do
             test -f "$source_root/$file" || { echo "Missing required source file: $source_root/$file"; find "$extract_dir" -maxdepth 3 -type f | sort | head -100; exit 3; }
           done
-          rsync -a "$source_root/" ./
+          for item in _locales icons lang background.js content.js offscreen.html offscreen.js popup.css popup.html popup.js styles.css manifest.json; do
+            cp -a "$source_root/$item" ./
+          done
 
       - name: Update README for the synchronized source tree
         shell: bash
