@@ -177,6 +177,7 @@ Volume-Controller-Pro/
 │   ├── volume-200-clipping-warning.jpg
 │   ├── visualizer-spectrogram.jpg
 │   └── voice-boost-clean-ui.jpg
+├── LICENSE                   # MIT License file
 ├── README.md                 # This file
 └── (Source code will be added here)
 
@@ -188,7 +189,7 @@ Chrome Extensions API	Browser integration
 JavaScript (ES Modules)	Modular architecture
 CSS3	Modern, responsive UI
 📝 License
-No LICENSE file has been added yet. Until a license is chosen, this repository does not grant explicit permission to reuse or redistribute the code.
+This project is licensed under the MIT License. See the LICENSE file for details.
 
 👤 Author
 Maxim Melnikov
