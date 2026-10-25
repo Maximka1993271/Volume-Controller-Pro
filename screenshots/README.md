@@ -1,7 +1,11 @@
 # Screenshots
 
-This folder contains the development reference image displayed on the repository homepage.
+This folder contains interface screenshots used by the repository homepage.
 
-- `voice-boost-ui.jpg` — cropped, optimized preview of the Bass Boost and Voice Boost panels. It is a reference screenshot and may not reflect the latest UI exactly.
+- `voice-boost-auto-mode.jpg` — Voice Boost in automatic mode.
+- `voice-boost-manual-mode.jpg` — Voice Boost in manual mode.
+- `quick-settings-page.jpg` — quick settings.
+- `volume-200-clipping-warning.jpg` — volume and clipping warning.
+- `visualizer-spectrogram.jpg` — visualizer and spectrogram.
 
-When a fresh screenshot of the current release is available, replace this reference and update the root README.
+The outdated v4.7.86 image was removed, along with a duplicate file that contained the same image. Replace screenshots only with images from the version being documented.
