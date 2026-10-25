@@ -2,198 +2,207 @@
 
 <p align="center">
   <a href="https://github.com/Maximka1993271/Volume-Controller-Pro/releases">
-    <img src="https://img.shields.io/badge/version-4.7.90-blue.svg?style=for-the-badge&logo=github" alt="Version"/>
+    <img src="https://img.shields.io/badge/version-4.7.90-blue.svg?style=for-the-badge&logo=github" alt="Version 4.7.90"/>
   </a>
   <a href="https://www.microsoft.com/edge">
-    <img src="https://img.shields.io/badge/Edge-Chromium-0078D7.svg?style=for-the-badge&logo=microsoft-edge" alt="Edge"/>
+    <img src="https://img.shields.io/badge/Edge-Chromium-0078D7.svg?style=for-the-badge&logo=microsoft-edge" alt="Microsoft Edge"/>
   </a>
   <a href="LICENSE">
-    <img src="https://img.shields.io/badge/license-MIT-green.svg?style=for-the-badge" alt="License"/>
+    <img src="https://img.shields.io/badge/license-MIT-green.svg?style=for-the-badge" alt="MIT License"/>
   </a>
   <a href="https://github.com/Maximka1993271/Volume-Controller-Pro">
-    <img src="https://img.shields.io/badge/Open%20Source-✅-brightgreen.svg?style=for-the-badge" alt="Open Source"/>
+    <img src="https://img.shields.io/badge/Open%20Source-Available-brightgreen.svg?style=for-the-badge&logo=github" alt="Open Source Repository"/>
   </a>
   <a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API">
-    <img src="https://img.shields.io/badge/Web%20Audio%20API-Supported-orange.svg?style=for-the-badge&logo=web-audio" alt="Web Audio API"/>
+    <img src="https://img.shields.io/badge/Web%20Audio%20API-Used-orange.svg?style=for-the-badge" alt="Web Audio API"/>
   </a>
-  <a href="https://github.com/Maximka1993271/Volume-Controller-Pro">
-    <img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=for-the-badge&logo=github" alt="PRs Welcome"/>
+  <a href="https://github.com/Maximka1993271/Volume-Controller-Pro/issues">
+    <img src="https://img.shields.io/badge/Issues-welcome-brightgreen.svg?style=for-the-badge&logo=github" alt="Issues Welcome"/>
   </a>
 </p>
 
 <p align="center">
-  <img src="https://github.com/Maximka1993271/Volume-Controller-Pro/blob/main/screenshots/voice-boost-manual-mode.jpg?raw=true" alt="Volume Controller Pro interface preview" width="600"/>
+  <img src="screenshots/voice-boost-manual-mode.jpg" alt="Volume Controller Pro — Voice Boost manual mode" width="600"/>
 </p>
 
 <p align="center">
-  <b>🎛️ Professional Audio Control for Microsoft Edge / Chromium</b><br/>
-  Real-time volume amplification, EQ, and audio enhancement for YouTube and Spotify.<br/>
-  <b>🔓 Free • Open Source • Privacy First</b>
+  <strong>🎛️ Professional audio control for Microsoft Edge / Chromium</strong><br/>
+  Volume amplification, audio enhancement, and real-time visualizers for browser media.<br/>
+  <strong>Free • MIT Licensed • Privacy-focused</strong>
 </p>
 
 ---
 
-## ⚠️ Official Source Warning
+## ⚠️ Official Project and Downloads
 
-> **🚨 IMPORTANT: This is the ONLY official distribution channel for Volume Controller Pro.**
->
-> This extension is **only published on GitHub** under this repository:
-> **[https://github.com/Maximka1993271/Volume-Controller-Pro](https://github.com/Maximka1993271/Volume-Controller-Pro)**
->
-> **I DO NOT upload this extension to:**
-> - ❌ Chrome Web Store
-> - ❌ Microsoft Edge Add-ons Store
-> - ❌ Any other websites or file hosting services
->
-> **If you find this extension anywhere else, it is NOT the original version and may contain malware, spyware, or modified code.**
->
-> **Always download from the official GitHub repository only!**
+This repository is the project's official GitHub home and the only distribution channel currently maintained by the author.
+
+- **Official repository:** [Maximka1993271/Volume-Controller-Pro](https://github.com/Maximka1993271/Volume-Controller-Pro)
+- **Releases:** [Download page](https://github.com/Maximka1993271/Volume-Controller-Pro/releases)
+- No official Chrome Web Store or Microsoft Edge Add-ons listing is currently announced by the author.
+- Be cautious with copies hosted elsewhere; use only files published through the official repository and its Releases page.
+
+> **Repository status:** the full extension source tree has not yet been synchronized into this repository. The repository currently contains documentation, screenshots, and the license; it is not yet a complete unpacked extension source directory. Check the Releases page for an available installable package.
 
 ---
 
 ## ⭐ Project Highlights
 
-- ✅ **Free & Open Source** — MIT License
-- ✅ **Microsoft Edge & Chromium Browsers**
-- ✅ **Volume Control** — Boost up to 600% with quick presets
-- ✅ **Bass Boost** — Adjustable low-frequency enhancement (±12 dB)
-- ✅ **Voice Boost** — Speech clarity with AUTO/MANUAL modes
-- ✅ **Audio Profiles** — Per-site settings for YouTube and Spotify
-- ✅ **Audio Visualizers** — 5 spectrum styles + Spectrogram
-- ✅ **Settings Backup** — Export/Import via `.cfg` files
-- ✅ **Dark / Light / System Themes**
-- ✅ **No Ads • No Tracking • No Telemetry**
-- ✅ **100% Local Audio Processing**
-- ✅ **Night Mode** — Softens dynamics for quiet listening
-- ✅ **Power Save Mode** — Reduces CPU load from visualizations
-- ✅ **Clipping Detection** — Warns when audio peaks
-- ✅ **3 Languages** — English, Русский, Українська
-- ✅ **Memory Management & Leak Prevention**
+- 🔊 **Volume Control** — presets up to 600%.
+- 🎚️ **Bass Boost** — adjustable low-frequency enhancement, up to +12 dB.
+- 🎤 **Voice Boost** — speech-clarity controls with AUTO and MANUAL modes.
+- 🎛️ **Audio Profiles** — per-site settings for supported media sites such as YouTube and Spotify.
+- 📊 **Audio Visualizers** — five spectrum styles plus a spectrogram.
+- 💾 **Settings Backup** — import/export settings through .cfg files.
+- 🌗 **Themes** — Dark, Light, and System options.
+- 🌙 **Night Mode** — audio dynamics control for quieter listening.
+- ⚡ **Power Saving** — reduces visualization workload.
+- 🎯 **Clipping Detection** — visual warnings when audio peaks are detected.
+- 🌐 **Three Languages** — English, Русский, Українська.
 
----
+## 🐛 Latest Fixes — v4.7.90
 
-## 🐛 Latest Fixes (v4.7.90)
+- **Voice Boost UI:** restored the original AUTO/MANUAL pill toggle beside the level; the numerical value remains clean, for example **0 dB**.
+- **Track-aware auto-tuning:** genre analysis resets when the track changes so a previous track's profile is not reused.
+- **Capture race handling:** tab-close and stream-end events are serialized through the capture queue to reduce stale-event interference with new streams.
+- **AudioContext lifecycle:** capture shutdown closes the audio context; a subsequent session waits for closure before creating a new context.
+- **Default profile tuning:** the default profile is tuned to a moderate starting point of +4 dB Bass and +2 dB Voice.
 
-- **Voice Boost UI Restored:** Reverted to the original AUTO/MANUAL pill button next to the value. The numeric value itself is clean (e.g., `0 dB`).
-- **Track-Aware Auto-Tuning:** Genre analysis now resets when the track changes, ensuring the previous song's profile doesn't carry over.
-- **Capture Race Condition Fixed:** Tab close and stream-end events are now serialized through the main capture queue, preventing new streams from being stopped by stale events.
-- **Audio Context Lifecycle:** Properly closes the `AudioContext` after capture stops to free up resources. The next session awaits the close promise before creating a new context.
-- **Balance & Optimization:** Default audio profile tuned to the "golden mean" (+4 dB Bass, +2 dB Voice) for a pleasant, non-fatiguing sound.
+For the detailed audit, fix rationale, and validation checklist, see [Readme/Readme.md](Readme/Readme.md). End-to-end audio capture behavior should still be tested in a real Edge installation before release.
 
 ---
 
 ## 🔒 Privacy
 
-All audio processing is performed locally using the Web Audio API.
-No advertisements, tracking, telemetry, analytics, or user data collection.
-**Your privacy is 100% protected.**
+The project is designed around local audio processing with the Web Audio API and does not intend to include ads, tracking, telemetry, analytics, or collection of personal data.
+
+Because the full source tree is not yet present in this repository, readers cannot independently verify the implementation from this repository alone. See the audit documentation and check the published source package when it becomes available.
 
 ---
 
 ## ✨ Features in Detail
 
 | Feature | Description |
-|---------|-------------|
-| 🔊 **Volume 0–600%** | Boost audio beyond the standard 100% with quick presets. |
-| 🎚️ **Bass Boost** | Low-shelf filter at 105Hz, adjustable from 0 to +12 dB. |
-| 🎤 **Voice Boost** | Two-band EQ (1.25kHz & 2.8kHz) for speech clarity. |
-| 📊 **Visualizers** | Spectrum (Bars, Line, Wave, Mirror, Dots) and Spectrogram. |
-| 🎨 **Themes** | Light, Dark, and System (auto-syncs with OS). |
-| 💾 **Backup** | Export/Import all settings as a `.cfg` file. |
-| 🌙 **Night Mode** | Dynamic compression for late-night listening. |
-| ⚡ **Power Save** | Reduces visualization framerate to save CPU. |
+|---|---|
+| 🔊 **Volume 0–600%** | Boost playback beyond the standard 100% using presets. |
+| 🎚️ **Bass Boost** | Low-frequency enhancement using a low-shelf filter around 105 Hz, adjustable up to +12 dB. |
+| 🎤 **Voice Boost** | Speech clarity enhancement focused around the 1.25 kHz and 2.8 kHz ranges. |
+| 📊 **Visualizers** | Spectrum: Bars, Line, Wave, Mirror, and Dots; plus a spectrogram. |
+| 🎨 **Themes** | Light, Dark, and System options. |
+| 💾 **Settings Backup** | Export/import settings with a .cfg file. |
+| 🌙 **Night Mode** | Dynamics control intended for quieter listening. |
+| ⚡ **Power Save** | Reduces visualization workload to save CPU. |
 | 🎯 **Clipping Detection** | Visual warning when audio peaks are detected. |
-| 🌐 **3 Languages** | Русский, Українська, English. |
+| 🌐 **Localization** | Russian, Ukrainian, and English. |
 
 ---
 
 ## 📸 Screenshots
 
-<div align="center">
-  <table>
-    <tr>
-      <td align="center">
-        <img src="https://github.com/Maximka1993271/Volume-Controller-Pro/blob/main/screenshots/voice-boost-auto-mode.jpg?raw=true" alt="Voice Boost Auto Mode" width="400"/>
-        <br/>
-        <b>🎛️ Voice Boost (Auto Mode)</b>
-      </td>
-      <td align="center">
-        <img src="https://github.com/Maximka1993271/Volume-Controller-Pro/blob/main/screenshots/quick-settings-page.jpg?raw=true" alt="Quick Settings" width="400"/>
-        <br/>
-        <b>⚡ Quick Settings Page</b>
-      </td>
-    </tr>
-    <tr>
-      <td align="center">
-        <img src="https://github.com/Maximka1993271/Volume-Controller-Pro/blob/main/screenshots/volume-200-clipping-warning.jpg?raw=true" alt="Clipping Warning" width="400"/>
-        <br/>
-        <b>🚨 Volume 200% & Clipping Warning</b>
-      </td>
-      <td align="center">
-        <img src="https://github.com/Maximka1993271/Volume-Controller-Pro/blob/main/screenshots/visualizer-spectrogram.jpg?raw=true" alt="Visualizer & Spectrogram" width="400"/>
-        <br/>
-        <b>📊 Visualizer & Spectrogram</b>
-      </td>
-    </tr>
-    <tr>
-      <td align="center" colspan="2">
-        <img src="https://github.com/Maximka1993271/Volume-Controller-Pro/blob/main/screenshots/voice-boost-clean-ui.jpg?raw=true" alt="Clean UI" width="400"/>
-        <br/>
-        <b>✨ Clean Bass & Voice Boost UI (v4.7.90)</b>
-      </td>
-    </tr>
-  </table>
-</div>
+<p align="center">
+  <a href="screenshots/voice-boost-auto-mode.jpg">
+    <img src="screenshots/voice-boost-auto-mode.jpg" alt="Voice Boost — Auto Mode" width="400"/>
+  </a>
+  <br/>
+  <strong>🎛️ Voice Boost — Auto Mode</strong>
+</p>
+
+<p align="center">
+  <a href="screenshots/quick-settings-page.jpg">
+    <img src="screenshots/quick-settings-page.jpg" alt="Quick Settings" width="400"/>
+  </a>
+  <br/>
+  <strong>⚡ Quick Settings</strong>
+</p>
+
+<p align="center">
+  <a href="screenshots/volume-200-clipping-warning.jpg">
+    <img src="screenshots/volume-200-clipping-warning.jpg" alt="Volume 200% and clipping warning" width="400"/>
+  </a>
+  <br/>
+  <strong>🚨 Volume 200% &amp; Clipping Warning</strong>
+</p>
+
+<p align="center">
+  <a href="screenshots/visualizer-spectrogram.jpg">
+    <img src="screenshots/visualizer-spectrogram.jpg" alt="Visualizer and Spectrogram" width="400"/>
+  </a>
+  <br/>
+  <strong>📊 Visualizer &amp; Spectrogram</strong>
+</p>
+
+<p align="center">
+  <a href="screenshots/voice-boost-clean-ui.jpg">
+    <img src="screenshots/voice-boost-clean-ui.jpg" alt="Clean Bass Boost and Voice Boost interface" width="400"/>
+  </a>
+  <br/>
+  <strong>✨ Clean Bass &amp; Voice Boost UI</strong>
+</p>
+
+<p align="center">
+  <a href="screenshots/voice-boost-manual-mode.jpg">Open the manual-mode screenshot at full size</a>
+</p>
 
 ---
 
-## 📥 Download & Installation
+## 📥 Installation
 
-### ⚠️ Repository Status
+### Current repository contents
 
-The current `main` branch contains the project README, screenshots, and audit documentation. **The full extension source tree has not yet been synchronized into this repository**, so this repository alone cannot currently be loaded as an unpacked extension.
+The main branch currently contains the README, screenshot assets, the audit report, and the MIT license. The complete extension source tree is not yet present here, so these steps will work only once a source package containing manifest.json is available.
 
-When the source package is available, follow the instructions below.
+### Load unpacked in Microsoft Edge
 
-### 🔧 Installation (Microsoft Edge / Chromium)
+1. Download and extract the complete source package.
+2. Open edge://extensions/ in Microsoft Edge (or chrome://extensions/ in a compatible Chromium browser).
+3. Enable **Developer mode**.
+4. Select **Load unpacked**.
+5. Choose the extracted project directory containing manifest.json.
 
-1. Download and extract the source package.
-2. Open `edge://extensions/` (or `chrome://extensions/`).
-3. Enable **"Developer mode"**.
-4. Select **"Load unpacked"**.
-5. Choose the extracted directory containing `manifest.json`.
+Do not select the documentation-only repository directory unless it contains the extension's manifest.json.
 
 ---
 
 ## 📁 Repository Structure
 
-```text
-Volume-Controller-Pro/
-├── 📁 Readme/                # Audit reports and detailed changelogs
-├── 📁 screenshots/           # Interface screenshots
-│   ├── voice-boost-manual-mode.jpg
-│   ├── voice-boost-auto-mode.jpg
-│   ├── quick-settings-page.jpg
-│   ├── volume-200-clipping-warning.jpg
-│   ├── visualizer-spectrogram.jpg
-│   └── voice-boost-clean-ui.jpg
-├── LICENSE                   # MIT License file
-├── README.md                 # This file
-└── (Source code will be added here)
+    Volume-Controller-Pro/
+    ├── Readme/
+    │   └── Readme.md                   # Audit report and detailed changelog
+    ├── screenshots/
+    │   ├── quick-settings-page.jpg
+    │   ├── visualizer-spectrogram.jpg
+    │   ├── voice-boost-auto-mode.jpg
+    │   ├── voice-boost-clean-ui.jpg
+    │   ├── voice-boost-manual-mode.jpg
+    │   └── volume-200-clipping-warning.jpg
+    ├── LICENSE                         # MIT License
+    └── README.md                       # Project overview
 
-🛠️ Technologies
-Technology	Description
-Manifest V3	Chrome/Edge extension standard
-Web Audio API	Low-level audio processing
-Chrome Extensions API	Browser integration
-JavaScript (ES Modules)	Modular architecture
-CSS3	Modern, responsive UI
-📝 License
-This project is licensed under the MIT License. See the LICENSE file for details.
+### Technologies
 
-👤 Author
-Maxim Melnikov
+| Technology | Purpose |
+|---|---|
+| Manifest V3 | Browser extension platform |
+| Web Audio API | Audio analysis and processing |
+| Chrome Extensions API | Browser integration |
+| JavaScript | Extension logic |
+| HTML & CSS | Popup and settings interface |
 
-GitHub
+---
 
-<p align="center"> <b>Made with ❤️</b><br/> <b>Maxim Melnikov</b> — <a href="https://github.com/Maximka1993271">@Maximka1993271</a> </p><p align="center"> <sub>Volume Controller Pro v4.7.90 — 25 October 2026</sub><br/> <sub>🔓 Open Source — fully open source code</sub> </p> ```
+## 📄 License
+
+This project is licensed under the **MIT License**. Read the full terms in [LICENSE](LICENSE).
+
+[![MIT License](https://img.shields.io/badge/License-MIT-green.svg?style=for-the-badge)](LICENSE)
+
+---
+
+## 👤 Author
+
+**Maxim Melnikov** — [@Maximka1993271](https://github.com/Maximka1993271)
+
+<p align="center">
+  <strong>Made with ❤️ by Maxim Melnikov</strong><br/>
+  <sub>Volume Controller Pro v4.7.90</sub>
+</p>
