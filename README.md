@@ -22,7 +22,7 @@
 </p>
 
 <p align="center">
-  <img src="https://github.com/Maximka1993271/Volume-Controller-Pro/blob/main/screenshots/voice-boost-ui.jpg?raw=true" alt="Volume Controller Pro interface preview" width="600"/>
+  <img src="https://github.com/Maximka1993271/Volume-Controller-Pro/blob/main/screenshots/voice-boost-manual-mode.jpg?raw=true" alt="Volume Controller Pro interface preview" width="600"/>
 </p>
 
 <p align="center">
@@ -113,26 +113,33 @@ No advertisements, tracking, telemetry, analytics, or user data collection.
   <table>
     <tr>
       <td align="center">
-        <img src="https://github.com/Maximka1993271/Volume-Controller-Pro/blob/main/screenshots/voice-boost-ui.jpg?raw=true" alt="Voice Boost & Bass Boost" width="400"/>
+        <img src="https://github.com/Maximka1993271/Volume-Controller-Pro/blob/main/screenshots/voice-boost-auto-mode.jpg?raw=true" alt="Voice Boost Auto Mode" width="400"/>
         <br/>
-        <b>🎛️ Voice Boost & Bass Boost</b>
+        <b>🎛️ Voice Boost (Auto Mode)</b>
       </td>
       <td align="center">
-        <img src="https://github.com/Maximka1993271/Volume-Controller-Pro/blob/main/screenshots/volume-controller-ui.png?raw=true" alt="Volume Controller" width="400"/>
+        <img src="https://github.com/Maximka1993271/Volume-Controller-Pro/blob/main/screenshots/quick-settings-page.jpg?raw=true" alt="Quick Settings" width="400"/>
         <br/>
-        <b>🔊 Volume Controller</b>
+        <b>⚡ Quick Settings Page</b>
       </td>
     </tr>
     <tr>
       <td align="center">
-        <img src="https://github.com/Maximka1993271/Volume-Controller-Pro/blob/main/screenshots/full-equalizer.png?raw=true" alt="Full Equalizer" width="400"/>
+        <img src="https://github.com/Maximka1993271/Volume-Controller-Pro/blob/main/screenshots/volume-200-clipping-warning.jpg?raw=true" alt="Clipping Warning" width="400"/>
         <br/>
-        <b>🎛️ Full Equalizer</b>
+        <b>🚨 Volume 200% & Clipping Warning</b>
       </td>
       <td align="center">
-        <img src="https://github.com/Maximka1993271/Volume-Controller-Pro/blob/main/screenshots/on-player.png?raw=true" alt="On Player" width="400"/>
+        <img src="https://github.com/Maximka1993271/Volume-Controller-Pro/blob/main/screenshots/visualizer-spectrogram.jpg?raw=true" alt="Visualizer & Spectrogram" width="400"/>
         <br/>
-        <b>🎵 On Player</b>
+        <b>📊 Visualizer & Spectrogram</b>
+      </td>
+    </tr>
+    <tr>
+      <td align="center" colspan="2">
+        <img src="https://github.com/Maximka1993271/Volume-Controller-Pro/blob/main/screenshots/voice-boost-clean-ui.jpg?raw=true" alt="Clean UI" width="400"/>
+        <br/>
+        <b>✨ Clean Bass & Voice Boost UI (v4.7.90)</b>
       </td>
     </tr>
   </table>
@@ -164,6 +171,12 @@ When the source package is available, follow the instructions below.
 Volume-Controller-Pro/
 ├── 📁 Readme/                # Audit reports and detailed changelogs
 ├── 📁 screenshots/           # Interface screenshots
+│   ├── voice-boost-manual-mode.jpg
+│   ├── voice-boost-auto-mode.jpg
+│   ├── quick-settings-page.jpg
+│   ├── volume-200-clipping-warning.jpg
+│   ├── visualizer-spectrogram.jpg
+│   └── voice-boost-clean-ui.jpg
 ├── README.md                 # This file
 └── (Source code will be added here)
 
