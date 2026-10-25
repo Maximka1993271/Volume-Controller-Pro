@@ -1,0 +1,38 @@
+name: Feature request
+description: Suggest an improvement or a new feature
+title: "[Feature]: "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Describe the problem or use case your suggestion would improve.
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem or use case
+      description: What limitation are you encountering?
+      placeholder: A clear description of the need or problem.
+    validations:
+      required: true
+  - type: textarea
+    id: proposed-solution
+    attributes:
+      label: Proposed solution
+      description: Describe how you would like the feature to work.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Have you considered another way to solve this?
+    validations:
+      required: false
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional context
+      description: Examples, mockups, or use cases that help explain the request.
+    validations:
+      required: false
