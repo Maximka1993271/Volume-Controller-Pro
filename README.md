@@ -158,31 +158,38 @@ Do not select the documentation-only repository directory unless it contains the
 
 ## 📁 Repository Structure
 
-    Volume-Controller-Pro/
-├── _locales/                      # Browser manifest localization
+```text
+Volume-Controller-Pro/
+├── _locales/
 │   ├── en/messages.json
 │   ├── ru/messages.json
 │   └── uk/messages.json
-├── icons/                         # Extension icons and favicons
-├── lang/                          # Interface translations
+├── icons/
+│   ├── favicon.ico
+│   ├── favicon.png
+│   ├── icon16.png
+│   ├── icon48.png
+│   └── icon128.png
+├── lang/
 │   ├── en.json
 │   ├── ru.json
 │   └── uk.json
 ├── Readme/
-│   ├── Readme.md                 # Detailed audit and change report
+│   ├── Readme.md
 │   └── RELEASE_DESCRIPTION_v4.7.90.md
-├── screenshots/                   # Interface screenshots
-├── background.js                  # Extension service worker
-├── content.js                     # Page content integration
+├── screenshots/
+├── background.js
+├── content.js
 ├── offscreen.html
-├── offscreen.js                   # Audio processing
+├── offscreen.js
 ├── popup.css
 ├── popup.html
 ├── popup.js
 ├── styles.css
-├── manifest.json                  # Extension manifest (root)
+├── manifest.json
 ├── LICENSE
 └── README.md
+```
 
 ### Technologies
 
