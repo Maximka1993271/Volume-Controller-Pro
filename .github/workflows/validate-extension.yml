@@ -36,7 +36,7 @@ jobs:
       - name: Install Playwright and Chromium
         run: |
           npm install --no-save --no-package-lock playwright
-          npx playwright install --with-deps chromium
+          npx playwright install chromium
 
       - name: Run browser integration tests
         run: xvfb-run -a node --test tests/extension-browser.test.js
