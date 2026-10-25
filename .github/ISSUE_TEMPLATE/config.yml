@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Download releases
+    url: https://github.com/Maximka1993271/Volume-Controller-Pro/releases
+    about: Check available downloads and release notes.
+  - name: Project documentation and audit report
+    url: https://github.com/Maximka1993271/Volume-Controller-Pro/blob/main/Readme/Readme.md
+    about: Review project documentation and the current testing status.
