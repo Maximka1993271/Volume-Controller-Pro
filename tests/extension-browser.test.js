@@ -58,7 +58,8 @@ before(async () => {
     channel: 'chromium',
     args: [
       '--disable-extensions-except=' + ROOT,
-      '--load-extension=' + ROOT
+      '--load-extension=' + ROOT,
+      '--autoplay-policy=no-user-gesture-required'
     ]
   });
 
@@ -120,7 +121,7 @@ test('settings interactions persist across popup reopen', async () => {
     const bassToggle = page.locator('#settingsBassBoostToggle');
     assert.equal(await bassToggle.isEnabled(), true);
     assert.equal(await bassToggle.isChecked(), true);
-    await bassToggle.uncheck();
+    await bassToggle.locator('xpath=..').click();
     await page.waitForFunction(async () =>
       (await chrome.storage.local.get('bassBoostEnabled')).bassBoostEnabled === false
     );
@@ -144,5 +145,132 @@ test('settings interactions persist across popup reopen', async () => {
     assert.equal(await reopenedPage.locator('#settingsBassBoostToggle').isChecked(), false);
   } finally {
     await reopenedPage.close();
+  }
+});
+
+
+test('tab audio capture starts, receives a synthetic tone, and stops cleanly', async () => {
+  const playerUrl = 'https://www.youtube.com/watch?v=dQw4w9WgXcQ';
+  await context.route(playerUrl, async (route) => {
+    await route.fulfill({
+      status: 200,
+      contentType: 'text/html; charset=utf-8',
+      body: \`<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><title>Volume Controller Pro audio test tone</title></head>
+<body>
+  <button id="start-tone" type="button">Start audio test tone</button>
+  <script>
+    document.querySelector('#start-tone').addEventListener('click', async () => {
+      const audio = new AudioContext();
+      await audio.resume();
+      const oscillator = audio.createOscillator();
+      const gain = audio.createGain();
+      oscillator.type = 'sine';
+      oscillator.frequency.value = 440;
+      gain.gain.value = 0.2;
+      oscillator.connect(gain);
+      gain.connect(audio.destination);
+      oscillator.start();
+      window.__vcpTestAudioContext = audio;
+      window.__vcpTestOscillator = oscillator;
+      window.__vcpTestToneStarted = true;
+      document.body.dataset.audio = 'playing';
+    });
+  </script>
+</body>
+</html>\`
+    });
+  });
+
+  const player = await context.newPage();
+  let popup;
+  let captureStarted = false;
+
+  try {
+    await player.goto(playerUrl, { waitUntil: 'domcontentloaded' });
+    assert.match(await player.title(), /audio test tone/i);
+    await player.locator('#start-tone').click();
+    await player.waitForFunction(() => window.__vcpTestToneStarted === true);
+
+    const worker = await getExtensionWorker();
+    const activeTabBeforePopup = await worker.evaluate(async () => {
+      const [tab] = await chrome.tabs.query({ active: true, lastFocusedWindow: true });
+      return tab ? { id: tab.id, url: tab.url } : null;
+    });
+    assert.ok(activeTabBeforePopup, 'test player tab should be active');
+    assert.equal(activeTabBeforePopup.url, playerUrl);
+
+    await worker.evaluate(async () => {
+      if (typeof chrome.action.openPopup !== 'function') {
+        throw new Error('This Chromium build does not support chrome.action.openPopup()');
+      }
+      await chrome.action.openPopup();
+    });
+
+    const popupDeadline = Date.now() + 10000;
+    while (Date.now() < popupDeadline) {
+      popup = context.pages().find((candidate) =>
+        candidate.url() === EXTENSION_URL_PREFIX + extensionId + '/popup.html'
+      );
+      if (popup) break;
+      await new Promise((resolve) => setTimeout(resolve, 100));
+    }
+    assert.ok(popup, 'opening the extension action should expose its popup to Playwright');
+
+    await popup.waitForFunction(() => {
+      const enableButton = document.querySelector('#enableExtensionBtn');
+      return enableButton && !enableButton.disabled;
+    }, null, { timeout: 20000 });
+
+    await popup.locator('#enableExtensionBtn').click();
+    await popup.waitForFunction(() =>
+      document.querySelector('#disableExtensionBtn')?.getAttribute('aria-pressed') === 'true'
+    , null, { timeout: 20000 });
+
+    captureStarted = true;
+    const runningStatus = await worker.evaluate(async () =>
+      chrome.runtime.sendMessage({ type: 'GET_CAPTURE_STATUS' })
+    );
+    assert.equal(runningStatus.success, true);
+    assert.equal(runningStatus.active, true);
+    assert.equal(runningStatus.tabId, activeTabBeforePopup.id);
+
+    // The test page emits a continuous 440 Hz sine wave. The offscreen analyzer
+    // must observe non-zero spectrum bands instead of merely reporting a live track.
+    await popup.waitForFunction(() => spectrumState.hasSignal === true, null, { timeout: 15000 });
+    const spectrum = await popup.evaluate(() => ({
+      active: spectrumState.captureActive,
+      hasSignal: spectrumState.hasSignal,
+      maxBand: Math.max(0, ...spectrumState.target)
+    }));
+    assert.equal(spectrum.active, true);
+    assert.equal(spectrum.hasSignal, true);
+    assert.ok(spectrum.maxBand > 0.045, 'captured tone should produce a measurable spectrum');
+
+    await popup.locator('#disableExtensionBtn').click();
+    await popup.waitForFunction(() =>
+      document.querySelector('#disableExtensionBtn')?.getAttribute('aria-pressed') === 'false'
+    , null, { timeout: 20000 });
+    const stoppedStatus = await worker.evaluate(async () =>
+      chrome.runtime.sendMessage({ type: 'GET_CAPTURE_STATUS' })
+    );
+    assert.equal(stoppedStatus.success, true);
+    assert.equal(stoppedStatus.active, false);
+    captureStarted = false;
+  } finally {
+    if (captureStarted) {
+      const worker = await getExtensionWorker().catch(() => null);
+      if (worker) await worker.evaluate(async () =>
+        chrome.runtime.sendMessage({ type: 'STOP_CAPTURE' }).catch(() => null)
+      ).catch(() => null);
+    }
+    if (popup && !popup.isClosed()) await popup.close().catch(() => {});
+    await player.evaluate(() => {
+      try { window.__vcpTestOscillator?.stop(); } catch {}
+      try { window.__vcpTestAudioContext?.close(); } catch {}
+    }).catch(() => {});
+    await player.close().catch(() => {});
+    await context.unroute(playerUrl);
   }
 });
