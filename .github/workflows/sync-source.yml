@@ -1,0 +1,137 @@
+name: Sync extension source into main
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/sync-source.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  sync-source:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          persist-credentials: true
+
+      - name: Download and validate the published v4.7.90 source archive
+        shell: bash
+        run: |
+          set -euo pipefail
+          archive="$RUNNER_TEMP/volume-controller-pro.zip"
+          extract_dir="$RUNNER_TEMP/volume-controller-pro"
+          curl --fail --location --retry 3 \
+            "https://github.com/Maximka1993271/Volume-Controller-Pro/releases/download/v4.7.90/Volume.Controller.Pro.v4.7.90.zip" \
+            --output "$archive"
+          mkdir -p "$extract_dir"
+          unzip -q "$archive" -d "$extract_dir"
+          test -f "$extract_dir/manifest.json"
+          node -e "const m=require(process.argv[1]); if(m.version!=='4.7.90'||m.manifest_version!==3) process.exit(2)" "$extract_dir/manifest.json"
+          for file in background.js content.js offscreen.html offscreen.js popup.css popup.html popup.js styles.css _locales/en/messages.json _locales/ru/messages.json _locales/uk/messages.json lang/en.json lang/ru.json lang/uk.json icons/icon16.png icons/icon48.png icons/icon128.png; do
+            test -f "$extract_dir/$file" || { echo "Missing required source file: $file"; exit 3; }
+          done
+          rsync -a "$extract_dir/" ./
+
+      - name: Update README for the synchronized source tree
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p = Path("README.md")
+          content = p.read_text(encoding="utf-8")
+          replacements = [
+              (
+                  "The full extension source tree has not yet been synchronized into this repository. The repository currently contains documentation, screenshots, and the license; it is not yet a complete unpacked extension source directory. Check the Releases page for an available installable package.",
+                  "The complete extension source tree is available in the main branch, with manifest.json at the repository root. You can download the repository as a ZIP or use the Releases page for a versioned package."
+              ),
+              (
+                  "Because the full source tree is not yet present in this repository, readers cannot independently verify the implementation from this repository alone. See the audit documentation and check the published source package when it becomes available.",
+                  "The extension source files are available in this repository for inspection. Audio processing is intended to run locally; review manifest.json and the source before installing."
+              ),
+              (
+                  "The main branch currently contains the README, screenshot assets, the audit report, and the MIT license. The complete extension source tree is not yet present here, so these steps will work only once a source package containing manifest.json is available.",
+                  "The main branch contains the unpacked extension source, including manifest.json, JavaScript, HTML, CSS, localized messages, and icons. You can install from a cloned repository or from the repository ZIP."
+              ),
+          ]
+          for old, new in replacements:
+              if old not in content:
+                  raise SystemExit("README text to update was not found; stopping instead of writing an incomplete change.")
+              content = content.replace(old, new)
+          p.write_text(content, encoding="utf-8")
+          PY
+
+      - name: Refresh repository structure in README
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p = Path("README.md")
+          content = p.read_text(encoding="utf-8")
+          start = "    Volume-Controller-Pro/\n"
+          end = "    └── README.md                       # Project overview\n"
+          if start not in content or end not in content:
+              raise SystemExit("README repository structure block was not found.")
+          a = content.index(start)
+          b = content.index(end, a) + len(end)
+          tree = """    Volume-Controller-Pro/
+          ├── _locales/                      # Browser manifest localization
+          │   ├── en/messages.json
+          │   ├── ru/messages.json
+          │   └── uk/messages.json
+          ├── icons/                         # Extension icons and favicons
+          ├── lang/                          # Interface translations
+          │   ├── en.json
+          │   ├── ru.json
+          │   └── uk.json
+          ├── Readme/
+          │   ├── Readme.md                 # Detailed audit and change report
+          │   └── RELEASE_DESCRIPTION_v4.7.90.md
+          ├── screenshots/                   # Interface screenshots
+          ├── background.js                  # Extension service worker
+          ├── content.js                     # Page content integration
+          ├── offscreen.html
+          ├── offscreen.js                   # Audio processing
+          ├── popup.css
+          ├── popup.html
+          ├── popup.js
+          ├── styles.css
+          ├── manifest.json                  # Extension manifest (root)
+          ├── LICENSE
+          └── README.md
+          """
+          # normalize indentation introduced by the multiline literal
+          tree = "\n".join(line[10:] if line.startswith("          ") else line for line in tree.splitlines()) + "\n"
+          content = content[:a] + tree + content[b:]
+          p.write_text(content, encoding="utf-8")
+          PY
+
+      - name: Validate source files and commit
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --check background.js
+          node --check content.js
+          node --check offscreen.js
+          node --check popup.js
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          manifest = json.loads(Path("manifest.json").read_text(encoding="utf-8"))
+          assert manifest["version"] == "4.7.90"
+          for path in Path("_locales").glob("*/messages.json"):
+              json.loads(path.read_text(encoding="utf-8"))
+          for path in Path("lang").glob("*.json"):
+              json.loads(path.read_text(encoding="utf-8"))
+          print("Manifest and localization JSON validated.")
+          PY
+          rm -f .github/workflows/sync-source.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Sync Volume Controller Pro v4.7.90 source files"
+          git push origin HEAD:main
