@@ -155,7 +155,7 @@ test('tab audio capture starts, receives a synthetic tone, and stops cleanly', a
     await route.fulfill({
       status: 200,
       contentType: 'text/html; charset=utf-8',
-      body: \`<!doctype html>
+      body: `<!doctype html>
 <html lang="en">
 <head><meta charset="utf-8"><title>Volume Controller Pro audio test tone</title></head>
 <body>
@@ -179,7 +179,7 @@ test('tab audio capture starts, receives a synthetic tone, and stops cleanly', a
     });
   </script>
 </body>
-</html>\`
+</html>`
     });
   });
 
