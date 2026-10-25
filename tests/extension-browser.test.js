@@ -44,7 +44,8 @@ async function openPopupPage(resetStorage = false) {
     const slider = document.querySelector('#volumeSlider');
     const settingsButton = document.querySelector('#settingsBtn');
     return slider && slider.disabled === true &&
-      settingsButton && settingsButton.getAttribute('aria-expanded') === 'false';
+      settingsButton && settingsButton.getAttribute('aria-expanded') === 'false' &&
+      document.querySelector('#settingsBassBoostToggle')?.disabled === false;
   }, null, { timeout: 20000 });
 
   return page;
@@ -53,7 +54,7 @@ async function openPopupPage(resetStorage = false) {
 before(async () => {
   userDataDir = await mkdtemp(join(tmpdir(), 'volume-controller-pro-e2e-'));
   context = await chromium.launchPersistentContext(userDataDir, {
-    headless: true,
+    headless: false,
     channel: 'chromium',
     args: [
       '--disable-extensions-except=' + ROOT,
