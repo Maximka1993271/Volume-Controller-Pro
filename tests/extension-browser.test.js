@@ -246,7 +246,7 @@ test('tab audio capture starts, receives a synthetic tone, and stops cleanly', a
 
     // Dispatch in-page clicks so Playwright doesn't focus the extension tab and
     // accidentally change the active tab the service worker is required to capture.
-    await popup.evaluate(() => document.querySelector('#enableExtensionBtn')?.click());
+    await popup.locator('#enableExtensionBtn').click();
     await popup.waitForFunction(() =>
       document.querySelector('#disableExtensionBtn')?.getAttribute('aria-pressed') === 'true'
     , null, { timeout: 20000 });
@@ -271,7 +271,7 @@ test('tab audio capture starts, receives a synthetic tone, and stops cleanly', a
     assert.equal(spectrum.hasSignal, true);
     assert.ok(spectrum.maxBand > 0.045, 'captured tone should produce a measurable spectrum');
 
-    await popup.evaluate(() => document.querySelector('#disableExtensionBtn')?.click());
+    await popup.locator('#disableExtensionBtn').click();
     await popup.waitForFunction(() =>
       document.querySelector('#disableExtensionBtn')?.getAttribute('aria-pressed') === 'false'
     , null, { timeout: 20000 });
