@@ -8,4 +8,4 @@ This folder contains interface screenshots used by the repository homepage.
 - `volume-200-clipping-warning.jpg` — volume and clipping warning.
 - `visualizer-spectrogram.jpg` — visualizer and spectrogram.
 
-The outdated v4.7.86 image was removed, along with a duplicate file that contained the same image. Replace screenshots only with images from the version being documented.
+These screenshots document the v4.7.90 interface. Replace them when preparing screenshots for a newer release.
