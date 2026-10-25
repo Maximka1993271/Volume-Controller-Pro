@@ -99,7 +99,7 @@ Because the full source tree is not yet present in this repository, readers cann
 
 ## 📸 Screenshots
 
-The screenshots are arranged in a two-column gallery so you can compare the interface views side by side. The outdated v4.7.86 Voice Boost image has been removed.
+The screenshots are arranged in a two-column gallery so you can compare the v4.7.90 interface views side by side.
 
 <table>
   <tr>
