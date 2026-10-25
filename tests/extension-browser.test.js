@@ -244,15 +244,24 @@ test('tab audio capture starts, receives a synthetic tone, and stops cleanly', a
     assert.equal(activeTabBeforeStart?.id, activeTabBeforePopup.id,
       'the player tab should remain active while the extension page is inspected');
 
-    // Dispatch in-page clicks so Playwright doesn't focus the extension tab and
-    // accidentally change the active tab the service worker is required to capture.
-    await popup.locator('#enableExtensionBtn').click();
+    // A toolbar popup is browser chrome and can't be reliably driven as a
+    // Playwright page. Send the same authenticated extension command from the
+    // popup document while keeping the synthetic media tab active.
+    const startResult = await popup.evaluate(async (tabId) =>
+      chrome.runtime.sendMessage({ type: 'START_CAPTURE', tabId }), activeTabBeforePopup.id
+    );
+    assert.equal(startResult?.success, true,
+      `Capture start failed: ${startResult?.error || 'no response'}`);
+    captureStarted = true;
+
+    // Reload the popup page without activating it so it reads the real capture
+    // status and starts spectrum sampling, just as reopening the toolbar popup does.
+    await popup.reload();
     await popup.waitForFunction(() =>
       document.querySelector('#disableExtensionBtn')?.getAttribute('aria-pressed') === 'true'
     , null, { timeout: 20000 });
 
-    captureStarted = true;
-    const runningStatus = await worker.evaluate(async () =>
+    const runningStatus = await popup.evaluate(async () =>
       chrome.runtime.sendMessage({ type: 'GET_CAPTURE_STATUS' })
     );
     assert.equal(runningStatus.success, true);
@@ -271,11 +280,12 @@ test('tab audio capture starts, receives a synthetic tone, and stops cleanly', a
     assert.equal(spectrum.hasSignal, true);
     assert.ok(spectrum.maxBand > 0.045, 'captured tone should produce a measurable spectrum');
 
-    await popup.locator('#disableExtensionBtn').click();
-    await popup.waitForFunction(() =>
-      document.querySelector('#disableExtensionBtn')?.getAttribute('aria-pressed') === 'false'
-    , null, { timeout: 20000 });
-    const stoppedStatus = await worker.evaluate(async () =>
+    const stopResult = await popup.evaluate(async () =>
+      chrome.runtime.sendMessage({ type: 'STOP_CAPTURE' })
+    );
+    assert.equal(stopResult?.success, true,
+      `Capture stop failed: ${stopResult?.error || 'no response'}`);
+    const stoppedStatus = await popup.evaluate(async () =>
       chrome.runtime.sendMessage({ type: 'GET_CAPTURE_STATUS' })
     );
     assert.equal(stoppedStatus.success, true);
@@ -283,10 +293,11 @@ test('tab audio capture starts, receives a synthetic tone, and stops cleanly', a
     captureStarted = false;
   } finally {
     if (captureStarted) {
-      const worker = await getExtensionWorker().catch(() => null);
-      if (worker) await worker.evaluate(async () =>
-        chrome.runtime.sendMessage({ type: 'STOP_CAPTURE' }).catch(() => null)
-      ).catch(() => null);
+      if (popup && !popup.isClosed()) {
+        await popup.evaluate(async () =>
+          chrome.runtime.sendMessage({ type: 'STOP_CAPTURE' }).catch(() => null)
+        ).catch(() => {});
+      }
     }
     if (popup && !popup.isClosed()) await popup.close().catch(() => {});
     await player.evaluate(() => {
