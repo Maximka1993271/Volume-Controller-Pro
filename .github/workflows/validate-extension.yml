@@ -1,0 +1,148 @@
+name: Validate extension
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: validate-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    name: Static validation
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+
+      - name: Check JavaScript syntax
+        run: |
+          node --version
+          node --check background.js
+          node --check content.js
+          node --check offscreen.js
+          node --check popup.js
+
+      - name: Validate manifest, locales, HTML resources and safety invariants
+        run: |
+          python3 - <<'PY'
+          import json
+          import re
+          from html.parser import HTMLParser
+          from pathlib import Path
+          from urllib.parse import unquote
+
+          root = Path(".").resolve()
+          manifest = json.loads((root / "manifest.json").read_text(encoding="utf-8"))
+          assert manifest.get("manifest_version") == 3, "Expected Manifest V3"
+          assert re.fullmatch(r"\\d+\\.\\d+\\.\\d+", manifest.get("version", "")), "Invalid version"
+          assert manifest.get("background", {}).get("service_worker") == "background.js"
+          assert manifest.get("action", {}).get("default_popup") == "popup.html"
+
+          for relative in [
+              "background.js", "content.js", "offscreen.html", "offscreen.js",
+              "popup.css", "popup.html", "popup.js", "styles.css", "LICENSE", "README.md"
+          ]:
+              assert (root / relative).is_file(), f"Missing required file: {relative}"
+
+          for size, icon in manifest.get("icons", {}).items():
+              assert (root / icon).is_file(), f"Missing manifest icon ({size}px): {icon}"
+          for size, icon in manifest.get("action", {}).get("default_icon", {}).items():
+              assert (root / icon).is_file(), f"Missing action icon ({size}px): {icon}"
+
+          locale_root = root / "_locales"
+          default_locale = manifest.get("default_locale")
+          assert default_locale and (locale_root / default_locale / "messages.json").is_file(), "Missing default locale"
+          browser_messages = {}
+          for path in sorted(locale_root.glob("*/messages.json")):
+              data = json.loads(path.read_text(encoding="utf-8"))
+              assert isinstance(data, dict), f"Locale file is not an object: {path}"
+              browser_messages[path.parent.name] = data
+          base_browser_keys = set(browser_messages[default_locale])
+          for locale, messages in browser_messages.items():
+              assert set(messages) == base_browser_keys, f"Browser locale keys differ for {locale}"
+          for field in ("name", "description", "action.default_title"):
+              value = manifest
+              for part in field.split("."):
+                  value = value.get(part) if isinstance(value, dict) else None
+              if isinstance(value, str) and value.startswith("__MSG_") and value.endswith("__"):
+                  assert value[5:-2] in base_browser_keys, f"Missing manifest message for {field}"
+
+          dictionaries = {}
+          for path in sorted((root / "lang").glob("*.json")):
+              data = json.loads(path.read_text(encoding="utf-8"))
+              assert isinstance(data, dict), f"Language file is not an object: {path}"
+              dictionaries[path.stem] = data
+          assert {"en", "ru", "uk"} <= set(dictionaries), "Missing EN/RU/UK translations"
+          base_keys = set(dictionaries["en"])
+          for locale, data in dictionaries.items():
+              assert set(data) == base_keys, f"Interface translation keys differ for {locale}"
+
+          class HtmlAudit(HTMLParser):
+              def __init__(self, path):
+                  super().__init__(convert_charrefs=True)
+                  self.path = path
+                  self.ids = []
+                  self.local_refs = []
+                  self.i18n_keys = []
+              def handle_starttag(self, tag, attrs):
+                  attrs = dict(attrs)
+                  if attrs.get("id"):
+                      self.ids.append(attrs["id"])
+                  for attr in ("src", "href"):
+                      value = attrs.get(attr, "")
+                      if value and not value.startswith(("#", "http://", "https://", "data:", "javascript:", "mailto:")):
+                          self.local_refs.append(unquote(value.split("#", 1)[0].split("?", 1)[0]))
+                  for attr, value in attrs.items():
+                      if (attr == "data-i18n" or attr.startswith("data-i18n-")) and value:
+                          self.i18n_keys.append(value)
+
+          parsed = {}
+          for relative in ("popup.html", "offscreen.html"):
+              path = root / relative
+              parser = HtmlAudit(relative)
+              parser.feed(path.read_text(encoding="utf-8"))
+              parser.close()
+              assert len(parser.ids) == len(set(parser.ids)), f"Duplicate HTML id in {relative}"
+              for ref in parser.local_refs:
+                  if not ref:
+                      continue
+                  target = (path.parent / ref).resolve()
+                  assert target.is_relative_to(root), f"Resource escapes repository: {relative} -> {ref}"
+                  assert target.exists(), f"Broken local resource in {relative}: {ref}"
+              missing = sorted(set(parser.i18n_keys) - base_keys)
+              assert not missing, f"Missing localization keys in {relative}: {missing}"
+              parsed[relative] = parser
+
+          popup_ids = set(parsed["popup.html"].ids)
+          popup_js = (root / "popup.js").read_text(encoding="utf-8")
+          js_ids = set(re.findall(r"""getElementById\\(\\s*['"]([^'"]+)['"]\\s*\\)""", popup_js))
+          missing_ids = sorted(js_ids - popup_ids)
+          assert not missing_ids, f"popup.js references absent HTML IDs: {missing_ids}"
+
+          used_keys = set(re.findall(r"""\\bt\\(\\s*['"]([^'"]+)['"]""", popup_js))
+          for parser in parsed.values():
+              used_keys.update(parser.i18n_keys)
+          missing_keys = sorted(used_keys - base_keys)
+          assert not missing_keys, f"Missing interface translation keys: {missing_keys}"
+
+          for relative in ("background.js", "content.js", "offscreen.js", "popup.js"):
+              source = (root / relative).read_text(encoding="utf-8")
+              for pattern, label in [
+                  (r"\\beval\\s*\\(", "eval()"),
+                  (r"\\bnew\\s+Function\\b", "new Function()"),
+                  (r"\\.innerHTML\\s*=", "innerHTML assignment"),
+              ]:
+                  assert not re.search(pattern, source), f"Review unsafe pattern {label} in {relative}"
+
+          print(f"Static validation passed for Volume Controller Pro {manifest['version']}")
+          print(f"Browser locales: {len(browser_messages)}; interface locales: {len(dictionaries)} x {len(base_keys)} keys")
+          print("Manifest icons, HTML resources, popup IDs, and static localization keys: OK")
+          PY
