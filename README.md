@@ -99,49 +99,54 @@ Because the full source tree is not yet present in this repository, readers cann
 
 ## 📸 Screenshots
 
-<p align="center">
-  <a href="screenshots/voice-boost-auto-mode.jpg">
-    <img src="screenshots/voice-boost-auto-mode.jpg" alt="Voice Boost — Auto Mode" width="400"/>
-  </a>
-  <br/>
-  <strong>🎛️ Voice Boost — Auto Mode</strong>
-</p>
+The screenshots are arranged in a two-column gallery so you can compare the interface views side by side.
 
-<p align="center">
-  <a href="screenshots/quick-settings-page.jpg">
-    <img src="screenshots/quick-settings-page.jpg" alt="Quick Settings" width="400"/>
-  </a>
-  <br/>
-  <strong>⚡ Quick Settings</strong>
-</p>
+<table>
+  <tr>
+    <td align="center" width="50%">
+      <a href="screenshots/voice-boost-auto-mode.jpg">
+        <img src="screenshots/voice-boost-auto-mode.jpg" alt="Voice Boost — Auto Mode" width="100%"/>
+      </a>
+      <br/><strong>🎛️ Voice Boost — Auto Mode</strong>
+    </td>
+    <td align="center" width="50%">
+      <a href="screenshots/quick-settings-page.jpg">
+        <img src="screenshots/quick-settings-page.jpg" alt="Quick Settings" width="100%"/>
+      </a>
+      <br/><strong>⚡ Quick Settings</strong>
+    </td>
+  </tr>
+  <tr>
+    <td align="center" width="50%">
+      <a href="screenshots/volume-200-clipping-warning.jpg">
+        <img src="screenshots/volume-200-clipping-warning.jpg" alt="Volume 200% and clipping warning" width="100%"/>
+      </a>
+      <br/><strong>🚨 Volume 200% &amp; Clipping Warning</strong>
+    </td>
+    <td align="center" width="50%">
+      <a href="screenshots/visualizer-spectrogram.jpg">
+        <img src="screenshots/visualizer-spectrogram.jpg" alt="Visualizer and Spectrogram" width="100%"/>
+      </a>
+      <br/><strong>📊 Visualizer &amp; Spectrogram</strong>
+    </td>
+  </tr>
+  <tr>
+    <td align="center" width="50%">
+      <a href="screenshots/voice-boost-clean-ui.jpg">
+        <img src="screenshots/voice-boost-clean-ui.jpg" alt="Clean Bass Boost and Voice Boost interface" width="100%"/>
+      </a>
+      <br/><strong>✨ Clean Bass &amp; Voice Boost UI</strong>
+    </td>
+    <td align="center" width="50%">
+      <a href="screenshots/voice-boost-manual-mode.jpg">
+        <img src="screenshots/voice-boost-manual-mode.jpg" alt="Voice Boost — Manual Mode" width="100%"/>
+      </a>
+      <br/><strong>🎚️ Voice Boost — Manual Mode</strong>
+    </td>
+  </tr>
+</table>
 
-<p align="center">
-  <a href="screenshots/volume-200-clipping-warning.jpg">
-    <img src="screenshots/volume-200-clipping-warning.jpg" alt="Volume 200% and clipping warning" width="400"/>
-  </a>
-  <br/>
-  <strong>🚨 Volume 200% &amp; Clipping Warning</strong>
-</p>
-
-<p align="center">
-  <a href="screenshots/visualizer-spectrogram.jpg">
-    <img src="screenshots/visualizer-spectrogram.jpg" alt="Visualizer and Spectrogram" width="400"/>
-  </a>
-  <br/>
-  <strong>📊 Visualizer &amp; Spectrogram</strong>
-</p>
-
-<p align="center">
-  <a href="screenshots/voice-boost-clean-ui.jpg">
-    <img src="screenshots/voice-boost-clean-ui.jpg" alt="Clean Bass Boost and Voice Boost interface" width="400"/>
-  </a>
-  <br/>
-  <strong>✨ Clean Bass &amp; Voice Boost UI</strong>
-</p>
-
-<p align="center">
-  <a href="screenshots/voice-boost-manual-mode.jpg">Open the manual-mode screenshot at full size</a>
-</p>
+[Open the screenshots folder](screenshots/) for full-size images.
 
 ---
 
