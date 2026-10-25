@@ -73,7 +73,7 @@ jobs:
               for part in field.split("."):
                   value = value.get(part) if isinstance(value, dict) else None
               if isinstance(value, str) and value.startswith("__MSG_") and value.endswith("__"):
-                  assert value[5:-2] in base_browser_keys, f"Missing manifest message for {field}"
+                  assert value[6:-2] in base_browser_keys, f"Missing manifest message for {field}"
 
           dictionaries = {}
           for path in sorted((root / "lang").glob("*.json")):
