@@ -1,0 +1,27 @@
+name: Sync v4.7.90 release notes
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "Readme/RELEASE_DESCRIPTION_v4.7.90.md"
+      - ".github/workflows/sync-release-notes.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - name: Update published release notes
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          test -s Readme/RELEASE_DESCRIPTION_v4.7.90.md
+          gh release view v4.7.90 >/dev/null
+          gh release edit v4.7.90 --notes-file Readme/RELEASE_DESCRIPTION_v4.7.90.md
