@@ -44,26 +44,33 @@ jobs:
         run: |
           python3 - <<'PY'
           from pathlib import Path
+          import re
           p = Path("README.md")
           content = p.read_text(encoding="utf-8")
-          replacements = [
-              (
-                  "The full extension source tree has not yet been synchronized into this repository. The repository currently contains documentation, screenshots, and the license; it is not yet a complete unpacked extension source directory. Check the Releases page for an available installable package.",
-                  "The complete extension source tree is available in the main branch, with manifest.json at the repository root. You can download the repository as a ZIP or use the Releases page for a versioned package."
-              ),
-              (
-                  "Because the full source tree is not yet present in this repository, readers cannot independently verify the implementation from this repository alone. See the audit documentation and check the published source package when it becomes available.",
-                  "The extension source files are available in this repository for inspection. Audio processing is intended to run locally; review manifest.json and the source before installing."
-              ),
-              (
-                  "The main branch currently contains the README, screenshot assets, the audit report, and the MIT license. The complete extension source tree is not yet present here, so these steps will work only once a source package containing manifest.json is available.",
-                  "The main branch contains the unpacked extension source, including manifest.json, JavaScript, HTML, CSS, localized messages, and icons. You can install from a cloned repository or from the repository ZIP."
-              ),
-          ]
-          for old, new in replacements:
-              if old not in content:
-                  raise SystemExit("README text to update was not found; stopping instead of writing an incomplete change.")
-              content = content.replace(old, new)
+          content, count = re.subn(
+              r"(?m)^> \\*\\*Repository status:\\*\\*.*$",
+              "> **Repository status:** The complete extension source tree is available in the main branch, with manifest.json at the repository root. You can download the repository as a ZIP or use the Releases page for a versioned package.",
+              content,
+              count=1,
+          )
+          if count != 1:
+              raise SystemExit("Could not find the repository status note in README.md.")
+          content, count = re.subn(
+              r"Because the full source tree is not yet present in this repository, readers cannot independently verify the implementation from this repository alone\\. See the audit documentation and check the published source package when it becomes available\\.",
+              "The extension source files are available in this repository for inspection. Audio processing is intended to run locally; review manifest.json and the source before installing.",
+              content,
+              count=1,
+          )
+          if count != 1:
+              raise SystemExit("Could not find the outdated privacy note in README.md.")
+          content, count = re.subn(
+              r"The main branch currently contains the README, screenshot assets, the audit report, and the MIT license\\. The complete extension source tree is not yet present here, so these steps will work only once a source package containing manifest\\.json is available\\.",
+              "The main branch contains the unpacked extension source, including manifest.json, JavaScript, HTML, CSS, localized messages, and icons. You can install from a cloned repository or from the repository ZIP.",
+              content,
+              count=1,
+          )
+          if count != 1:
+              raise SystemExit("Could not find the outdated installation note in README.md.")
           p.write_text(content, encoding="utf-8")
           PY
 
