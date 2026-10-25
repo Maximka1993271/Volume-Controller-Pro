@@ -70,7 +70,7 @@ This repository is the project's official GitHub home and the only distribution 
 - **AudioContext lifecycle:** capture shutdown closes the audio context; a subsequent session waits for closure before creating a new context.
 - **Default profile tuning:** the default profile is tuned to a moderate starting point of +4 dB Bass and +2 dB Voice.
 
-For the detailed audit, fix rationale, and validation checklist, see [Readme/Readme.md](Readme/Readme.md). The repeatable [Validate extension workflow](.github/workflows/validate-extension.yml) runs on pushes and pull requests. End-to-end audio capture behavior still needs testing in a real Edge installation before release.
+For the detailed audit, fix rationale, and validation checklist, see [Readme/Readme.md](Readme/Readme.md). The repeatable [Validate extension workflow](.github/workflows/validate-extension.yml) runs on pushes and pull requests. **Manual test report (2026-10-25):** the maintainer reports successful use in Microsoft Edge on YouTube, including capture start/stop/restart, tab switching and closing, Bass Boost, Voice Boost, visualizers, and settings import/export. CI remains static and does not independently reproduce real audio playback.
 
 ---
 
