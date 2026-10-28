@@ -1212,10 +1212,13 @@ const AUTO_GENRE_CONTEXT_WORDS = new Set([
   'музыка', 'музика', 'микс', 'мікс', 'плейлист', 'жанр', 'трек', 'песня', 'песни', 'пісня', 'пісні',
   'збірка', 'сборник', 'саундтрек', 'хиты', 'хіти', 'музичний', 'музыкальный'
 ]);
-const AUTO_GENRE_MATCHERS = AUTO_GENRE_CATALOG.flatMap((item) => item.aliases.map((alias) => {
-  const normalizedAlias = normalizeGenreText(alias);
-  return { item, alias: normalizedAlias, tokenCount: normalizedAlias ? normalizedAlias.split(' ').length : 0,
-    score: normalizedAlias ? normalizedAlias.length + normalizedAlias.split(' ').length * 10 : 0 };
+const AUTO_GENRE_MATCHERS = AUTO_GENRE_CATALOG.flatMap((item) =>
+  item.aliases.map((alias) => [item, normalizeGenreText(alias)])
+).map(([item, alias]) => ({
+  item,
+  alias,
+  tokenCount: alias ? alias.split(' ').length : 0,
+  score: alias ? alias.length + alias.split(' ').length * 10 : 0
 })).filter((entry) => entry.alias).sort((a, b) => b.score - a.score);
 
 // Balanced defaults: moderate low-shelf boost and restrained vocal-presence EQ.
