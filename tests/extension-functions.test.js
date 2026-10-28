@@ -333,6 +333,21 @@ test('genre catalog removes ambiguous short aliases and retains clear alternativ
   }
 });
 
+test('genre title matching preserves literal ampersands', () => {
+  const rnbHits = plain(offscreen.classifyGenreFromTitle('R&B Hits'));
+  assert.equal(rnbHits.genre, 'rnb');
+
+  const spacedRnbHits = plain(offscreen.classifyGenreFromTitle('R & B Hits'));
+  assert.equal(spacedRnbHits.genre, 'rnb');
+
+  assert.equal(offscreen.classifyGenreFromTitle('R B Session'), null);
+  assert.equal(offscreen.classifyGenreFromTitle('R B Music'), null);
+
+  const rockAndRoll = plain(offscreen.classifyGenreFromTitle('Rock & Roll Classics'));
+  assert.equal(rockAndRoll.genre, 'rock');
+  assert.equal(offscreen.classifyGenreFromTitle('Rock Roll Classics'), null);
+});
+
 test('title genre classifier detects specific named genres and respects word boundaries', () => {
   const phonk = plain(offscreen.classifyGenreFromTitle('DRIFT--PHONK / LIVE MIX'));
   assert.equal(phonk.genre, 'phonk');
