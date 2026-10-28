@@ -1170,31 +1170,41 @@ const AUTO_GENRE_CATALOG = [
     "id": "audioBassHeavy",
     "label": "autoGenreAudioBassHeavy",
     "family": "bassHeavy",
-    "aliases": []
+    "aliases": [
+
+    ]
   },
   {
     "id": "audioElectronic",
     "label": "autoGenreAudioElectronic",
     "family": "electronic",
-    "aliases": []
+    "aliases": [
+
+    ]
   },
   {
     "id": "audioAtmospheric",
     "label": "autoGenreAudioAtmospheric",
     "family": "atmosphere",
-    "aliases": []
+    "aliases": [
+
+    ]
   },
   {
     "id": "audioVocal",
     "label": "autoGenreAudioVocal",
     "family": "vocal",
-    "aliases": []
+    "aliases": [
+
+    ]
   },
   {
     "id": "audioOther",
     "label": "autoGenreAudioOther",
     "family": "neutral",
-    "aliases": []
+    "aliases": [
+
+    ]
   }
 ];
 const AUTO_GENRE_PROFILES = Object.fromEntries(AUTO_GENRE_CATALOG.map((item) => [item.id, AUTO_GENRE_PROFILE_FAMILIES[item.family] || AUTO_GENRE_PROFILE_FAMILIES.neutral]));

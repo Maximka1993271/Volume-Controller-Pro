@@ -39,10 +39,12 @@ This repository is the project's official GitHub home and the only distribution 
 
 - **Official repository:** [Maximka1993271/Volume-Controller-Pro](https://github.com/Maximka1993271/Volume-Controller-Pro)
 - **Releases:** [Download page](https://github.com/Maximka1993271/Volume-Controller-Pro/releases)
-- **Latest published release asset (v4.7.90):** [Download `Volume.Controller.Pro.v4.7.90.zip`](https://github.com/Maximka1993271/Volume-Controller-Pro/releases/download/v4.7.90/Volume.Controller.Pro.v4.7.90.zip)
-- **Updated source on `main` (v4.7.91):** automatic genre-detection improvements and the full [genre catalog](AUTO_GENRE_CATALOG.md). [Download the current source ZIP](https://github.com/Maximka1993271/Volume-Controller-Pro/archive/refs/heads/main.zip).
-- **Release status:** v4.7.91 is a source update, not a published GitHub Release asset. The v4.7.90 download remains the latest published binary until a new release is created.
-- **SHA-256 of the published GitHub release asset:** `11dbbe5d751abd6f06105317e2aad803ce2d1f08ec159f62121382153ed1de6f`
+- **Latest release (v4.7.91):** [Download `Volume.Controller.Pro.v4.7.91.zip`](https://github.com/Maximka1993271/Volume-Controller-Pro/releases/download/v4.7.91/Volume.Controller.Pro.v4.7.91.zip)
+- **SHA-256 checksum:** [`Volume.Controller.Pro.v4.7.91.zip.sha256`](https://github.com/Maximka1993271/Volume-Controller-Pro/releases/download/v4.7.91/Volume.Controller.Pro.v4.7.91.zip.sha256)
+- **Full release notes:** [v4.7.91](https://github.com/Maximka1993271/Volume-Controller-Pro/releases/tag/v4.7.91)
+- **Source archive:** [Download the current `main` source ZIP](https://github.com/Maximka1993271/Volume-Controller-Pro/archive/refs/heads/main.zip). The release package is built from the reviewed source tree and includes the full [genre catalog](AUTO_GENRE_CATALOG.md).
+- The previous [v4.7.90 release](https://github.com/Maximka1993271/Volume-Controller-Pro/releases/tag/v4.7.90) remains in the release history.
+- No official Chrome Web Store or Microsoft Edge Add-ons listing is currently announced by the author.
 - No official Chrome Web Store or Microsoft Edge Add-ons listing is currently announced by the author.
 - Be cautious with copies hosted elsewhere; use only files published through the official repository and its Releases page.
 
@@ -56,7 +58,7 @@ This repository is the project's official GitHub home and the only distribution 
 - 🎚️ **Bass Boost** — adjustable low-frequency enhancement, up to +12 dB.
 - 🎤 **Voice Boost** — speech-clarity controls with AUTO and MANUAL modes.
 - 🎛️ **Audio Profiles** — per-site settings for supported media sites such as YouTube and Spotify.
-- 🎶 **Automatic Genre Detection** — 76 title-based genre/subgenre labels plus five broad audio-only profiles; see [the full catalog and EQ families](AUTO_GENRE_CATALOG.md).
+- 🎶 **Automatic Genre Detection** — 76 title-based genre/subgenre labels plus five broad audio-only profiles; aliases are synchronized with the v4.7.91 archive; see [the full catalog and EQ families](AUTO_GENRE_CATALOG.md).
 - 📊 **Audio Visualizers** — five spectrum styles plus a spectrogram.
 - 💾 **Settings Backup** — import/export settings through .cfg files.
 - 🌗 **Themes** — Dark, Light, and System options.

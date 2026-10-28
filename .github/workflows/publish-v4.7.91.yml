@@ -1,0 +1,73 @@
+name: Publish Volume Controller Pro 4.7.91
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "Readme/RELEASE_DESCRIPTION_v4.7.91.md"
+      - ".github/workflows/publish-v4.7.91.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: publish-v4.7.91
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Check out reviewed source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Validate release version and source files
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+
+          manifest = json.loads(Path("manifest.json").read_text(encoding="utf-8"))
+          assert manifest.get("version") == "4.7.91", f"Unexpected version: {manifest.get('version')}"
+          required = [
+              "AUTO_GENRE_CATALOG.md", "_locales", "background.js", "content.js",
+              "icons", "lang", "manifest.json", "offscreen.html", "offscreen.js",
+              "popup.css", "popup.html", "popup.js", "styles.css",
+          ]
+          missing = [name for name in required if not Path(name).exists()]
+          assert not missing, f"Missing package files: {missing}"
+          assert Path("Readme/RELEASE_DESCRIPTION_v4.7.91.md").is_file()
+          print("Validated Volume Controller Pro 4.7.91 source tree.")
+          PY
+
+      - name: Package extension and create checksum
+        run: |
+          set -euo pipefail
+          mkdir -p dist/package/"Volume Controller Pro"
+          cp -a AUTO_GENRE_CATALOG.md _locales background.js content.js icons lang manifest.json offscreen.html offscreen.js popup.css popup.html popup.js styles.css dist/package/"Volume Controller Pro"/
+          (
+            cd dist/package
+            zip -qr ../Volume.Controller.Pro.v4.7.91.zip "Volume Controller Pro"
+          )
+          cd dist
+          sha256sum Volume.Controller.Pro.v4.7.91.zip > Volume.Controller.Pro.v4.7.91.zip.sha256
+          ls -lh Volume.Controller.Pro.v4.7.91.zip Volume.Controller.Pro.v4.7.91.zip.sha256
+
+      - name: Publish GitHub Release v4.7.91
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          if gh release view v4.7.91 >/dev/null 2>&1; then
+            echo "Release v4.7.91 already exists; refusing to overwrite release history." >&2
+            exit 1
+          fi
+          gh release create v4.7.91 \
+            dist/Volume.Controller.Pro.v4.7.91.zip \
+            dist/Volume.Controller.Pro.v4.7.91.zip.sha256 \
+            --target main \
+            --title "Volume Controller Pro 4.7.91" \
+            --notes-file Readme/RELEASE_DESCRIPTION_v4.7.91.md \
+            --latest
