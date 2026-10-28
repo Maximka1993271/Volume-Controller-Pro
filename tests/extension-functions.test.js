@@ -78,7 +78,10 @@ const popup = loadProductionApi('popup.js', [
 ]);
 
 const offscreen = loadProductionApi('offscreen.js', [
-  'AUTO_GENRE_CATALOG'
+  'AUTO_GENRE_CATALOG',
+  'AUTO_GENRE_AMBIGUOUS_WORDS',
+  'AUTO_GENRE_CONTEXT_WORDS',
+  'AUTO_GENRE_MATCHERS'
 ], [
   'normalizeGenreText',
   'classifyGenreFromTitle',
