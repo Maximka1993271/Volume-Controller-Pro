@@ -1,8 +1,8 @@
-<h1 align="center">Volume Controller Pro v4.7.90</h1>
+<h1 align="center">Volume Controller Pro v4.7.91</h1>
 
 <p align="center">
   <a href="https://github.com/Maximka1993271/Volume-Controller-Pro/releases">
-    <img src="https://img.shields.io/badge/version-4.7.90-blue.svg?style=for-the-badge&logo=github" alt="Version 4.7.90"/>
+    <img src="https://img.shields.io/badge/version-4.7.91-blue.svg?style=for-the-badge&logo=github" alt="Version 4.7.91"/>
   </a>
   <a href="https://www.microsoft.com/edge">
     <img src="https://img.shields.io/badge/Edge-Chromium-0078D7.svg?style=for-the-badge&logo=microsoft-edge" alt="Microsoft Edge"/>
@@ -39,7 +39,9 @@ This repository is the project's official GitHub home and the only distribution 
 
 - **Official repository:** [Maximka1993271/Volume-Controller-Pro](https://github.com/Maximka1993271/Volume-Controller-Pro)
 - **Releases:** [Download page](https://github.com/Maximka1993271/Volume-Controller-Pro/releases)
-- **Current installable package (v4.7.90):** [Download `Volume.Controller.Pro.v4.7.90.zip`](https://github.com/Maximka1993271/Volume-Controller-Pro/releases/download/v4.7.90/Volume.Controller.Pro.v4.7.90.zip)
+- **Latest published release asset (v4.7.90):** [Download `Volume.Controller.Pro.v4.7.90.zip`](https://github.com/Maximka1993271/Volume-Controller-Pro/releases/download/v4.7.90/Volume.Controller.Pro.v4.7.90.zip)
+- **Updated source on `main` (v4.7.91):** automatic genre-detection improvements and the full [genre catalog](AUTO_GENRE_CATALOG.md). [Download the current source ZIP](https://github.com/Maximka1993271/Volume-Controller-Pro/archive/refs/heads/main.zip).
+- **Release status:** v4.7.91 is a source update, not a published GitHub Release asset. The v4.7.90 download remains the latest published binary until a new release is created.
 - **SHA-256 of the published GitHub release asset:** `11dbbe5d751abd6f06105317e2aad803ce2d1f08ec159f62121382153ed1de6f`
 - No official Chrome Web Store or Microsoft Edge Add-ons listing is currently announced by the author.
 - Be cautious with copies hosted elsewhere; use only files published through the official repository and its Releases page.
@@ -54,6 +56,7 @@ This repository is the project's official GitHub home and the only distribution 
 - 🎚️ **Bass Boost** — adjustable low-frequency enhancement, up to +12 dB.
 - 🎤 **Voice Boost** — speech-clarity controls with AUTO and MANUAL modes.
 - 🎛️ **Audio Profiles** — per-site settings for supported media sites such as YouTube and Spotify.
+- 🎶 **Automatic Genre Detection** — 76 title-based genre/subgenre labels plus five broad audio-only profiles; see [the full catalog and EQ families](AUTO_GENRE_CATALOG.md).
 - 📊 **Audio Visualizers** — five spectrum styles plus a spectrogram.
 - 💾 **Settings Backup** — import/export settings through .cfg files.
 - 🌗 **Themes** — Dark, Light, and System options.
@@ -62,15 +65,15 @@ This repository is the project's official GitHub home and the only distribution 
 - 🎯 **Clipping Detection** — visual warnings when audio peaks are detected.
 - 🌐 **Three Languages** — English, Русский, Українська.
 
-## 🐛 Latest Fixes — v4.7.90
+## 🐛 Latest Fixes — v4.7.91 source update
 
-- **Voice Boost UI:** restored the original AUTO/MANUAL pill toggle beside the level; the numerical value remains clean, for example **0 dB**.
-- **Track-aware auto-tuning:** genre analysis resets when the track changes so a previous track's profile is not reused.
-- **Capture race handling:** tab-close and stream-end events are serialized through the capture queue to reduce stale-event interference with new streams.
-- **AudioContext lifecycle:** capture shutdown closes the audio context; a subsequent session waits for closure before creating a new context.
-- **Default profile tuning:** the default profile is tuned to a moderate starting point of +4 dB Bass and +2 dB Voice.
+- **Genre catalog:** expanded aliases and spelling variants, including additional Russian and Ukrainian names for the existing genre/subgenre IDs.
+- **Fewer title false positives:** ambiguous one-word labels such as `house`, `rock`, and `pop` need an exact genre title or nearby music context; specific subgenres retain priority.
+- **Safer audio-only fallback:** silence and near-noise-floor samples are not classified; the atmospheric heuristic meets the minimum confidence threshold before application.
+- **Status reliability:** confidence and Bass/Voice toggle state are part of the status signature, so meaningful changes can reach the interface.
+- **Full reference:** [AUTO_GENRE_CATALOG.md](AUTO_GENRE_CATALOG.md) documents all 81 records, aliases, 12 EQ families, and audio-only rules.
 
-For the detailed audit, fix rationale, and validation checklist, see [Readme/Readme.md](Readme/Readme.md). The repeatable [Validate extension workflow](.github/workflows/validate-extension.yml) runs on pushes and pull requests. **Manual test report (2026-10-25):** the maintainer reports successful use in Microsoft Edge on YouTube, including capture start/stop/restart, tab switching and closing, Bass Boost, Voice Boost, visualizers, and settings import/export. CI remains static and does not independently reproduce real audio playback.
+The source branch is updated to v4.7.91. The binary asset listed in Releases remains v4.7.90 until a v4.7.91 release is published. For the earlier release and manual test report (2026-10-25), see [Readme/Readme.md](Readme/Readme.md). The [Validate extension workflow](.github/workflows/validate-extension.yml) runs on pushes and pull requests.
 
 ---
 
@@ -192,6 +195,7 @@ Volume-Controller-Pro/
 ├── popup.js
 ├── styles.css
 ├── manifest.json
+├── AUTO_GENRE_CATALOG.md
 ├── CHANGELOG.md
 ├── CONTRIBUTING.md
 ├── LICENSE
@@ -215,6 +219,7 @@ Volume-Controller-Pro/
 
 ## 📚 Project documentation
 
+- [Full automatic genre catalog](AUTO_GENRE_CATALOG.md)
 - [Changelog](CHANGELOG.md)
 - [Privacy notes](PRIVACY.md)
 - [Security policy](SECURITY.md)
@@ -235,5 +240,5 @@ This project is licensed under the **MIT License**. Read the full terms in [LICE
 
 <p align="center">
   <strong>Made with ❤️ by Maxim Melnikov</strong><br/>
-  <sub>Volume Controller Pro v4.7.90</sub>
+  <sub>Volume Controller Pro v4.7.91</sub>
 </p>
