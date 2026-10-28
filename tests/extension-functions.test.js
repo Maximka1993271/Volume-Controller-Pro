@@ -502,7 +502,7 @@ test('capture recovery restores the active tab from the offscreen document after
     status: { success: true, active: true, tabId: 42 }
   });
   assert.equal(await harness.api.reconcileCapturedTabState(), 42);
-  assert.deepEqual(harness.calls.filter((call) => call.type === 'sendToOffscreen').map((call) => call.message), [
+  assert.deepEqual(harness.calls.filter((call) => call.type === 'sendToOffscreen').map((call) => plain(call.message)), [
     { type: 'GET_CAPTURE_STATUS' }
   ]);
 });
