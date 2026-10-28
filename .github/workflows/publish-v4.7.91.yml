@@ -3,9 +3,23 @@ name: Publish Volume Controller Pro 4.7.91
 on:
   push:
     branches: [main]
+    # Rebuild whenever any file packaged into the release ZIP changes.
     paths:
-      - "Readme/RELEASE_DESCRIPTION_v4.7.91.md"
       - ".github/workflows/publish-v4.7.91.yml"
+      - "AUTO_GENRE_CATALOG.md"
+      - "_locales/**"
+      - "background.js"
+      - "content.js"
+      - "icons/**"
+      - "lang/**"
+      - "manifest.json"
+      - "offscreen.html"
+      - "offscreen.js"
+      - "popup.css"
+      - "popup.html"
+      - "popup.js"
+      - "styles.css"
+      - "Readme/RELEASE_DESCRIPTION_v4.7.91.md"
   workflow_dispatch:
 
 permissions:
@@ -53,6 +67,9 @@ jobs:
           )
           cd dist
           sha256sum Volume.Controller.Pro.v4.7.91.zip > Volume.Controller.Pro.v4.7.91.zip.sha256
+          # Fail before publishing if the archive is corrupt or its checksum does not match.
+          unzip -t Volume.Controller.Pro.v4.7.91.zip >/dev/null
+          sha256sum -c Volume.Controller.Pro.v4.7.91.zip.sha256
           ls -lh Volume.Controller.Pro.v4.7.91.zip Volume.Controller.Pro.v4.7.91.zip.sha256
 
       - name: Replace assets on existing GitHub Release v4.7.91
