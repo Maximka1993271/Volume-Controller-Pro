@@ -22,7 +22,7 @@
 </p>
 
 <p align="center">
-  <img src="screenshots/voice-boost-manual-mode.jpg" alt="Volume Controller Pro — Voice Boost manual mode" width="600"/>
+  <img src="screenshots/quick-settings-page.jpg" alt="Volume Controller Pro — Voice Boost manual mode" width="600"/>
 </p>
 
 <p align="center">
