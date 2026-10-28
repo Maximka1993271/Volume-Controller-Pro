@@ -8,6 +8,7 @@
 - Raised the atmospheric audio heuristic to the classifier's minimum confidence threshold.
 - Included confidence and Bass/Voice enable states in the status signature so meaningful UI changes are not suppressed.
 - Added the full [AUTO_GENRE_CATALOG.md](AUTO_GENRE_CATALOG.md) reference.
+- Synced the complete alias table from the v4.7.91 archive into `offscreen.js` and the documentation.
 
 User-facing highlights for published releases. Older implementation and audit history is preserved in [Readme/Readme.md](Readme/Readme.md).
 
