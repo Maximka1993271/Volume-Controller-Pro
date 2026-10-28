@@ -10,7 +10,7 @@ const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 // Execute real production function bodies without booting a browser UI.
 // Top-level function declarations in the source files end with an unindented brace.
 function extractFunction(source, name) {
-  const match = new RegExp('^function\\s+' + name + '\\s*\\(', 'm').exec(source);
+  const match = new RegExp('^(?:async\\s+)?function\\s+' + name + '\\s*\\(', 'm').exec(source);
   assert.ok(match, 'Could not find production function: ' + name);
   const end = source.indexOf('\n}', match.index);
   assert.notEqual(end, -1, 'Could not find end of production function: ' + name);
@@ -86,14 +86,14 @@ function extractDeclaration(source, name) {
   assert.fail('Could not find end of production declaration: ' + name);
 }
 
-function loadProductionApi(file, declarationNames, functionNames) {
+function loadProductionApi(file, declarationNames, functionNames, globals = {}) {
   const source = readFileSync(resolve(ROOT, file), 'utf8');
   const fragments = [
     ...declarationNames.map((name) => extractDeclaration(source, name)),
     ...functionNames.map((name) => extractFunction(source, name)),
     'globalThis.__testApi = {' + [...declarationNames, ...functionNames].map((name) => name + ': ' + name).join(', ') + '};'
   ];
-  const context = createContext({ URL });
+  const context = createContext({ URL, ...globals });
   runInContext(fragments.join('\n\n'), context, { filename: file });
   return runInContext('globalThis.__testApi', context);
 }
@@ -458,4 +458,91 @@ test('spectrum conversion returns the requested number of bounded finite bands',
   assert.equal(uniformBands.length, 24);
   assert.ok(uniformBands.every((value) => Number.isFinite(value) && value >= 0 && value <= 1));
   assert.ok(uniformBands.every((value) => value > 0.45 && value < 0.60));
+});
+
+
+function createCaptureLifecycleHarness({
+  contexts = [{ url: 'chrome-extension://test/offscreen.html' }],
+  status = { success: true, active: true, tabId: 17 },
+  rejectStatus = false
+} = {}) {
+  const calls = [];
+  const api = loadProductionApi('background.js', [], [
+    'enqueueCaptureTask',
+    'reconcileCapturedTabState'
+  ], {
+    captureQueue: Promise.resolve(),
+    currentCapturedTabId: 99,
+    chrome: {
+      runtime: {
+        getURL: (path) => 'chrome-extension://test/' + path,
+        getContexts: async (filter) => {
+          calls.push({ type: 'getContexts', filter });
+          return contexts;
+        }
+      }
+    },
+    sendToOffscreen: async (message) => {
+      calls.push({ type: 'sendToOffscreen', message });
+      if (rejectStatus) throw new Error('offscreen unavailable');
+      return status;
+    }
+  });
+  return { api, calls };
+}
+
+test('capture recovery clears stale worker state when the offscreen document is absent', async () => {
+  const harness = createCaptureLifecycleHarness({ contexts: [] });
+  assert.equal(await harness.api.reconcileCapturedTabState(), null);
+  assert.equal(harness.calls.filter((call) => call.type === 'sendToOffscreen').length, 0);
+});
+
+test('capture recovery restores the active tab from the offscreen document after worker restart', async () => {
+  const harness = createCaptureLifecycleHarness({
+    status: { success: true, active: true, tabId: 42 }
+  });
+  assert.equal(await harness.api.reconcileCapturedTabState(), 42);
+  assert.deepEqual(harness.calls.filter((call) => call.type === 'sendToOffscreen').map((call) => plain(call.message)), [
+    { type: 'GET_CAPTURE_STATUS' }
+  ]);
+});
+
+test('capture recovery rejects stale or malformed offscreen status safely', async () => {
+  for (const status of [
+    { success: true, active: false, tabId: 42 },
+    { success: false, active: true, tabId: 42 },
+    { success: true, active: true, tabId: '42' },
+    null
+  ]) {
+    const harness = createCaptureLifecycleHarness({ status });
+    assert.equal(await harness.api.reconcileCapturedTabState(), null, JSON.stringify(status));
+  }
+
+  const unavailable = createCaptureLifecycleHarness({ rejectStatus: true });
+  assert.equal(await unavailable.api.reconcileCapturedTabState(), null);
+});
+
+test('capture lifecycle queue serializes start/stop work and continues after a rejected task', async () => {
+  const harness = createCaptureLifecycleHarness();
+  const order = [];
+  let releaseFirst;
+  const firstGate = new Promise((resolve) => { releaseFirst = resolve; });
+
+  const first = harness.api.enqueueCaptureTask(async () => {
+    order.push('first:start');
+    await firstGate;
+    order.push('first:end');
+    throw new Error('expected test failure');
+  });
+  const second = harness.api.enqueueCaptureTask(async () => {
+    order.push('second');
+    return 'second result';
+  });
+
+  await new Promise((resolve) => setImmediate(resolve));
+  assert.deepEqual(order, ['first:start']);
+  releaseFirst();
+  await assert.rejects(first, /expected test failure/);
+  assert.equal(await second, 'second result');
+  assert.deepEqual(order, ['first:start', 'first:end', 'second']);
 });
