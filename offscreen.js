@@ -78,7 +78,15 @@ const AUTO_GENRE_CATALOG = [
       "boom bap",
       "рэп",
       "хип хоп",
-      "хип-хоп"
+      "хип-хоп",
+      "hip-hop music",
+      "hip hop beats",
+      "uk hip hop",
+      "хіп хоп",
+      "хіпхоп",
+      "український реп",
+      "український хіп-хоп",
+      "український хіпхоп"
     ]
   },
   {
@@ -90,7 +98,11 @@ const AUTO_GENRE_CATALOG = [
       "trap mix",
       "trap",
       "трэп",
-      "трап"
+      "трап",
+      "trap beats",
+      "trap playlist",
+      "треп музика",
+      "трап музика"
     ]
   },
   {
@@ -102,7 +114,12 @@ const AUTO_GENRE_CATALOG = [
       "uk drill",
       "drill music",
       "drill",
-      "дрилл"
+      "дрилл",
+      "drill beats",
+      "drill playlist",
+      "дріл",
+      "дрілл",
+      "дрил"
     ]
   },
   {
@@ -111,7 +128,11 @@ const AUTO_GENRE_CATALOG = [
     "family": "hiphop",
     "aliases": [
       "grime music",
-      "grime"
+      "grime",
+      "uk grime",
+      "uk grime music",
+      "ґрайм",
+      "грайм"
     ]
   },
   {
@@ -124,7 +145,12 @@ const AUTO_GENRE_CATALOG = [
       "cowbell phonk",
       "phonk",
       "фонк",
-      "фонк микс"
+      "фонк микс",
+      "phonk music",
+      "phonk playlist",
+      "phonk beats",
+      "фонк музика",
+      "фонк плейлист"
     ]
   },
   {
@@ -138,7 +164,12 @@ const AUTO_GENRE_CATALOG = [
       "wave music",
       "wave mix",
       "wave",
-      "вейв"
+      "вейв",
+      "wave playlist",
+      "wave mix music",
+      "вейв музика",
+      "хардвейв",
+      "чилвейв"
     ]
   },
   {
@@ -152,7 +183,13 @@ const AUTO_GENRE_CATALOG = [
       "lofi beats",
       "lofi",
       "лоу фай",
-      "лоуфай"
+      "лоуфай",
+      "lo-fi music",
+      "lo-fi beats",
+      "low fidelity music",
+      "лоуфай музыка",
+      "лоу-фай музика",
+      "лоуфай музика"
     ]
   },
   {
@@ -163,7 +200,13 @@ const AUTO_GENRE_CATALOG = [
       "dark ambient",
       "ambient music",
       "ambient",
-      "эмбиент"
+      "эмбиент",
+      "ambient soundtrack",
+      "ambient instrumental",
+      "ембієнт",
+      "атмосферна музика",
+      "атмосферная музыка",
+      "дарк эмбиент"
     ]
   },
   {
@@ -173,7 +216,11 @@ const AUTO_GENRE_CATALOG = [
     "aliases": [
       "new age music",
       "new age",
-      "нью эйдж"
+      "нью эйдж",
+      "релакс музыка",
+      "релакс музика",
+      "музыка нью эйдж",
+      "музика нью-ейдж"
     ]
   },
   {
@@ -184,7 +231,12 @@ const AUTO_GENRE_CATALOG = [
       "chill out",
       "chillout",
       "chill mix",
-      "relaxing music"
+      "relaxing music",
+      "chill-out music",
+      "chillout music",
+      "чиллаут",
+      "чил-аут",
+      "чиллаут музика"
     ]
   },
   {
@@ -197,7 +249,16 @@ const AUTO_GENRE_CATALOG = [
       "pop song",
       "pop",
       "поп музыка",
-      "поп"
+      "поп",
+      "pop playlist",
+      "pop hits",
+      "pop hits mix",
+      "city pop",
+      "synth-pop",
+      "electropop",
+      "поп-музика",
+      "поп-хиты",
+      "поп хіти"
     ]
   },
   {
@@ -206,7 +267,9 @@ const AUTO_GENRE_CATALOG = [
     "family": "pop",
     "aliases": [
       "dance pop",
-      "dance-pop"
+      "dance-pop",
+      "dance-pop music",
+      "денс-поп"
     ]
   },
   {
@@ -217,7 +280,11 @@ const AUTO_GENRE_CATALOG = [
       "k pop",
       "kpop",
       "korean pop",
-      "кей поп"
+      "кей поп",
+      "k-pop music",
+      "к-поп",
+      "корейская поп-музыка",
+      "корейський поп"
     ]
   },
   {
@@ -227,7 +294,11 @@ const AUTO_GENRE_CATALOG = [
     "aliases": [
       "j pop",
       "jpop",
-      "japanese pop"
+      "japanese pop",
+      "j-pop music",
+      "джей-поп",
+      "японская поп-музыка",
+      "японський поп"
     ]
   },
   {
@@ -235,7 +306,10 @@ const AUTO_GENRE_CATALOG = [
     "label": "autoGenreIndiePop",
     "family": "pop",
     "aliases": [
-      "indie pop"
+      "indie pop",
+      "indie pop music",
+      "інді-поп",
+      "инди-поп"
     ]
   },
   {
@@ -244,7 +318,11 @@ const AUTO_GENRE_CATALOG = [
     "family": "pop",
     "aliases": [
       "hyperpop",
-      "хайперпоп"
+      "хайперпоп",
+      "hyper-pop",
+      "hyperpop music",
+      "хайпер-поп",
+      "хайперпоп музика"
     ]
   },
   {
@@ -257,7 +335,16 @@ const AUTO_GENRE_CATALOG = [
       "rock mix",
       "rock",
       "рок музыка",
-      "рок"
+      "рок",
+      "rock playlist",
+      "rock and roll",
+      "rock n roll",
+      "rock & roll",
+      "garage rock",
+      "post-punk",
+      "рок-музика",
+      "рок-н-ролл",
+      "рок-н-рол"
     ]
   },
   {
@@ -267,7 +354,10 @@ const AUTO_GENRE_CATALOG = [
     "aliases": [
       "alternative rock",
       "alt rock",
-      "альтернативный рок"
+      "альтернативный рок",
+      "alternative rock music",
+      "альт-рок",
+      "альтернативний рок"
     ]
   },
   {
@@ -276,7 +366,8 @@ const AUTO_GENRE_CATALOG = [
     "family": "rock",
     "aliases": [
       "hard rock",
-      "хард рок"
+      "хард рок",
+      "hard rock music"
     ]
   },
   {
@@ -285,7 +376,9 @@ const AUTO_GENRE_CATALOG = [
     "family": "rock",
     "aliases": [
       "post rock",
-      "post-rock"
+      "post-rock",
+      "post-rock music",
+      "пост-рок"
     ]
   },
   {
@@ -299,7 +392,12 @@ const AUTO_GENRE_CATALOG = [
       "metal music",
       "metal",
       "метал",
-      "металл"
+      "металл",
+      "metal playlist",
+      "heavy metal music",
+      "metal music mix",
+      "метал-музика",
+      "металева музика"
     ]
   },
   {
@@ -307,7 +405,11 @@ const AUTO_GENRE_CATALOG = [
     "label": "autoGenreMetalcore",
     "family": "rock",
     "aliases": [
-      "metalcore"
+      "metalcore",
+      "metal-core",
+      "metalcore music",
+      "металкор",
+      "металкор музика"
     ]
   },
   {
@@ -317,7 +419,11 @@ const AUTO_GENRE_CATALOG = [
     "aliases": [
       "punk rock",
       "punk",
-      "панк"
+      "панк",
+      "punk music",
+      "punk playlist",
+      "post-hardcore",
+      "панк-рок"
     ]
   },
   {
@@ -327,7 +433,11 @@ const AUTO_GENRE_CATALOG = [
     "aliases": [
       "indie rock",
       "indie music",
-      "indie"
+      "indie",
+      "indie music playlist",
+      "інді",
+      "інді-рок",
+      "инди-рок"
     ]
   },
   {
@@ -336,7 +446,9 @@ const AUTO_GENRE_CATALOG = [
     "family": "rock",
     "aliases": [
       "grunge",
-      "гранж"
+      "гранж",
+      "grunge rock",
+      "гранж-рок"
     ]
   },
   {
@@ -346,7 +458,9 @@ const AUTO_GENRE_CATALOG = [
     "aliases": [
       "emo rock",
       "emo",
-      "эмо"
+      "эмо",
+      "emo rock music",
+      "емо-рок"
     ]
   },
   {
@@ -355,7 +469,10 @@ const AUTO_GENRE_CATALOG = [
     "family": "rock",
     "aliases": [
       "shoegaze",
-      "shoe gaze"
+      "shoe gaze",
+      "shoegaze music",
+      "шугейз",
+      "шугейз музика"
     ]
   },
   {
@@ -366,7 +483,12 @@ const AUTO_GENRE_CATALOG = [
       "smooth jazz",
       "jazz music",
       "jazz",
-      "джаз"
+      "джаз",
+      "jazz playlist",
+      "jazz fusion",
+      "джазова музика",
+      "джаз музика",
+      "джаз-фьюжн"
     ]
   },
   {
@@ -377,7 +499,12 @@ const AUTO_GENRE_CATALOG = [
       "blues rock",
       "blues music",
       "blues",
-      "блюз"
+      "блюз",
+      "delta blues",
+      "electric blues",
+      "blues playlist",
+      "блюзова музика",
+      "блюз музика"
     ]
   },
   {
@@ -387,7 +514,10 @@ const AUTO_GENRE_CATALOG = [
     "aliases": [
       "funk music",
       "funk",
-      "фанк"
+      "фанк",
+      "funk playlist",
+      "фанк музика",
+      "фанкова музика"
     ]
   },
   {
@@ -398,7 +528,10 @@ const AUTO_GENRE_CATALOG = [
       "neo soul",
       "soul music",
       "soul",
-      "соул"
+      "соул",
+      "soul music playlist",
+      "нео-соул",
+      "соул музика"
     ]
   },
   {
@@ -410,7 +543,15 @@ const AUTO_GENRE_CATALOG = [
       "r and b",
       "r b",
       "rnb",
-      "r&b"
+      "r&b",
+      "r&b music",
+      "r and b music",
+      "contemporary r&b",
+      "alternative r&b",
+      "uk r&b",
+      "ритм-н-блюз",
+      "ритм энд блюз",
+      "ритм-енд-блюз"
     ]
   },
   {
@@ -420,7 +561,12 @@ const AUTO_GENRE_CATALOG = [
     "aliases": [
       "disco music",
       "disco",
-      "диско"
+      "диско",
+      "nu-disco",
+      "disco playlist",
+      "диско музыка",
+      "диско музика",
+      "ню-диско"
     ]
   },
   {
@@ -430,7 +576,14 @@ const AUTO_GENRE_CATALOG = [
     "aliases": [
       "country music",
       "country",
-      "кантри"
+      "кантри",
+      "country playlist",
+      "alt-country",
+      "alternative country",
+      "country folk",
+      "country rock",
+      "кантрі музика",
+      "кантри музыка"
     ]
   },
   {
@@ -440,7 +593,11 @@ const AUTO_GENRE_CATALOG = [
     "aliases": [
       "folk music",
       "folk",
-      "фолк"
+      "фолк",
+      "folk playlist",
+      "indie folk",
+      "современный фолк",
+      "сучасний фолк"
     ]
   },
   {
@@ -448,7 +605,10 @@ const AUTO_GENRE_CATALOG = [
     "label": "autoGenreBluegrass",
     "family": "acoustic",
     "aliases": [
-      "bluegrass"
+      "bluegrass",
+      "bluegrass music",
+      "блуграс",
+      "блюграсс"
     ]
   },
   {
@@ -458,7 +618,11 @@ const AUTO_GENRE_CATALOG = [
     "aliases": [
       "acoustic music",
       "acoustic guitar",
-      "acoustic"
+      "acoustic",
+      "acoustic playlist",
+      "acoustic guitar music",
+      "акустична музика",
+      "акустическая музыка"
     ]
   },
   {
@@ -470,7 +634,11 @@ const AUTO_GENRE_CATALOG = [
       "classic music",
       "classical",
       "классическая музыка",
-      "классика"
+      "классика",
+      "classical piano",
+      "classical orchestra",
+      "класична музика",
+      "класика музика"
     ]
   },
   {
@@ -480,7 +648,11 @@ const AUTO_GENRE_CATALOG = [
     "aliases": [
       "orchestral music",
       "orchestra",
-      "orchestral"
+      "orchestral",
+      "orchestral soundtrack",
+      "orchestral score",
+      "оркестрова музика",
+      "оркестровая музыка"
     ]
   },
   {
@@ -493,7 +665,16 @@ const AUTO_GENRE_CATALOG = [
       "original soundtrack",
       "soundtrack",
       "ost",
-      "саундтрек"
+      "саундтрек",
+      "film score",
+      "movie score",
+      "original score",
+      "motion picture soundtrack",
+      "ost music",
+      "музыка из фильма",
+      "музика з фільму",
+      "саундтрек до фільму",
+      "саундтрек к фильму"
     ]
   },
   {
@@ -503,7 +684,14 @@ const AUTO_GENRE_CATALOG = [
     "aliases": [
       "video game music",
       "game soundtrack",
-      "gaming soundtrack"
+      "gaming soundtrack",
+      "video game ost",
+      "game ost",
+      "game music soundtrack",
+      "игровая музыка",
+      "музика з гри",
+      "ігрова музика",
+      "музыка из игры"
     ]
   },
   {
@@ -514,7 +702,15 @@ const AUTO_GENRE_CATALOG = [
       "anime music",
       "anime soundtrack",
       "anime opening",
-      "anime op"
+      "anime op",
+      "anime ost",
+      "anime song",
+      "anime songs",
+      "music from anime",
+      "музыка из аниме",
+      "музика з аніме",
+      "аниме опенинг",
+      "аніме опенінг"
     ]
   },
   {
@@ -524,7 +720,9 @@ const AUTO_GENRE_CATALOG = [
     "aliases": [
       "opera music",
       "opera",
-      "опера"
+      "опера",
+      "оперная музыка",
+      "оперна музика"
     ]
   },
   {
@@ -535,7 +733,13 @@ const AUTO_GENRE_CATALOG = [
       "electronic music",
       "electronica",
       "электронная музыка",
-      "электроника"
+      "электроника",
+      "edm",
+      "edm music",
+      "edm mix",
+      "electronic dance music",
+      "electronic music playlist",
+      "електронна музика"
     ]
   },
   {
@@ -545,7 +749,16 @@ const AUTO_GENRE_CATALOG = [
     "aliases": [
       "house music",
       "house mix",
-      "house"
+      "house",
+      "house playlist",
+      "house beats",
+      "bass house",
+      "tech house",
+      "electro house",
+      "future house",
+      "afro house",
+      "хавс музика",
+      "хаус музика"
     ]
   },
   {
@@ -554,7 +767,9 @@ const AUTO_GENRE_CATALOG = [
     "family": "electronic",
     "aliases": [
       "deep house",
-      "deep-house"
+      "deep-house",
+      "deep house music",
+      "дип-хаус"
     ]
   },
   {
@@ -563,7 +778,10 @@ const AUTO_GENRE_CATALOG = [
     "family": "electronic",
     "aliases": [
       "progressive house",
-      "prog house"
+      "prog house",
+      "progressive house music",
+      "прогрессив-хаус",
+      "прогресив-хаус"
     ]
   },
   {
@@ -573,7 +791,15 @@ const AUTO_GENRE_CATALOG = [
     "aliases": [
       "techno music",
       "techno",
-      "техно"
+      "техно",
+      "melodic techno",
+      "minimal techno",
+      "industrial techno",
+      "techno playlist",
+      "техно музыка",
+      "техно музика",
+      "мелодік техно",
+      "мелодик техно"
     ]
   },
   {
@@ -586,7 +812,12 @@ const AUTO_GENRE_CATALOG = [
       "uplifting trance",
       "trance music",
       "trance",
-      "транс"
+      "транс",
+      "psy-trance music",
+      "goa trance",
+      "uplifting trance music",
+      "транс музика",
+      "транс музыка"
     ]
   },
   {
@@ -595,7 +826,11 @@ const AUTO_GENRE_CATALOG = [
     "family": "electronic",
     "aliases": [
       "dubstep",
-      "дабстеп"
+      "дабстеп",
+      "melodic dubstep",
+      "brostep",
+      "dubstep music",
+      "дабстеп музика"
     ]
   },
   {
@@ -608,7 +843,12 @@ const AUTO_GENRE_CATALOG = [
       "drum bass",
       "dnb",
       "d and b",
-      "джангл днб"
+      "джангл днб",
+      "drum n bass music",
+      "dnb music",
+      "джангл-н-бейс",
+      "драм-н-бейс",
+      "драм-енд-бейс"
     ]
   },
   {
@@ -617,7 +857,10 @@ const AUTO_GENRE_CATALOG = [
     "family": "electronic",
     "aliases": [
       "jungle music",
-      "jungle"
+      "jungle",
+      "jungle playlist",
+      "jungle dnb",
+      "джангл музика"
     ]
   },
   {
@@ -626,7 +869,9 @@ const AUTO_GENRE_CATALOG = [
     "family": "electronic",
     "aliases": [
       "breakbeat",
-      "break beat"
+      "break beat",
+      "breakbeat music",
+      "брейкбит музика"
     ]
   },
   {
@@ -635,7 +880,10 @@ const AUTO_GENRE_CATALOG = [
     "family": "electronic",
     "aliases": [
       "electro music",
-      "electro"
+      "electro",
+      "electro music playlist",
+      "электро музыка",
+      "електро музика"
     ]
   },
   {
@@ -644,7 +892,9 @@ const AUTO_GENRE_CATALOG = [
     "family": "electronic",
     "aliases": [
       "hardstyle",
-      "hard style"
+      "hard style",
+      "hardstyle music",
+      "хардстайл музика"
     ]
   },
   {
@@ -654,7 +904,13 @@ const AUTO_GENRE_CATALOG = [
     "aliases": [
       "synthwave",
       "ретровейв",
-      "синтвейв"
+      "синтвейв",
+      "retro wave",
+      "retrowave",
+      "outrun music",
+      "ретро-вейв",
+      "ретровейв музыка",
+      "синтвейв музыка"
     ]
   },
   {
@@ -663,7 +919,9 @@ const AUTO_GENRE_CATALOG = [
     "family": "atmosphere",
     "aliases": [
       "vaporwave",
-      "vapor wave"
+      "vapor wave",
+      "вейпорвейв",
+      "вейпорвейв музика"
     ]
   },
   {
@@ -682,7 +940,11 @@ const AUTO_GENRE_CATALOG = [
     "aliases": [
       "uk garage",
       "garage music",
-      "garage"
+      "garage",
+      "ukg",
+      "uk garage music",
+      "garage music playlist",
+      "гараж музика"
     ]
   },
   {
@@ -691,7 +953,12 @@ const AUTO_GENRE_CATALOG = [
     "family": "world",
     "aliases": [
       "reggae",
-      "регги"
+      "регги",
+      "roots reggae",
+      "dub reggae",
+      "reggae music",
+      "регги музыка",
+      "реггі музика"
     ]
   },
   {
@@ -701,7 +968,10 @@ const AUTO_GENRE_CATALOG = [
     "aliases": [
       "dancehall",
       "dance hall",
-      "денсхолл"
+      "денсхолл",
+      "dancehall music",
+      "денс-холл",
+      "денсхол музика"
     ]
   },
   {
@@ -710,7 +980,11 @@ const AUTO_GENRE_CATALOG = [
     "family": "world",
     "aliases": [
       "ska",
-      "ска"
+      "ска",
+      "ska punk",
+      "ska music",
+      "ска-панк",
+      "ска музика"
     ]
   },
   {
@@ -719,7 +993,10 @@ const AUTO_GENRE_CATALOG = [
     "family": "world",
     "aliases": [
       "reggaeton",
-      "реггетон"
+      "реггетон",
+      "reggaeton music",
+      "реггетон музыка",
+      "регетон музика"
     ]
   },
   {
@@ -729,7 +1006,9 @@ const AUTO_GENRE_CATALOG = [
     "aliases": [
       "salsa music",
       "salsa",
-      "сальса"
+      "сальса",
+      "salsa music playlist",
+      "сальса музика"
     ]
   },
   {
@@ -738,7 +1017,9 @@ const AUTO_GENRE_CATALOG = [
     "family": "world",
     "aliases": [
       "bachata",
-      "бачата"
+      "бачата",
+      "bachata music",
+      "бачата музика"
     ]
   },
   {
@@ -747,7 +1028,10 @@ const AUTO_GENRE_CATALOG = [
     "family": "world",
     "aliases": [
       "cumbia",
-      "кумбия"
+      "кумбия",
+      "cumbia music",
+      "кумбия музыка",
+      "кумбія музика"
     ]
   },
   {
@@ -758,7 +1042,13 @@ const AUTO_GENRE_CATALOG = [
       "afrobeats",
       "afro beats",
       "afrobeat",
-      "афробит"
+      "афробит",
+      "afrobeat music",
+      "afrobeats music",
+      "afrobeats playlist",
+      "афробитс",
+      "афробітс",
+      "афробіт музика"
     ]
   },
   {
@@ -766,7 +1056,9 @@ const AUTO_GENRE_CATALOG = [
     "label": "autoGenreAmapiano",
     "family": "world",
     "aliases": [
-      "amapiano"
+      "amapiano",
+      "amapiano music",
+      "amapiano mix"
     ]
   },
   {
@@ -776,7 +1068,11 @@ const AUTO_GENRE_CATALOG = [
     "aliases": [
       "gospel music",
       "gospel",
-      "госпел"
+      "госпел",
+      "gospel choir",
+      "gospel music playlist",
+      "євангельська музика",
+      "госпел музика"
     ]
   },
   {
@@ -787,7 +1083,12 @@ const AUTO_GENRE_CATALOG = [
       "latin music",
       "latin pop",
       "latin mix",
-      "латино"
+      "латино",
+      "latin playlist",
+      "latin dance music",
+      "латино музика",
+      "латино музыка",
+      "латинська музика"
     ]
   },
   {
@@ -796,7 +1097,10 @@ const AUTO_GENRE_CATALOG = [
     "family": "world",
     "aliases": [
       "bossa nova",
-      "bossanova"
+      "bossanova",
+      "bossa nova music",
+      "босанова",
+      "боса-нова"
     ]
   },
   {
@@ -805,7 +1109,9 @@ const AUTO_GENRE_CATALOG = [
     "family": "world",
     "aliases": [
       "samba",
-      "самба"
+      "самба",
+      "samba music",
+      "самба музика"
     ]
   },
   {
@@ -814,7 +1120,10 @@ const AUTO_GENRE_CATALOG = [
     "family": "world",
     "aliases": [
       "tango",
-      "танго"
+      "танго",
+      "tango music",
+      "танго музыка",
+      "танго музика"
     ]
   },
   {
@@ -823,7 +1132,9 @@ const AUTO_GENRE_CATALOG = [
     "family": "world",
     "aliases": [
       "flamenco",
-      "фламенко"
+      "фламенко",
+      "flamenco music",
+      "фламенко музика"
     ]
   },
   {
@@ -832,7 +1143,11 @@ const AUTO_GENRE_CATALOG = [
     "family": "world",
     "aliases": [
       "bollywood music",
-      "bollywood"
+      "bollywood",
+      "bollywood songs",
+      "bollywood soundtrack",
+      "болливудская музыка",
+      "боллівудська музика"
     ]
   },
   {
@@ -843,7 +1158,12 @@ const AUTO_GENRE_CATALOG = [
       "experimental music",
       "experimental",
       "avant garde",
-      "avant-garde"
+      "avant-garde",
+      "experimental electronica",
+      "experimental hip hop",
+      "avant-garde music",
+      "авангардная музыка",
+      "авангардна музика"
     ]
   },
   {
@@ -878,6 +1198,25 @@ const AUTO_GENRE_CATALOG = [
   }
 ];
 const AUTO_GENRE_PROFILES = Object.fromEntries(AUTO_GENRE_CATALOG.map((item) => [item.id, AUTO_GENRE_PROFILE_FAMILIES[item.family] || AUTO_GENRE_PROFILE_FAMILIES.neutral]));
+
+// Common words are weak genre evidence when they appear inside an ordinary song or artist title.
+const AUTO_GENRE_AMBIGUOUS_WORDS = new Set([
+  'pop', 'rock', 'rap', 'metal', 'house', 'garage', 'jungle', 'indie', 'folk', 'country',
+  'acoustic', 'soul', 'funk', 'disco', 'opera', 'ska', 'latin', 'salsa', 'samba', 'tango',
+  'reggae', 'trance', 'techno', 'electronic', 'wave', 'ambient', 'jazz', 'blues', 'classical',
+  'gospel', 'electro', 'chillout', 'experimental'
+]);
+const AUTO_GENRE_CONTEXT_WORDS = new Set([
+  'music', 'mix', 'remix', 'playlist', 'beats', 'beat', 'radio', 'genre', 'soundtrack', 'song', 'songs',
+  'style', 'version', 'type', 'session', 'set', 'compilation', 'hits', 'hit', 'album', 'track',
+  'музыка', 'музика', 'микс', 'мікс', 'плейлист', 'жанр', 'трек', 'песня', 'песни', 'пісня', 'пісні',
+  'збірка', 'сборник', 'саундтрек', 'хиты', 'хіти', 'музичний', 'музыкальный'
+]);
+const AUTO_GENRE_MATCHERS = AUTO_GENRE_CATALOG.flatMap((item) => item.aliases.map((alias) => {
+  const normalizedAlias = normalizeGenreText(alias);
+  return { item, alias: normalizedAlias, tokenCount: normalizedAlias ? normalizedAlias.split(' ').length : 0,
+    score: normalizedAlias ? normalizedAlias.length + normalizedAlias.split(' ').length * 10 : 0 };
+})).filter((entry) => entry.alias).sort((a, b) => b.score - a.score);
 
 // Balanced defaults: moderate low-shelf boost and restrained vocal-presence EQ.
 let currentVolume = 1;
@@ -1615,30 +1954,30 @@ function normalizeGenreText(value) {
 function classifyGenreFromTitle(title) {
   const normalized = normalizeGenreText(title);
   if (!normalized) return null;
+  const titleTokens = normalized.split(' ');
   const padded = ` ${normalized} `;
-  const candidates = [];
-  for (const item of AUTO_GENRE_CATALOG) {
-    if (!item.aliases.length) continue;
-    let bestScore = 0;
-    for (const alias of item.aliases) {
-      const normalizedAlias = normalizeGenreText(alias);
-      if (!normalizedAlias || !padded.includes(` ${normalizedAlias} `)) continue;
-      // Prefer explicit multi-word subgenres (e.g. "deep house") over their parents ("house").
-      const score = normalizedAlias.length + normalizedAlias.split(' ').length * 10;
-      if (score > bestScore) bestScore = score;
+  const bestByGenre = new Map();
+  for (const matcher of AUTO_GENRE_MATCHERS) {
+    if (!padded.includes(` ${matcher.alias} `)) continue;
+    if (matcher.tokenCount === 1 && AUTO_GENRE_AMBIGUOUS_WORDS.has(matcher.alias) && normalized !== matcher.alias) {
+      const index = titleTokens.indexOf(matcher.alias);
+      const previous = index > 0 ? titleTokens[index - 1] : '';
+      const next = index >= 0 ? titleTokens[index + 1] || '' : '';
+      if (!AUTO_GENRE_CONTEXT_WORDS.has(previous) && !AUTO_GENRE_CONTEXT_WORDS.has(next)) continue;
     }
-    if (bestScore > 0) candidates.push({ item, score: bestScore });
+    const previous = bestByGenre.get(matcher.item.id);
+    if (!previous || matcher.score > previous.score) bestByGenre.set(matcher.item.id, matcher);
   }
+  const candidates = Array.from(bestByGenre.values()).sort((a, b) => b.score - a.score);
   if (!candidates.length) return null;
-  candidates.sort((a, b) => b.score - a.score);
-  // Ambiguous mixed-genre titles should not trigger an arbitrary genre-specific EQ.
   if (candidates.length > 1 && candidates[0].score === candidates[1].score) return null;
-  const score = candidates[0].score;
-  return {
-    genre: candidates[0].item.id,
-    confidence: Math.min(0.97, 0.72 + Math.min(20, score) * 0.012),
-    source: 'title'
-  };
+  const best = candidates[0];
+  const isExactGenreTitle = normalized === best.alias;
+  const contextualGeneric = best.tokenCount === 1 && AUTO_GENRE_AMBIGUOUS_WORDS.has(best.alias);
+  const confidence = best.tokenCount > 1
+    ? Math.min(0.97, 0.86 + Math.min(20, best.score - 20) * 0.004)
+    : (contextualGeneric && !isExactGenreTitle ? 0.80 : (isExactGenreTitle ? 0.84 : 0.88));
+  return { genre: best.item.id, confidence, source: 'title' };
 }
 
 // EN: Measures coarse frequency-band energies used by the heuristic genre classifier.
@@ -1684,7 +2023,8 @@ function classifyGenreFromAudio(samples) {
   if (samples.length < 6) return null;
   const average = (key) => samples.reduce((sum, sample) => sum + sample[key], 0) / samples.length;
   const meanTotal = average('total');
-  if (meanTotal < 8) return null; // Keep waiting while muted, silent, or barely audible.
+  const meanRmsDb = average('rmsDb');
+  if (meanTotal < 8 || meanRmsDb < -58) return null; // Wait while muted, silent, or close to the capture noise floor.
   const bassShare = average('bassShare');
   const midShare = average('midShare');
   const highShare = average('highShare');
@@ -1700,7 +2040,7 @@ function classifyGenreFromAudio(samples) {
     return { genre: 'audioElectronic', confidence: Math.min(0.70, 0.57 + bassShare * 0.12 + pulseRatio * 0.12), source: 'audio' };
   }
   if (pulseRatio < 0.04 && bassShare < 0.30 && highShare < 0.34) {
-    return { genre: 'audioAtmospheric', confidence: Math.min(0.68, 0.56 + (0.04 - pulseRatio) * 2), source: 'audio' };
+    return { genre: 'audioAtmospheric', confidence: Math.min(0.68, 0.60 + Math.max(0, (0.04 - pulseRatio) * 1.5)), source: 'audio' };
   }
   if (midShare > 0.32 && bassShare < 0.36 && highShare > 0.18) {
     return { genre: 'audioVocal', confidence: 0.60, source: 'audio' };
@@ -1841,7 +2181,7 @@ function publishAutoGenreStatus(force = false) {
     state,
     updatedAt: Date.now()
   };
-  const signature = `${status.enabled}:${status.active}:${status.trackId || ''}:${status.trackTitle || ''}:${status.genre || ''}:${status.source || ''}:${status.state}:${status.bassBoostDb}:${status.voiceBoostDb}:${status.volumeTrimDb}:${status.bassManualOverride}:${status.voiceManualOverride}`;
+  const signature = `${status.enabled}:${status.active}:${status.trackId || ''}:${status.trackTitle || ''}:${status.genre || ''}:${status.source || ''}:${status.state}:${Math.round(status.confidence * 100)}:${status.bassBoostEnabled}:${status.bassBoostDb}:${status.voiceBoostEnabled}:${status.voiceBoostDb}:${status.volumeTrimDb}:${status.bassManualOverride}:${status.voiceManualOverride}`;
   if (!force && signature === lastAutoGenreStatusSignature) return;
   lastAutoGenreStatusSignature = signature;
   // The offscreen audio document may not expose chrome.storage in every Edge
