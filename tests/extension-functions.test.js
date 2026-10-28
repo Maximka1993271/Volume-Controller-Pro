@@ -39,7 +39,7 @@ function loadProductionApi(file, declarationNames, functionNames) {
   const fragments = [
     ...declarationNames.map((name) => extractDeclaration(source, name)),
     ...functionNames.map((name) => extractFunction(source, name)),
-    'globalThis.__testApi = {' + functionNames.map((name) => name + ': ' + name).join(', ') + '};'
+    'globalThis.__testApi = {' + [...declarationNames, ...functionNames].map((name) => name + ': ' + name).join(', ') + '};'
   ];
   const context = createContext({ URL });
   runInContext(fragments.join('\n\n'), context, { filename: file });
