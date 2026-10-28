@@ -1,5 +1,14 @@
 # Changelog
 
+## [4.7.91] — 2026-10-28 (source update; not yet published as a GitHub Release)
+
+- Expanded automatic genre aliases with additional English variants and Russian/Ukrainian names for existing genre/subgenre IDs.
+- Added safeguards against false positives from ambiguous single words in ordinary titles and preserved preference for specific subgenres.
+- Added a low-signal gate so silence or near-noise-floor input does not trigger genre changes.
+- Raised the atmospheric audio heuristic to the classifier's minimum confidence threshold.
+- Included confidence and Bass/Voice enable states in the status signature so meaningful UI changes are not suppressed.
+- Added the full [AUTO_GENRE_CATALOG.md](AUTO_GENRE_CATALOG.md) reference.
+
 User-facing highlights for published releases. Older implementation and audit history is preserved in [Readme/Readme.md](Readme/Readme.md).
 
 ## [4.7.90] — 2026-10-25
