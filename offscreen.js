@@ -1974,15 +1974,14 @@ function classifyGenreFromTitle(title) {
     // Preserve the meaning of literal ampersands: "R&B" must not match "R B".
     // Other catalog spellings such as "rock and roll" remain available without "&".
     if (matcher.sourceAlias.includes('&')) {
-      const ampersandPair = matcher.sourceAlias.match(/(\\p{L}+)\\s*&\\s*(\\p{L}+)/u);
+      const ampersandPair = matcher.sourceAlias.match(/([a-z]+)\\s*&\\s*([a-z]+)/i);
       if (ampersandPair) {
-        const leftWord = ampersandPair[1];
-        const rightWord = ampersandPair[2];
-        const literalAmpersand = new RegExp(
-          `(^|[^\\\\p{L}\\\\p{N}])${leftWord}\\\\s*&\\\\s*${rightWord}($|[^\\\\p{L}\\\\p{N}])`,
-          'iu'
-        );
-        if (!literalAmpersand.test(rawTitle)) continue;
+        const leftWord = ampersandPair[1].toLowerCase();
+        const rightWord = ampersandPair[2].toLowerCase();
+        const hasLiteralAmpersandPair = Array.from(
+          rawTitle.matchAll(/([a-z]+)\\s*&\\s*([a-z]+)/gi)
+        ).some((pair) => pair[1].toLowerCase() === leftWord && pair[2].toLowerCase() === rightWord);
+        if (!hasLiteralAmpersandPair) continue;
       }
     }
     if (matcher.tokenCount === 1 && AUTO_GENRE_AMBIGUOUS_WORDS.has(matcher.alias) && normalized !== matcher.alias) {
