@@ -1220,9 +1220,10 @@ const AUTO_GENRE_CONTEXT_WORDS = new Set([
   'збірка', 'сборник', 'саундтрек', 'хиты', 'хіти', 'музичний', 'музыкальный'
 ]);
 const AUTO_GENRE_MATCHERS = AUTO_GENRE_CATALOG.flatMap((item) =>
-  item.aliases.map((alias) => [item, normalizeGenreText(alias)])
-).map(([item, alias]) => ({
+  item.aliases.map((sourceAlias) => [item, sourceAlias, normalizeGenreText(sourceAlias)])
+).map(([item, sourceAlias, alias]) => ({
   item,
+  sourceAlias,
   alias,
   tokenCount: alias ? alias.split(' ').length : 0,
   score: alias ? alias.length + alias.split(' ').length * 10 : 0
@@ -1962,13 +1963,27 @@ function normalizeGenreText(value) {
 // RU: Сопоставляет нормализованные слова/фразы и выбирает самый конкретный поджанр; неоднозначные названия передаются анализу звука.
 // UK: Зіставляє нормалізовані слова/фрази й обирає найконкретніший піджанр; неоднозначні назви передаються аналізу звуку.
 function classifyGenreFromTitle(title) {
-  const normalized = normalizeGenreText(title);
+  const rawTitle = String(title || '');
+  const normalized = normalizeGenreText(rawTitle);
   if (!normalized) return null;
   const titleTokens = normalized.split(' ');
   const padded = ` ${normalized} `;
   const bestByGenre = new Map();
   for (const matcher of AUTO_GENRE_MATCHERS) {
     if (!padded.includes(` ${matcher.alias} `)) continue;
+    // Preserve the meaning of literal ampersands: "R&B" must not match "R B".
+    // Other catalog spellings such as "rock and roll" remain available without "&".
+    if (matcher.sourceAlias.includes('&')) {
+      const ampersandPair = matcher.sourceAlias.match(/([a-z]+)[ \\t]*&[ \\t]*([a-z]+)/i);
+      if (ampersandPair) {
+        const leftWord = ampersandPair[1].toLowerCase();
+        const rightWord = ampersandPair[2].toLowerCase();
+        const hasLiteralAmpersandPair = Array.from(
+          rawTitle.matchAll(/([a-z]+)[ \\t]*&[ \\t]*([a-z]+)/gi)
+        ).some((pair) => pair[1].toLowerCase() === leftWord && pair[2].toLowerCase() === rightWord);
+        if (!hasLiteralAmpersandPair) continue;
+      }
+    }
     if (matcher.tokenCount === 1 && AUTO_GENRE_AMBIGUOUS_WORDS.has(matcher.alias) && normalized !== matcher.alias) {
       const index = titleTokens.indexOf(matcher.alias);
       const previous = index > 0 ? titleTokens[index - 1] : '';
