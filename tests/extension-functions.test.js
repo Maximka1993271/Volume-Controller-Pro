@@ -21,6 +21,12 @@ function extractDeclaration(source, name) {
   const match = new RegExp('^const\\s+' + name + '\\s*=', 'm').exec(source);
   assert.ok(match, 'Could not find production declaration: ' + name);
   const valueStart = source.indexOf('=', match.index) + 1;
+  if (name === 'AUTO_GENRE_MATCHERS') {
+    const endMarker = '\\n})).filter((entry) => entry.alias).sort((a, b) => b.score - a.score);';
+    const end = source.indexOf(endMarker, valueStart);
+    assert.notEqual(end, -1, 'Could not find end of production declaration: ' + name);
+    return source.slice(match.index, end + endMarker.length);
+  }
   const firstValue = source.slice(valueStart).trimStart()[0];
   let marker;
   if (firstValue === '{') marker = '\n};';
