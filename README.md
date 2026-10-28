@@ -111,16 +111,16 @@ The screenshots are arranged in a two-column gallery so you can compare the v4.7
 <table>
   <tr>
     <td align="center" width="50%">
-      <a href="screenshots/voice-boost-auto-mode.jpg">
-        <img src="screenshots/voice-boost-auto-mode.jpg" alt="Voice Boost — Auto Mode" width="100%"/>
-      </a>
-      <br/><strong>🎛️ Voice Boost — Auto Mode</strong>
-    </td>
-    <td align="center" width="50%">
       <a href="screenshots/quick-settings-page.jpg">
         <img src="screenshots/quick-settings-page.jpg" alt="Quick Settings" width="100%"/>
       </a>
       <br/><strong>⚡ Quick Settings</strong>
+    </td>
+    <td align="center" width="50%">
+      <a href="screenshots/voice-boost-auto-mode.jpg">
+        <img src="screenshots/voice-boost-auto-mode.jpg" alt="Voice Boost — Auto Mode" width="100%"/>
+      </a>
+      <br/><strong>🎛️ Voice Boost — Auto Mode</strong>
     </td>
   </tr>
   <tr>
