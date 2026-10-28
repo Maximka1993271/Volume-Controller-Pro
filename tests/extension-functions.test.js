@@ -21,6 +21,12 @@ function extractDeclaration(source, name) {
   const match = new RegExp('^const\\s+' + name + '\\s*=', 'm').exec(source);
   assert.ok(match, 'Could not find production declaration: ' + name);
   const valueStart = source.indexOf('=', match.index) + 1;
+  if (name === 'AUTO_GENRE_MATCHERS') {
+    const endMarker = '\n})).filter((entry) => entry.alias).sort((a, b) => b.score - a.score);';
+    const end = source.indexOf(endMarker, valueStart);
+    assert.notEqual(end, -1, 'Could not find end of production declaration: ' + name);
+    return source.slice(match.index, end + endMarker.length);
+  }
   const firstValue = source.slice(valueStart).trimStart()[0];
   let marker;
   if (firstValue === '{') marker = '\n};';
@@ -29,9 +35,55 @@ function extractDeclaration(source, name) {
     const end = source.indexOf(marker, valueStart);
     if (end !== -1) return source.slice(match.index, end + marker.length);
   }
-  const semicolon = source.indexOf(';', valueStart);
-  assert.notEqual(semicolon, -1, 'Could not find end of production declaration: ' + name);
-  return source.slice(match.index, semicolon + 1);
+  // Some declarations are expressions with callback blocks containing semicolons.
+  // Find the declaration terminator only when outside balanced (), [] and {} groups.
+  let depth = 0;
+  let quote = '';
+  let escaped = false;
+  let lineComment = false;
+  let blockComment = false;
+  for (let index = valueStart; index < source.length; index += 1) {
+    const char = source[index];
+    const next = source[index + 1];
+
+    if (lineComment) {
+      if (char === '\\n') lineComment = false;
+      continue;
+    }
+    if (blockComment) {
+      if (char === '*' && next === '/') {
+        blockComment = false;
+        index += 1;
+      }
+      continue;
+    }
+    if (quote) {
+      if (escaped) escaped = false;
+      else if (char === '\\\\') escaped = true;
+      else if (char === quote) quote = '';
+      continue;
+    }
+    if (char === '/' && next === '/') {
+      lineComment = true;
+      index += 1;
+      continue;
+    }
+    if (char === '/' && next === '*') {
+      blockComment = true;
+      index += 1;
+      continue;
+    }
+    if (char === "'" || char === '"' || char === '`') {
+      quote = char;
+      continue;
+    }
+    if (char === '(' || char === '[' || char === '{') depth += 1;
+    else if (char === ')' || char === ']' || char === '}') depth -= 1;
+    else if (char === ';' && depth === 0) {
+      return source.slice(match.index, index + 1);
+    }
+  }
+  assert.fail('Could not find end of production declaration: ' + name);
 }
 
 function loadProductionApi(file, declarationNames, functionNames) {

@@ -1167,46 +1167,37 @@ const AUTO_GENRE_CATALOG = [
     "id": "audioBassHeavy",
     "label": "autoGenreAudioBassHeavy",
     "family": "bassHeavy",
-    "aliases": [
-
-    ]
+    "aliases": []
   },
   {
     "id": "audioElectronic",
     "label": "autoGenreAudioElectronic",
     "family": "electronic",
-    "aliases": [
-
-    ]
+    "aliases": []
   },
   {
     "id": "audioAtmospheric",
     "label": "autoGenreAudioAtmospheric",
     "family": "atmosphere",
-    "aliases": [
-
-    ]
+    "aliases": []
   },
   {
     "id": "audioVocal",
     "label": "autoGenreAudioVocal",
     "family": "vocal",
-    "aliases": [
-
-    ]
+    "aliases": []
   },
   {
     "id": "audioOther",
     "label": "autoGenreAudioOther",
     "family": "neutral",
-    "aliases": [
-
-    ]
+    "aliases": []
   }
 ];
 const AUTO_GENRE_PROFILES = Object.fromEntries(AUTO_GENRE_CATALOG.map((item) => [item.id, AUTO_GENRE_PROFILE_FAMILIES[item.family] || AUTO_GENRE_PROFILE_FAMILIES.neutral]));
 
-// Common words are weak genre evidence when they appear inside an ordinary song or artist title.
+// Common words are not reliable genre tags when they appear inside a song or artist title.
+// Exact one-word titles and words adjacent to clear music context remain eligible.
 const AUTO_GENRE_AMBIGUOUS_WORDS = new Set([
   'pop', 'rock', 'rap', 'metal', 'house', 'garage', 'jungle', 'indie', 'folk', 'country',
   'acoustic', 'soul', 'funk', 'disco', 'opera', 'ska', 'latin', 'salsa', 'samba', 'tango',
@@ -1219,14 +1210,18 @@ const AUTO_GENRE_CONTEXT_WORDS = new Set([
   'музыка', 'музика', 'микс', 'мікс', 'плейлист', 'жанр', 'трек', 'песня', 'песни', 'пісня', 'пісні',
   'збірка', 'сборник', 'саундтрек', 'хиты', 'хіти', 'музичний', 'музыкальный'
 ]);
-const AUTO_GENRE_MATCHERS = AUTO_GENRE_CATALOG.flatMap((item) =>
-  item.aliases.map((sourceAlias) => [item, sourceAlias, normalizeGenreText(sourceAlias)])
-).map(([item, sourceAlias, alias]) => ({
-  item,
-  sourceAlias,
-  alias,
-  tokenCount: alias ? alias.split(' ').length : 0,
-  score: alias ? alias.length + alias.split(' ').length * 10 : 0
+const AUTO_GENRE_MATCHERS = AUTO_GENRE_CATALOG.flatMap((item) => item.aliases.map((alias) => {
+  const normalizedAlias = normalizeGenreText(alias);
+  const tokens = normalizedAlias ? normalizedAlias.split(' ') : [];
+  const genreTokens = tokens.filter((token) => !AUTO_GENRE_CONTEXT_WORDS.has(token));
+  return {
+    item,
+    sourceAlias: alias,
+    alias: normalizedAlias,
+    tokenCount: tokens.length,
+    // A specific subgenre phrase (e.g. "latin pop") outranks generic suffixes (e.g. "pop playlist").
+    score: normalizedAlias ? genreTokens.length * 100 + normalizedAlias.length : 0
+  };
 })).filter((entry) => entry.alias).sort((a, b) => b.score - a.score);
 
 // Balanced defaults: moderate low-shelf boost and restrained vocal-presence EQ.
@@ -1968,16 +1963,18 @@ function classifyGenreFromTitle(title) {
   if (!normalized) return null;
   const titleTokens = normalized.split(' ');
   const padded = ` ${normalized} `;
-  // Cache literal ampersand pairs once per title instead of re-scanning it for every alias.
+  // Compute literal ampersand pairs once per title and reuse them for all aliases.
   const rawAmpersandPairs = new Set(
     Array.from(rawTitle.matchAll(/([a-z]+)[ \t]*&[ \t]*([a-z]+)/gi))
       .map((pair) => `${pair[1].toLowerCase()}&${pair[2].toLowerCase()}`)
   );
   const bestByGenre = new Map();
+
   for (const matcher of AUTO_GENRE_MATCHERS) {
     if (!padded.includes(` ${matcher.alias} `)) continue;
-    // Preserve the meaning of literal ampersands: "R&B" must not match "R B".
-    // Other catalog spellings such as "rock and roll" remain available without "&".
+
+    // Keep a literal ampersand meaningful: "R&B" matches, but "R B" does not.
+    // Alternate aliases without ampersands (such as "rock and roll") remain supported.
     if (matcher.sourceAlias.includes('&')) {
       const ampersandPair = matcher.sourceAlias.match(/([a-z]+)[ \t]*&[ \t]*([a-z]+)/i);
       if (ampersandPair) {
@@ -1985,23 +1982,30 @@ function classifyGenreFromTitle(title) {
         if (!rawAmpersandPairs.has(key)) continue;
       }
     }
+
+    // A bare word like "house" or "rock" inside an ordinary song title is weak evidence.
+    // Permit it when the complete title is that genre, or a music-context token is adjacent.
     if (matcher.tokenCount === 1 && AUTO_GENRE_AMBIGUOUS_WORDS.has(matcher.alias) && normalized !== matcher.alias) {
       const index = titleTokens.indexOf(matcher.alias);
       const previous = index > 0 ? titleTokens[index - 1] : '';
       const next = index >= 0 ? titleTokens[index + 1] || '' : '';
       if (!AUTO_GENRE_CONTEXT_WORDS.has(previous) && !AUTO_GENRE_CONTEXT_WORDS.has(next)) continue;
     }
+
     const previous = bestByGenre.get(matcher.item.id);
     if (!previous || matcher.score > previous.score) bestByGenre.set(matcher.item.id, matcher);
   }
+
   const candidates = Array.from(bestByGenre.values()).sort((a, b) => b.score - a.score);
   if (!candidates.length) return null;
+  // Do not guess when equally strong aliases point to different genres (e.g. "pop rock").
   if (candidates.length > 1 && candidates[0].score === candidates[1].score) return null;
+
   const best = candidates[0];
   const isExactGenreTitle = normalized === best.alias;
   const contextualGeneric = best.tokenCount === 1 && AUTO_GENRE_AMBIGUOUS_WORDS.has(best.alias);
   const confidence = best.tokenCount > 1
-    ? Math.min(0.97, 0.86 + Math.min(20, best.score - 20) * 0.004)
+    ? Math.min(0.97, 0.86 + Math.min(20, best.score % 100) * 0.004)
     : (contextualGeneric && !isExactGenreTitle ? 0.80 : (isExactGenreTitle ? 0.84 : 0.88));
   return { genre: best.item.id, confidence, source: 'title' };
 }
