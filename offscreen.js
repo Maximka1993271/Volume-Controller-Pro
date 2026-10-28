@@ -1968,20 +1968,21 @@ function classifyGenreFromTitle(title) {
   if (!normalized) return null;
   const titleTokens = normalized.split(' ');
   const padded = ` ${normalized} `;
+  // Cache literal ampersand pairs once per title instead of re-scanning it for every alias.
+  const rawAmpersandPairs = new Set(
+    Array.from(rawTitle.matchAll(/([a-z]+)[ \t]*&[ \t]*([a-z]+)/gi))
+      .map((pair) => `${pair[1].toLowerCase()}&${pair[2].toLowerCase()}`)
+  );
   const bestByGenre = new Map();
   for (const matcher of AUTO_GENRE_MATCHERS) {
     if (!padded.includes(` ${matcher.alias} `)) continue;
     // Preserve the meaning of literal ampersands: "R&B" must not match "R B".
     // Other catalog spellings such as "rock and roll" remain available without "&".
     if (matcher.sourceAlias.includes('&')) {
-      const ampersandPair = matcher.sourceAlias.match(/([a-z]+)[ \\t]*&[ \\t]*([a-z]+)/i);
+      const ampersandPair = matcher.sourceAlias.match(/([a-z]+)[ \t]*&[ \t]*([a-z]+)/i);
       if (ampersandPair) {
-        const leftWord = ampersandPair[1].toLowerCase();
-        const rightWord = ampersandPair[2].toLowerCase();
-        const hasLiteralAmpersandPair = Array.from(
-          rawTitle.matchAll(/([a-z]+)[ \\t]*&[ \\t]*([a-z]+)/gi)
-        ).some((pair) => pair[1].toLowerCase() === leftWord && pair[2].toLowerCase() === rightWord);
-        if (!hasLiteralAmpersandPair) continue;
+        const key = `${ampersandPair[1].toLowerCase()}&${ampersandPair[2].toLowerCase()}`;
+        if (!rawAmpersandPairs.has(key)) continue;
       }
     }
     if (matcher.tokenCount === 1 && AUTO_GENRE_AMBIGUOUS_WORDS.has(matcher.alias) && normalized !== matcher.alias) {

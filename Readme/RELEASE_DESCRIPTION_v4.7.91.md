@@ -7,6 +7,7 @@ Audio enhancement for Microsoft Edge and compatible Chromium browsers.
 - **Automatic genre detection:** expanded English spelling variants and Russian/Ukrainian aliases across the existing genre catalog.
 - **Safer genre aliases:** removed the ambiguous short forms `anime op`, `r b`, and `d and b`; retained `anime opening`, `r and b` / `rnb` / `r&b`, and `dnb` / `drum n bass` / `drum and bass`.
 - **Ampersand-aware matching:** aliases such as `r&b` and `rock & roll` now require the literal `&` in the title, so `R&B Hits` still matches while `R B Session` does not. Non-ampersand aliases such as `rock and roll` remain supported.
+- **Matching efficiency:** literal ampersand pairs are precomputed once per title and reused for every alias.
 - **Fewer false positives:** common single words such as `house`, `rock`, and `pop` are treated cautiously in ordinary track titles, while specific genre phrases retain priority.
 - **Safer audio-only classification:** silent or near-noise-floor input is not classified, and the atmospheric profile uses a confidence floor consistent with the classifier's application threshold.
 - **Status updates:** confidence and Bass/Voice toggle states are included in status-change detection.
