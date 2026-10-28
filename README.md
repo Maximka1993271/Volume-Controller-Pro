@@ -56,7 +56,7 @@ This repository is the project's official GitHub home and the only distribution 
 - 🎚️ **Bass Boost** — adjustable low-frequency enhancement, up to +12 dB.
 - 🎤 **Voice Boost** — speech-clarity controls with AUTO and MANUAL modes.
 - 🎛️ **Audio Profiles** — per-site settings for supported media sites such as YouTube and Spotify.
-- 🎶 **Automatic Genre Detection** — 76 title-based genre/subgenre labels plus five broad audio-only profiles; see [the full catalog and EQ families](AUTO_GENRE_CATALOG.md).
+- 🎶 **Automatic Genre Detection** — 76 title-based genre/subgenre labels plus five broad audio-only profiles; aliases are synchronized with the v4.7.91 archive; see [the full catalog and EQ families](AUTO_GENRE_CATALOG.md).
 - 📊 **Audio Visualizers** — five spectrum styles plus a spectrogram.
 - 💾 **Settings Backup** — import/export settings through .cfg files.
 - 🌗 **Themes** — Dark, Light, and System options.
