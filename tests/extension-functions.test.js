@@ -314,6 +314,25 @@ test('genre text normalization ignores case, punctuation and diacritics', () => 
   assert.equal(offscreen.normalizeGenreText(null), '');
 });
 
+test('genre catalog removes ambiguous short aliases and retains clear alternatives', () => {
+  const catalog = plain(offscreen.AUTO_GENRE_CATALOG);
+  const aliasesFor = (id) => catalog.find((entry) => entry.id === id)?.aliases || [];
+
+  const anime = aliasesFor('animeMusic');
+  assert.ok(!anime.includes('anime op'));
+  assert.ok(anime.includes('anime opening'));
+
+  const rnb = aliasesFor('rnb');
+  assert.ok(!rnb.includes('r b'));
+  for (const alias of ['r and b', 'rnb', 'r&b']) assert.ok(rnb.includes(alias));
+
+  const drumBass = aliasesFor('drumBass');
+  assert.ok(!drumBass.includes('d and b'));
+  for (const alias of ['dnb', 'drum n bass', 'drum and bass']) {
+    assert.ok(drumBass.includes(alias));
+  }
+});
+
 test('title genre classifier detects specific named genres and respects word boundaries', () => {
   const phonk = plain(offscreen.classifyGenreFromTitle('DRIFT--PHONK / LIVE MIX'));
   assert.equal(phonk.genre, 'phonk');

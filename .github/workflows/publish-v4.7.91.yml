@@ -55,19 +55,18 @@ jobs:
           sha256sum Volume.Controller.Pro.v4.7.91.zip > Volume.Controller.Pro.v4.7.91.zip.sha256
           ls -lh Volume.Controller.Pro.v4.7.91.zip Volume.Controller.Pro.v4.7.91.zip.sha256
 
-      - name: Publish GitHub Release v4.7.91
+      - name: Replace assets on existing GitHub Release v4.7.91
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
-          if gh release view v4.7.91 >/dev/null 2>&1; then
-            echo "Release v4.7.91 already exists; refusing to overwrite release history." >&2
-            exit 1
-          fi
-          gh release create v4.7.91 \
+          # Require the existing release: never create a new release or move its tag.
+          gh release view v4.7.91 >/dev/null
+          gh release upload v4.7.91 \
             dist/Volume.Controller.Pro.v4.7.91.zip \
             dist/Volume.Controller.Pro.v4.7.91.zip.sha256 \
-            --target main \
+            --clobber
+          gh release edit v4.7.91 \
             --title "Volume Controller Pro 4.7.91" \
-            --notes-file Readme/RELEASE_DESCRIPTION_v4.7.91.md \
-            --latest
+            --notes-file Readme/RELEASE_DESCRIPTION_v4.7.91.md
+          gh release view v4.7.91

@@ -541,7 +541,6 @@ const AUTO_GENRE_CATALOG = [
     "aliases": [
       "rhythm and blues",
       "r and b",
-      "r b",
       "rnb",
       "r&b",
       "r&b music",
@@ -702,7 +701,6 @@ const AUTO_GENRE_CATALOG = [
       "anime music",
       "anime soundtrack",
       "anime opening",
-      "anime op",
       "anime ost",
       "anime song",
       "anime songs",
@@ -842,7 +840,6 @@ const AUTO_GENRE_CATALOG = [
       "drum n bass",
       "drum bass",
       "dnb",
-      "d and b",
       "джангл днб",
       "drum n bass music",
       "dnb music",
