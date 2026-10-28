@@ -343,6 +343,13 @@ test('genre title matching preserves literal ampersands', () => {
   assert.equal(offscreen.classifyGenreFromTitle('R B Session'), null);
   assert.equal(offscreen.classifyGenreFromTitle('R B Music'), null);
 
+  assert.equal(plain(offscreen.classifyGenreFromTitle('UK R&B Hits')).genre, 'rnb');
+  assert.equal(plain(offscreen.classifyGenreFromTitle('UK R and B Hits')).genre, 'rnb');
+  assert.equal(plain(offscreen.classifyGenreFromTitle('R&B 2024')).genre, 'rnb');
+  assert.equal(plain(offscreen.classifyGenreFromTitle('R&B: The Collection')).genre, 'rnb');
+  assert.equal(plain(offscreen.classifyGenreFromTitle('Rock and Roll Classics')).genre, 'rock');
+  assert.equal(plain(offscreen.classifyGenreFromTitle('Rock n Roll Classics')).genre, 'rock');
+
   const rockAndRoll = plain(offscreen.classifyGenreFromTitle('Rock & Roll Classics'));
   assert.equal(rockAndRoll.genre, 'rock');
   assert.equal(offscreen.classifyGenreFromTitle('Rock Roll Classics'), null);
