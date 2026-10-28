@@ -56,7 +56,7 @@
 | `indiePop` | `autoGenreIndiePop` | `pop` | `indie pop`, `indie pop music`, `інді-поп`, `инди-поп` |
 | `hyperpop` | `autoGenreHyperpop` | `pop` | `hyperpop`, `хайперпоп`, `hyper-pop`, `hyperpop music`, `хайпер-поп`, `хайперпоп музика` |
 | `disco` | `autoGenreDisco` | `pop` | `disco music`, `disco`, `диско`, `nu-disco`, `disco playlist`, `диско музыка`, `диско музика`, `ню-диско` |
-| `animeMusic` | `autoGenreAnimeMusic` | `pop` | `anime music`, `anime soundtrack`, `anime opening`, `anime op`, `anime ost`, `anime song`, `anime songs`, `music from anime`, `музыка из аниме`, `музика з аніме`, `аниме опенинг`, `аніме опенінг` |
+| `animeMusic` | `autoGenreAnimeMusic` | `pop` | `anime music`, `anime soundtrack`, `anime opening`, `anime ost`, `anime song`, `anime songs`, `music from anime`, `музыка из аниме`, `музика з аніме`, `аниме опенинг`, `аніме опенінг` |
 
 ### 4. Rock / Metal
 
@@ -82,7 +82,7 @@
 | `blues` | `autoGenreBlues` | `vocal` | `blues rock`, `blues music`, `blues`, `блюз`, `delta blues`, `electric blues`, `blues playlist`, `блюзова музика`, `блюз музика` |
 | `funk` | `autoGenreFunk` | `vocal` | `funk music`, `funk`, `фанк`, `funk playlist`, `фанк музика`, `фанкова музика` |
 | `soul` | `autoGenreSoul` | `vocal` | `neo soul`, `soul music`, `soul`, `соул`, `soul music playlist`, `нео-соул`, `соул музика` |
-| `rnb` | `autoGenreRnb` | `vocal` | `rhythm and blues`, `r and b`, `r b`, `rnb`, `r&b`, `r&b music`, `r and b music`, `contemporary r&b`, `alternative r&b`, `uk r&b`, `ритм-н-блюз`, `ритм энд блюз`, `ритм-енд-блюз` |
+| `rnb` | `autoGenreRnb` | `vocal` | `rhythm and blues`, `r and b`, `rnb`, `r&b`, `r&b music`, `r and b music`, `contemporary r&b`, `alternative r&b`, `uk r&b`, `ритм-н-блюз`, `ритм энд блюз`, `ритм-енд-блюз` |
 | `gospel` | `autoGenreGospel` | `vocal` | `gospel music`, `gospel`, `госпел`, `gospel choir`, `gospel music playlist`, `євангельська музика`, `госпел музика` |
 
 ### 6. Country / Folk / Acoustic
@@ -115,7 +115,7 @@
 | `techno` | `autoGenreTechno` | `electronic` | `techno music`, `techno`, `техно`, `melodic techno`, `minimal techno`, `industrial techno`, `techno playlist`, `техно музыка`, `техно музика`, `мелодік техно`, `мелодик техно` |
 | `trance` | `autoGenreTrance` | `electronic` | `psytrance`, `psy trance`, `uplifting trance`, `trance music`, `trance`, `транс`, `psy-trance music`, `goa trance`, `uplifting trance music`, `транс музика`, `транс музыка` |
 | `dubstep` | `autoGenreDubstep` | `electronic` | `dubstep`, `дабстеп`, `melodic dubstep`, `brostep`, `dubstep music`, `дабстеп музика` |
-| `drumBass` | `autoGenreDrumBass` | `electronic` | `drum and bass`, `drum n bass`, `drum bass`, `dnb`, `d and b`, `джангл днб`, `drum n bass music`, `dnb music`, `джангл-н-бейс`, `драм-н-бейс`, `драм-енд-бейс` |
+| `drumBass` | `autoGenreDrumBass` | `electronic` | `drum and bass`, `drum n bass`, `drum bass`, `dnb`, `джангл днб`, `drum n bass music`, `dnb music`, `джангл-н-бейс`, `драм-н-бейс`, `драм-енд-бейс` |
 | `jungle` | `autoGenreJungle` | `electronic` | `jungle music`, `jungle`, `jungle playlist`, `jungle dnb`, `джангл музика` |
 | `breakbeat` | `autoGenreBreakbeat` | `electronic` | `breakbeat`, `break beat`, `breakbeat music`, `брейкбит музика` |
 | `electro` | `autoGenreElectro` | `electronic` | `electro music`, `electro`, `electro music playlist`, `электро музыка`, `електро музика` |
