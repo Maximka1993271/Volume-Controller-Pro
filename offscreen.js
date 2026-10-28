@@ -1974,12 +1974,12 @@ function classifyGenreFromTitle(title) {
     // Preserve the meaning of literal ampersands: "R&B" must not match "R B".
     // Other catalog spellings such as "rock and roll" remain available without "&".
     if (matcher.sourceAlias.includes('&')) {
-      const ampersandPair = matcher.sourceAlias.match(/([a-z]+)\\s*&\\s*([a-z]+)/i);
+      const ampersandPair = matcher.sourceAlias.match(/([a-z]+)[ \\t]*&[ \\t]*([a-z]+)/i);
       if (ampersandPair) {
         const leftWord = ampersandPair[1].toLowerCase();
         const rightWord = ampersandPair[2].toLowerCase();
         const hasLiteralAmpersandPair = Array.from(
-          rawTitle.matchAll(/([a-z]+)\\s*&\\s*([a-z]+)/gi)
+          rawTitle.matchAll(/([a-z]+)[ \\t]*&[ \\t]*([a-z]+)/gi)
         ).some((pair) => pair[1].toLowerCase() === leftWord && pair[2].toLowerCase() === rightWord);
         if (!hasLiteralAmpersandPair) continue;
       }
