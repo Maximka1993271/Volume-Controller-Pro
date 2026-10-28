@@ -10,7 +10,7 @@ const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 // Execute real production function bodies without booting a browser UI.
 // Top-level function declarations in the source files end with an unindented brace.
 function extractFunction(source, name) {
-  const match = new RegExp('^function\\s+' + name + '\\s*\\(', 'm').exec(source);
+  const match = new RegExp('^(?:async\\s+)?function\\s+' + name + '\\s*\\(', 'm').exec(source);
   assert.ok(match, 'Could not find production function: ' + name);
   const end = source.indexOf('\n}', match.index);
   assert.notEqual(end, -1, 'Could not find end of production function: ' + name);
