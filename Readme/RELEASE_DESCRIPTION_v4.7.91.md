@@ -11,6 +11,8 @@ Audio enhancement for Microsoft Edge and compatible Chromium browsers.
 - **Fewer false positives:** common single words such as `house`, `rock`, and `pop` are treated cautiously in ordinary track titles, while specific genre phrases retain priority.
 - **Safer audio-only classification:** silent or near-noise-floor input is not classified, and the atmospheric profile uses a confidence floor consistent with the classifier's application threshold.
 - **Status updates:** confidence and Bass/Voice toggle states are included in status-change detection.
+- **Capture recovery:** the background service rechecks the offscreen document after each setup, so a browser-closed offscreen document can be created again instead of reusing a stale completed promise.
+- **Accessibility:** the temporary page indicator respects reduced-motion preferences by avoiding scale animation.
 - **Full genre reference:** the package includes `AUTO_GENRE_CATALOG.md`, documenting all 81 records, aliases, 12 EQ profile families, and audio-only heuristics.
 
 ## Download and install
