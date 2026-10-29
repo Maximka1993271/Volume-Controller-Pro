@@ -58,8 +58,15 @@
 
 @media (prefers-reduced-motion: reduce) {
   #vc-floating-indicator.visible {
-    animation-duration: 1.6s;
+    /* Keep the temporary fade, but remove the scale/zoom motion. */
+    animation-name: vcp-indicator-fade-reduced;
+    transition: none;
   }
+}
+
+@keyframes vcp-indicator-fade-reduced {
+  0%, 68% { opacity: 1; }
+  100% { opacity: 0; }
 }
 
 #vc-floating-indicator.boosted {

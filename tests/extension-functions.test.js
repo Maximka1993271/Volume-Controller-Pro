@@ -546,3 +546,45 @@ test('capture lifecycle queue serializes start/stop work and continues after a r
   assert.equal(await second, 'second result');
   assert.deepEqual(order, ['first:start', 'first:end', 'second']);
 });
+
+
+test('offscreen setup recreates the document after the browser closes it', async () => {
+  const source = readFileSync(resolve(ROOT, 'background.js'), 'utf8');
+  const setupFunction = extractFunction(source, 'setupOffscreenDocument');
+  const contexts = [];
+  let createCount = 0;
+  const context = createContext({
+    chrome: {
+      runtime: {
+        getURL: (path) => 'chrome-extension://test/' + path,
+        getContexts: async () => contexts
+      },
+      offscreen: {
+        createDocument: async ({ url }) => {
+          createCount += 1;
+          contexts.splice(0, contexts.length, { url: 'chrome-extension://test/' + url });
+        }
+      }
+    }
+  });
+  runInContext(
+    ['let offscreenSetupPromise = null;', setupFunction, 'globalThis.__setup = setupOffscreenDocument;'].join('\n\n'),
+    context,
+    { filename: 'background.js' }
+  );
+
+  await context.__setup();
+  assert.equal(createCount, 1);
+  assert.equal(contexts.length, 1);
+
+  // Chromium may independently close an offscreen document. A fulfilled creation
+  // promise must not be treated as proof that the document is still alive.
+  contexts.length = 0;
+  await context.__setup();
+  assert.equal(createCount, 2);
+  assert.equal(contexts.length, 1);
+
+  // Existing documents are reused rather than redundantly recreated.
+  await context.__setup();
+  assert.equal(createCount, 2);
+});
