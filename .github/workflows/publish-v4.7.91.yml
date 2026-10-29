@@ -72,6 +72,16 @@ jobs:
           sha256sum -c Volume.Controller.Pro.v4.7.91.zip.sha256
           ls -lh Volume.Controller.Pro.v4.7.91.zip Volume.Controller.Pro.v4.7.91.zip.sha256
 
+      - name: Attach verified ZIP and checksum to this workflow run
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: Volume.Controller.Pro.v4.7.91-audited
+          path: |
+            dist/Volume.Controller.Pro.v4.7.91.zip
+            dist/Volume.Controller.Pro.v4.7.91.zip.sha256
+          if-no-files-found: error
+          retention-days: 7
+
       - name: Replace assets on existing GitHub Release v4.7.91
         env:
           GH_TOKEN: ${{ github.token }}
