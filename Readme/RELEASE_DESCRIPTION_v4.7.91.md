@@ -15,6 +15,8 @@ Audio enhancement for Microsoft Edge and compatible Chromium browsers.
 - **Accessibility:** the temporary page indicator respects reduced-motion preferences by avoiding scale animation.
 - **Audio-capture lifecycle fix:** each setup checks whether the offscreen document still exists instead of trusting a previously fulfilled creation promise. If Chromium closes the document independently, a later setup can recreate it.
 - **Regression coverage:** added an automated test for offscreen-document closure, recreation, and reuse.
+- **Capture-state recovery coverage:** regression tests verify restoration of the active captured tab after a service-worker restart and safe handling of missing/unavailable offscreen contexts, stale or malformed status replies, and queued capture work after a failed operation.
+- **Automatic package rebuilds:** changes to packaged extension files trigger a v4.7.91 rebuild; the workflow checks ZIP integrity and SHA-256 before replacing the existing release assets.
 - **Release integrity:** the publishing workflow validates the ZIP and SHA-256, and attaches the verified ZIP and checksum as a downloadable GitHub Actions artifact.
 - **Full genre reference:** the package includes `AUTO_GENRE_CATALOG.md`, documenting all 81 records, aliases, 12 EQ profile families, and audio-only heuristics.
 
