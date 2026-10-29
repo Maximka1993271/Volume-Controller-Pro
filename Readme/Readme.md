@@ -2454,3 +2454,61 @@ SHA-256: `25f2ea58484c5357a7896812f7c6cd99d571d45915b721aa36f030ada9f5c060`
 - При запуске аудиозахвата и применении сохранённых параметров фоновой обработчик передаёт режимы в offscreen, поэтому UI и аудиограф используют один и тот же выбор.
 - При смене трека сбрасывается анализ жанра, но не ручной/автоматический режим параметров.
 - Проверены синтаксис JavaScript, JSON, CSS, локализации, HTML ID и структура ZIP. Фактический захват звука в Edge требует ручного теста.
+
+---
+
+# Privacy notes
+
+Last reviewed: 2026-10-25. This section describes a static review of the repository's source tree; verify the release archive independently.
+
+## Audio processing
+
+Volume Controller Pro captures audio from a tab when the user starts the feature and processes it with browser Web Audio APIs. Audio processing is designed to run locally in the browser.
+
+The reviewed JavaScript files contain no remote analytics endpoint or telemetry service, and no call that sends captured audio to a developer-controlled server. The translation loader uses `fetch()` with `chrome.runtime.getURL()` to load a packaged local file.
+
+## Local data
+
+The extension uses `chrome.storage.local` for settings and state, including volume/EQ preferences, visualization options, site profiles and automatic genre status. Track-aware status can include a title, platform-specific track identifier, detected genre, confidence/state values and update time.
+
+Settings backups (`.cfg`) are created or imported at the user's request. Review a backup before sharing it; it may contain personal preferences and site-specific settings.
+
+## Permissions
+
+- `activeTab`: access to a user-selected tab for an explicit action.
+- `scripting`: inject extension scripts/styles or run cleanup/inspection functions in supported tabs.
+- `storage`: save settings and local extension state.
+- `tabCapture`: capture audio from the selected tab after capture is started.
+- `offscreen`: run audio processing in an offscreen extension document.
+
+The manifest does not declare broad `host_permissions` or `externally_connectable`. Browser pages that prohibit script injection may not be controllable.
+
+## Limits
+
+This is a source-based static review, not independent network monitoring of every runtime path or of a binary release. Review this section again whenever permissions, networking or storage behavior changes. Real-world testing in Microsoft Edge is needed to validate capture and lifecycle behavior.
+
+---
+
+# Release process
+
+## Source of truth
+
+The unpacked extension source belongs in the repository root with `manifest.json` at the root. Source files, README, release notes and archive version should describe the same release.
+
+## Checklist
+
+1. Update `manifest.json` and the user-facing changelog.
+2. Update version-specific release notes and limitations. Never claim a manual test passed unless it was performed.
+3. Run the **Validate extension** workflow and review its result.
+4. Install the candidate in Microsoft Edge. Test audio start/stop/restart, switching and closing captured tabs, YouTube/Spotify track changes, volume/EQ, limiter, visualizers and settings backup import/export.
+5. Build the ZIP from the reviewed source commit. It should contain one clearly named project folder with `manifest.json` inside.
+6. Compute SHA-256 from the exact ZIP to be uploaded. Use the exact asset name and checksum in release notes.
+7. Create the version tag from the reviewed source commit, then publish the matching ZIP as that tag's release asset.
+8. Verify tag, release body, asset name, checksum and source version on GitHub after publishing.
+
+## Existing v4.7.90 history
+
+The `v4.7.90` tag was created before the unpacked source tree was synchronized into `main`. Its Git tree contains `Volume_Controller_Pro_GitHub_Ready.zip`, while current `main` contains unpacked source files. The published release asset is named `Volume.Controller.Pro.v4.7.90.zip`.
+
+To preserve the historical record, do not force-move the existing tag. From the next release onward, create the tag only after the full source tree and release artifact have been verified together.
+
