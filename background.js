@@ -111,10 +111,11 @@ async function setupOffscreenDocument() {
 
   try {
     await offscreenSetupPromise;
-  } catch (error) {
-    // Allow a later attempt to create the document if this attempt failed.
+  } finally {
+    // Keep the promise only while creation is in flight. The offscreen document can
+    // be closed independently of the service worker, so every later start must check
+    // getContexts() again instead of trusting an already-fulfilled promise forever.
     offscreenSetupPromise = null;
-    throw error;
   }
 }
 
