@@ -568,7 +568,7 @@ test('offscreen setup recreates the document after the browser closes it', async
     }
   });
   runInContext(
-    ['let offscreenSetupPromise = null;', setupFunction, 'globalThis.__setup = setupOffscreenDocument;'].join('\\n\\n'),
+    ['let offscreenSetupPromise = null;', setupFunction, 'globalThis.__setup = setupOffscreenDocument;'].join('\n\n'),
     context,
     { filename: 'background.js' }
   );
