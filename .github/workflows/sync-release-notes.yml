@@ -1,10 +1,10 @@
-name: Sync v4.7.90 release notes
+name: Sync v4.7.91 release notes
 
 on:
   push:
     branches: [main]
     paths:
-      - "Readme/RELEASE_DESCRIPTION_v4.7.90.md"
+      - "Readme/RELEASE_DESCRIPTION_v4.7.91.md"
       - ".github/workflows/sync-release-notes.yml"
   workflow_dispatch:
 
@@ -22,6 +22,6 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          test -s Readme/RELEASE_DESCRIPTION_v4.7.90.md
-          gh release view v4.7.90 >/dev/null
-          gh release edit v4.7.90 --notes-file Readme/RELEASE_DESCRIPTION_v4.7.90.md
+          test -s Readme/RELEASE_DESCRIPTION_v4.7.91.md
+          gh release view v4.7.91 >/dev/null
+          gh release edit v4.7.91 --notes-file Readme/RELEASE_DESCRIPTION_v4.7.91.md
