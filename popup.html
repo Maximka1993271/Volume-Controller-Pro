@@ -9,7 +9,7 @@
   <meta charset="UTF-8">
   <title>Volume Controller Pro</title>
   <link rel="icon" href="icons/favicon.ico" type="image/x-icon" sizes="16x16 32x32 48x48">
-  <link rel="icon" href="icons/favicon.png" type="image/png" sizes="256x256">
+  <link rel="icon" href="icons/favicon.png" type="image/png" sizes="512x512">
   <link rel="stylesheet" href="popup.css">
 </head>
 <body>
@@ -649,12 +649,12 @@
     </div>
 
     <div class="presets">
-      <button class="preset-btn" data-value="100">100%</button>
-      <button class="preset-btn" data-value="200">200%</button>
-      <button class="preset-btn" data-value="300">300%</button>
-      <button class="preset-btn" data-value="400">400%</button>
-      <button class="preset-btn" data-value="500">500%</button>
-      <button class="preset-btn" data-value="600">600%</button>
+      <button type="button" class="preset-btn" data-value="100">100%</button>
+      <button type="button" class="preset-btn" data-value="200">200%</button>
+      <button type="button" class="preset-btn" data-value="300">300%</button>
+      <button type="button" class="preset-btn" data-value="400">400%</button>
+      <button type="button" class="preset-btn" data-value="500">500%</button>
+      <button type="button" class="preset-btn" data-value="600">600%</button>
     </div>
 
     <section id="audioProtectionIndicator" class="audio-protection-indicator" data-state="waiting" aria-live="polite" role="status" aria-atomic="true">
@@ -766,12 +766,12 @@
       <div class="bass-note" data-i18n="voiceNote">Рекомендуется +2–4 dB для речи и диалогов. Сильное усиление может сделать голос резким.</div>
     </section>
 
-    <div class="status" id="status" data-i18n="ready">Готово</div>
+    <div class="status" id="status" role="status" aria-live="polite" aria-atomic="true" data-i18n="ready">Готово</div>
 
     <footer class="footer">
       <div class="footer-meta">
         <div class="footer-author"><span data-i18n="author">Автор</span>: <span class="author-name">Maxim Melnikov</span></div>
-        <div class="footer-version"><span data-i18n="versionLabel">Версия</span>: <span id="extensionVersion">4.7.90</span></div>
+        <div class="footer-version"><span data-i18n="versionLabel">Версия</span>: <span id="extensionVersion">4.7.92</span></div>
       </div>
       <a href="https://github.com/Maximka1993271" target="_blank" rel="noopener noreferrer" class="github-link">
         <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor">
