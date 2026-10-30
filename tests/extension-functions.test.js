@@ -122,6 +122,7 @@ const popup = loadProductionApi('popup.js', [
 ], [
   'isSpotifyWebPlayerUrl',
   'isYouTubeVideoUrl',
+  'isCaptureCapableHost',
   'createDefaultServiceAudioProfile',
   'normalizeServiceAudioProfile',
   'isValidServiceAudioProfile',
@@ -405,6 +406,48 @@ test('genre title matching preserves literal ampersands', () => {
   const rockAndRoll = plain(offscreen.classifyGenreFromTitle('Rock & Roll Classics'));
   assert.equal(rockAndRoll.genre, 'rock');
   assert.equal(offscreen.classifyGenreFromTitle('Rock Roll Classics'), null);
+});
+
+test('popup URL validation matches the background capture allowlist', () => {
+  const cases = [
+    ['https://www.youtube.com/watch?v=abcdefghijk', true, true],
+    ['https://youtube.com/shorts/abcdefghijk', true, true],
+    ['https://music.youtube.com/watch?v=abcdefghijk', true, true],
+    ['https://m.youtube.com/live/abcdefghijk', true, true],
+    ['https://studio.youtube.com/watch?v=abcdefghijk', false, false],
+    ['https://youtube.com/watch', false, false],
+    ['https://youtube.com/shorts/', false, false],
+    ['https://youtube.com:444/watch?v=abcdefghijk', false, false],
+    ['https://user:pass@youtube.com/watch?v=abcdefghijk', false, false],
+    ['http://youtube.com/watch?v=abcdefghijk', false, false],
+    ['https://open.spotify.com/', false, true],
+    ['https://user:pass@open.spotify.com/', false, false],
+    ['https://open.spotify.com:444/', false, false],
+    ['https://open.spotify.com:443/', false, true]
+  ];
+  for (const [url, youtubeExpected, spotifyExpected] of cases) {
+    assert.equal(popup.isYouTubeVideoUrl(url), youtubeExpected, url);
+    assert.equal(popup.isSpotifyWebPlayerUrl(url), spotifyExpected, url);
+  }
+});
+
+test('legacy capture-circle cleanup is limited to supported media hosts', () => {
+  assert.equal(popup.isCaptureCapableHost('https://www.youtube.com/watch?v=abcdefghijk'), true);
+  assert.equal(popup.isCaptureCapableHost('https://open.spotify.com/track/abc123'), true);
+  assert.equal(popup.isCaptureCapableHost('https://example.com/'), false);
+  assert.equal(popup.isCaptureCapableHost('edge://extensions/'), false);
+});
+
+test('title genre classifier treats ambiguous Russian/Ukrainian words as context-dependent', () => {
+  for (const title of [
+    'Король и Шут - Рок', 'Моя Опера - Тик-так', 'Диско-шар',
+    'Дождь в стиле танго', 'Этот транс не отпускает', 'Daft Punk - One More Time',
+    'Mouse Trap', 'Drill Sergeant'
+  ]) {
+    assert.equal(offscreen.classifyGenreFromTitle(title), null, title);
+  }
+  assert.equal(plain(offscreen.classifyGenreFromTitle('Рок музыка')).genre, 'rock');
+  assert.equal(plain(offscreen.classifyGenreFromTitle('Трэп микс')).genre, 'trap');
 });
 
 test('title genre classifier detects specific named genres and respects word boundaries', () => {
