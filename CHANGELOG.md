@@ -1,5 +1,17 @@
 # Changelog
 
+## [4.7.92] — 2026-10-30
+
+- Recover visualizer settings and control requests from the offscreen capture state after a service-worker restart, using the serialized capture queue.
+- Clear stale automatic genre status at browser startup and when the popup confirms that no capture is active.
+- Prevent false genre matches from ambiguous English and Russian/Ukrainian single words in ordinary track titles; normalize Cyrillic aliases consistently.
+- Align popup YouTube/Spotify URL checks with the background allowlist, including host, route, video ID, HTTPS, port, and credential validation.
+- Limit obsolete page-indicator cleanup to supported YouTube and Spotify hosts.
+- Round restored Bass/Voice dB settings to integer values and log rejected offscreen updates.
+- Handle rejected badge API promises; improve status announcements and popup markup semantics.
+- Remove unused popup state helper and simplify a constant compressor knee value.
+- Bump extension version to 4.7.92. Backup schema remains v18; no localization keys added.
+
 ## [4.7.91] — 2026-10-28
 
 - Expanded automatic genre aliases with additional English variants and Russian/Ukrainian names for existing genre/subgenre IDs.

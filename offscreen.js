@@ -1202,8 +1202,14 @@ const AUTO_GENRE_AMBIGUOUS_WORDS = new Set([
   'pop', 'rock', 'rap', 'metal', 'house', 'garage', 'jungle', 'indie', 'folk', 'country',
   'acoustic', 'soul', 'funk', 'disco', 'opera', 'ska', 'latin', 'salsa', 'samba', 'tango',
   'reggae', 'trance', 'techno', 'electronic', 'wave', 'ambient', 'jazz', 'blues', 'classical',
-  'gospel', 'electro', 'chillout', 'experimental'
-]);
+  'gospel', 'electro', 'chillout', 'experimental', 'punk', 'trap', 'drill', 'grime', 'emo',
+  'поп', 'рок', 'рэп', 'реп', 'метал', 'хаус', 'гараж', 'джангл', 'инди', 'инди', 'фолк', 'кантри',
+  'акустика', 'соул', 'фанк', 'диско', 'опера', 'ска', 'сальса', 'самба', 'танго',
+  'регги', 'транс', 'техно', 'электроника', 'волна', 'эмбиент', 'джаз', 'блюз', 'классика',
+  'госпел', 'электро', 'чиллаут', 'экспериментальный',
+  'панк', 'трэп', 'дрилл', 'грайм', 'эмо',
+  'рок', 'реп', 'поп', 'метал', 'хаус', 'диско', 'опера', 'транc', 'джаз', 'блюз'
+].map(normalizeGenreText));
 const AUTO_GENRE_CONTEXT_WORDS = new Set([
   'music', 'mix', 'remix', 'playlist', 'beats', 'beat', 'radio', 'genre', 'soundtrack', 'song', 'songs',
   'style', 'version', 'type', 'session', 'set', 'compilation', 'hits', 'hit', 'album', 'track',
@@ -1818,7 +1824,7 @@ function applyAudioSettings() {
   if (compressor) {
     // Night mode narrows the dynamic range gently so quiet speech is less masked by peaks.
     compressor.threshold.setTargetAtTime(nightModeEnabled ? -24 : -12, now, 0.06);
-    compressor.knee.setTargetAtTime(nightModeEnabled ? 12 : 12, now, 0.06);
+    compressor.knee.setTargetAtTime(12, now, 0.06);
     compressor.ratio.setTargetAtTime(nightModeEnabled ? 3.5 : 2.2, now, 0.06);
     compressor.attack.setTargetAtTime(nightModeEnabled ? 0.008 : 0.012, now, 0.06);
     compressor.release.setTargetAtTime(nightModeEnabled ? 0.30 : 0.25, now, 0.06);
@@ -1951,7 +1957,7 @@ function updateAutoGenreSourceMetadata(title, trackId) {
 // RU: Нормализует текст для сопоставления жанров независимо от регистра и пунктуации.
 // UK: Нормалізує текст для зіставлення жанрів незалежно від регістру та пунктуації.
 function normalizeGenreText(value) {
-  return String(value || '').toLowerCase().normalize('NFKD').replace(/[\u0300-\u036f]/g, '').replace(/[^\p{L}\p{N}]+/gu, ' ').trim();
+  return String(value || '').toLowerCase().replace(/й/g, 'и').normalize('NFKD').replace(/[\u0300-\u036f]/g, '').replace(/[^\p{L}\p{N}]+/gu, ' ').trim();
 }
 
 // EN: Match bounded, normalized aliases and prefer the most specific known subgenre; ambiguous titles fall back to audio.

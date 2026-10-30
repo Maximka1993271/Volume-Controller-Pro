@@ -1,4 +1,4 @@
-name: Publish Volume Controller Pro 4.7.91
+name: Publish Volume Controller Pro 4.7.92
 
 on:
   push:
@@ -19,14 +19,14 @@ on:
       - "popup.html"
       - "popup.js"
       - "styles.css"
-      - "Readme/RELEASE_DESCRIPTION_v4.7.91.md"
+      - "Readme/RELEASE_DESCRIPTION_v4.7.92.md"
   workflow_dispatch:
 
 permissions:
   contents: write
 
 concurrency:
-  group: publish-v4.7.91
+  group: publish-v4.7.92
   cancel-in-progress: false
 
 jobs:
@@ -44,7 +44,7 @@ jobs:
           from pathlib import Path
 
           manifest = json.loads(Path("manifest.json").read_text(encoding="utf-8"))
-          assert manifest.get("version") == "4.7.91", f"Unexpected version: {manifest.get('version')}"
+          assert manifest.get("version") == "4.7.92", f"Unexpected version: {manifest.get('version')}"
           required = [
               "AUTO_GENRE_CATALOG.md", "_locales", "background.js", "content.js",
               "icons", "lang", "manifest.json", "offscreen.html", "offscreen.js",
@@ -52,48 +52,55 @@ jobs:
           ]
           missing = [name for name in required if not Path(name).exists()]
           assert not missing, f"Missing package files: {missing}"
-          assert Path("Readme/RELEASE_DESCRIPTION_v4.7.91.md").is_file()
-          print("Validated Volume Controller Pro 4.7.91 source tree.")
+          assert Path("Readme/RELEASE_DESCRIPTION_v4.7.92.md").is_file()
+          print("Validated Volume Controller Pro 4.7.92 source tree.")
           PY
 
       - name: Package extension and create checksum
         run: |
           set -euo pipefail
-          mkdir -p dist/package/"Volume Controller Pro"
-          cp -a AUTO_GENRE_CATALOG.md _locales background.js content.js icons lang manifest.json offscreen.html offscreen.js popup.css popup.html popup.js styles.css dist/package/"Volume Controller Pro"/
+          mkdir -p dist/package
+          cp -a AUTO_GENRE_CATALOG.md _locales background.js content.js icons lang manifest.json offscreen.html offscreen.js popup.css popup.html popup.js styles.css dist/package/
           (
             cd dist/package
-            zip -qr ../Volume.Controller.Pro.v4.7.91.zip "Volume Controller Pro"
+            zip -qr ../Volume.Controller.Pro.v4.7.92.zip .
           )
+          # The extension manifest must be at the ZIP root for direct "Load unpacked" extraction.
           cd dist
-          sha256sum Volume.Controller.Pro.v4.7.91.zip > Volume.Controller.Pro.v4.7.91.zip.sha256
+          sha256sum Volume.Controller.Pro.v4.7.92.zip > Volume.Controller.Pro.v4.7.92.zip.sha256
           # Fail before publishing if the archive is corrupt or its checksum does not match.
-          unzip -t Volume.Controller.Pro.v4.7.91.zip >/dev/null
-          sha256sum -c Volume.Controller.Pro.v4.7.91.zip.sha256
-          ls -lh Volume.Controller.Pro.v4.7.91.zip Volume.Controller.Pro.v4.7.91.zip.sha256
+          unzip -t Volume.Controller.Pro.v4.7.92.zip >/dev/null
+          sha256sum -c Volume.Controller.Pro.v4.7.92.zip.sha256
+          ls -lh Volume.Controller.Pro.v4.7.92.zip Volume.Controller.Pro.v4.7.92.zip.sha256
 
       - name: Attach verified ZIP and checksum to this workflow run
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
-          name: Volume.Controller.Pro.v4.7.91-audited
+          name: Volume.Controller.Pro.v4.7.92-audited
           path: |
-            dist/Volume.Controller.Pro.v4.7.91.zip
-            dist/Volume.Controller.Pro.v4.7.91.zip.sha256
+            dist/Volume.Controller.Pro.v4.7.92.zip
+            dist/Volume.Controller.Pro.v4.7.92.zip.sha256
           if-no-files-found: error
           retention-days: 7
 
-      - name: Replace assets on existing GitHub Release v4.7.91
+      - name: Update an existing v4.7.92 release when one is available
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
-          # Require the existing release: never create a new release or move its tag.
-          gh release view v4.7.91 >/dev/null
-          gh release upload v4.7.91 \
-            dist/Volume.Controller.Pro.v4.7.91.zip \
-            dist/Volume.Controller.Pro.v4.7.91.zip.sha256 \
-            --clobber
-          gh release edit v4.7.91 \
-            --title "Volume Controller Pro 4.7.91" \
-            --notes-file Readme/RELEASE_DESCRIPTION_v4.7.91.md
-          gh release view v4.7.91
+          if gh release view v4.7.92 >/dev/null 2>&1; then
+            gh release upload v4.7.92 \
+              dist/Volume.Controller.Pro.v4.7.92.zip \
+              dist/Volume.Controller.Pro.v4.7.92.zip.sha256 \
+              --clobber
+            gh release edit v4.7.92 \
+              --title "Volume Controller Pro 4.7.92" \
+              --notes-file Readme/RELEASE_DESCRIPTION_v4.7.92.md
+          else
+            gh release create v4.7.92 \
+              dist/Volume.Controller.Pro.v4.7.92.zip \
+              dist/Volume.Controller.Pro.v4.7.92.zip.sha256 \
+              --title "Volume Controller Pro 4.7.92" \
+              --notes-file Readme/RELEASE_DESCRIPTION_v4.7.92.md
+          fi
+          gh release view v4.7.92
