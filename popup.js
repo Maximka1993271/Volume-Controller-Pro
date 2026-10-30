@@ -21,13 +21,28 @@ const quickPeakLimiterToggle = document.getElementById('quickPeakLimiterToggle')
 const showClippingWarningToggle = document.getElementById('showClippingWarningToggle');
 const showAllMessagesToggle = document.getElementById('showAllMessagesToggle');
 
-// EN: Remove the obsolete page-side green dot left by versions 4.7.83/4.7.84; never create a replacement.
-// RU: Удаляем устаревший зелёный кружок, оставшийся от версий 4.7.83/4.7.84; новый кружок не создаём.
-// UK: Видаляємо застарілий зелений кружок, що залишився від версій 4.7.83/4.7.84; нового кружка не створюємо.
+// EN: Restrict legacy-indicator cleanup to supported media player hosts.
+// RU: Ограничиваем удаление устаревшего индикатора поддерживаемыми сайтами-плеерами.
+// UK: Обмежуємо видалення застарілого індикатора підтримуваними сайтами-плеєрами.
+function isCaptureCapableHost(tabUrl) {
+  try {
+    const parsed = new URL(tabUrl);
+    const host = parsed.hostname.toLowerCase();
+    return parsed.protocol === 'https:' &&
+      ((host === 'youtube.com' || host === 'www.youtube.com' || host === 'm.youtube.com' || host === 'music.youtube.com') ||
+       host === 'open.spotify.com');
+  } catch {
+    return false;
+  }
+}
+
+// EN: Remove the obsolete page-side green dot only from supported media sites.
+// RU: Удаляем устаревший зелёный кружок только на поддерживаемых музыкальных сайтах.
+// UK: Видаляємо застарілий зелений кружок лише на підтримуваних музичних сайтах.
 async function removeObsoleteCaptureCircleFromActiveTab() {
   try {
     const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
-    if (!tab || !Number.isInteger(tab.id)) return;
+    if (!tab || !Number.isInteger(tab.id) || !isCaptureCapableHost(tab.url)) return;
     await chrome.scripting.executeScript({
       target: { tabId: tab.id },
       func: () => {
@@ -35,7 +50,7 @@ async function removeObsoleteCaptureCircleFromActiveTab() {
       }
     });
   } catch (_) {
-    // The tab may not be scriptable (for example edge:// pages); nothing needs to be changed there.
+    // Cleanup is optional; never interfere with popup initialization or audio capture.
   }
 }
 void removeObsoleteCaptureCircleFromActiveTab();
@@ -164,7 +179,8 @@ function writeLocalSettings(values) {
 function isSpotifyWebPlayerUrl(tabUrl) {
   try {
     const parsed = new URL(tabUrl);
-    return parsed.protocol === 'https:' && parsed.hostname === 'open.spotify.com';
+    return parsed.protocol === 'https:' && !parsed.username && !parsed.password &&
+      (!parsed.port || parsed.port === '443') && parsed.hostname.toLowerCase() === 'open.spotify.com';
   } catch {
     return false;
   }
@@ -176,13 +192,14 @@ function isSpotifyWebPlayerUrl(tabUrl) {
 function isYouTubeVideoUrl(tabUrl) {
   try {
     const parsed = new URL(tabUrl);
+    if (parsed.protocol !== 'https:' || parsed.username || parsed.password || (parsed.port && parsed.port !== '443')) return false;
     const host = parsed.hostname.toLowerCase();
-    const isYouTubeHost = host === 'youtube.com' || host.endsWith('.youtube.com');
-    const isVideoRoute = parsed.pathname === '/watch' ||
-      parsed.pathname.startsWith('/shorts/') ||
-      parsed.pathname.startsWith('/live/') ||
-      parsed.pathname.startsWith('/embed/');
-    return parsed.protocol === 'https:' && isYouTubeHost && isVideoRoute;
+    const allowedHosts = new Set(['youtube.com', 'www.youtube.com', 'm.youtube.com', 'music.youtube.com']);
+    if (!allowedHosts.has(host)) return false;
+    const validVideoId = (value) => typeof value === 'string' && /^[A-Za-z0-9_-]{6,20}$/.test(value);
+    if (parsed.pathname === '/watch') return validVideoId(parsed.searchParams.get('v'));
+    const routeMatch = parsed.pathname.match(/^\/(shorts|live|embed)\/([^/?#]+)\/?$/i);
+    return Boolean(routeMatch && validVideoId(routeMatch[2]));
   } catch {
     return false;
   }
@@ -583,24 +600,6 @@ function getServiceProfileControlsList() {
     controls.enabled, controls.volume, controls.bassEnabled, controls.bassDb,
     controls.voiceEnabled, controls.voiceDb, controls.limiter, controls.night
   ]).filter(Boolean);
-}
-
-// EN: Global/site profile helpers isolate preferences so YouTube and Spotify can keep different values.
-// RU: Вспомогательные функции профилей разделяют параметры YouTube, Spotify и общие настройки.
-// UK: Допоміжні функції профілів розділяють параметри YouTube, Spotify та загальні налаштування.
-function snapshotGlobalAudioSettingsFromCurrentState() {
-  globalAudioSettings = {
-    volume: Math.min(6, Math.max(0, Number(slider.value) / 100 || 0)),
-    muted: isMuted,
-    bassBoostEnabled,
-    bassBoostDb,
-    voiceBoostEnabled,
-    voiceBoostDb,
-    peakLimiterEnabled,
-    nightModeEnabled,
-    activeAudioPreset,
-    lastBoostValue: Math.min(600, Math.max(100, Number(lastBoostValue) || 200))
-  };
 }
 
 // EN: Copies a profile into the main controls and refreshes their displayed values.
@@ -1461,6 +1460,25 @@ const AUTO_GENRE_LABELS = {
 // EN: Displays detected track/genre status and syncs quick toggles with stored preferences.
 // RU: Показывает состояние трека/жанра и синхронизирует быстрые переключатели с настройками.
 // UK: Показує стан треку/жанру та синхронізує швидкі перемикачі з налаштуваннями.
+// EN: Clears a persisted genre card when no capture is active anywhere.
+// RU: Очищает сохранённую карточку жанра, если активного захвата больше нет.
+// UK: Очищає збережену картку жанру, якщо активного захоплення більше немає.
+async function resetStaleAutoGenreStatus() {
+  autoGenreStatus = {
+    enabled: autoGenreEnabled, active: false, genre: null, confidence: 0,
+    source: null, trackId: '', trackTitle: '',
+    bassManualOverride: autoGenreBassManualOverride,
+    voiceManualOverride: autoGenreVoiceManualOverride,
+    state: autoGenreEnabled ? 'waiting-capture' : 'disabled'
+  };
+  updateAutoGenreStatusUI();
+  try {
+    await writeLocalSettings({ autoGenreStatus });
+  } catch (error) {
+    console.debug('Could not clear stale automatic genre status:', error?.message || error);
+  }
+}
+
 function updateAutoGenreStatusUI() {
   const setTextIfChanged = (element, value) => {
     if (element && element.textContent !== value) element.textContent = value;
@@ -3539,6 +3557,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Opening the popup only checks status. It must never start tab capture by itself.
     let captureStatus = await chrome.runtime.sendMessage({ type: 'GET_CAPTURE_STATUS' }).catch(() => null);
     if (!captureStatus || captureStatus.success !== true) captureStatus = { active: false, tabId: null };
+    if (captureStatus.active !== true || !Number.isInteger(captureStatus.tabId)) {
+      await resetStaleAutoGenreStatus();
+    }
 
     // A stream should never survive if its own tab has navigated to a restricted page.
     if (!currentTabSupportsCapture && captureStatus.active === true && captureStatus.tabId === currentTabId) {
