@@ -5,7 +5,7 @@ on:
     branches: [main]
     # Rebuild whenever any file packaged into the release ZIP changes.
     paths:
-      - ".github/workflows/publish-v4.7.92.yml"
+      - ".github/workflows/publish-v4.7.91.yml"
       - "AUTO_GENRE_CATALOG.md"
       - "_locales/**"
       - "background.js"
@@ -59,12 +59,13 @@ jobs:
       - name: Package extension and create checksum
         run: |
           set -euo pipefail
-          mkdir -p dist/package/"Volume Controller Pro"
-          cp -a AUTO_GENRE_CATALOG.md _locales background.js content.js icons lang manifest.json offscreen.html offscreen.js popup.css popup.html popup.js styles.css dist/package/"Volume Controller Pro"/
+          mkdir -p dist/package
+          cp -a AUTO_GENRE_CATALOG.md _locales background.js content.js icons lang manifest.json offscreen.html offscreen.js popup.css popup.html popup.js styles.css dist/package/
           (
             cd dist/package
-            zip -qr ../Volume.Controller.Pro.v4.7.92.zip "Volume Controller Pro"
+            zip -qr ../Volume.Controller.Pro.v4.7.92.zip .
           )
+          # The extension manifest must be at the ZIP root for direct "Load unpacked" extraction.
           cd dist
           sha256sum Volume.Controller.Pro.v4.7.92.zip > Volume.Controller.Pro.v4.7.92.zip.sha256
           # Fail before publishing if the archive is corrupt or its checksum does not match.
