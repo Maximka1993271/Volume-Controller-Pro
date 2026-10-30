@@ -88,8 +88,6 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
-          # Never create a release or tag automatically. Until v4.7.92 is published,
-          # the verified ZIP and checksum remain available as this workflow artifact.
           if gh release view v4.7.92 >/dev/null 2>&1; then
             gh release upload v4.7.92 \
               dist/Volume.Controller.Pro.v4.7.92.zip \
@@ -98,7 +96,11 @@ jobs:
             gh release edit v4.7.92 \
               --title "Volume Controller Pro 4.7.92" \
               --notes-file Readme/RELEASE_DESCRIPTION_v4.7.92.md
-            gh release view v4.7.92
           else
-            echo "No v4.7.92 release exists yet; no tag or release was created."
+            gh release create v4.7.92 \
+              dist/Volume.Controller.Pro.v4.7.92.zip \
+              dist/Volume.Controller.Pro.v4.7.92.zip.sha256 \
+              --title "Volume Controller Pro 4.7.92" \
+              --notes-file Readme/RELEASE_DESCRIPTION_v4.7.92.md
           fi
+          gh release view v4.7.92
