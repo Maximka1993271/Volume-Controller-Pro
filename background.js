@@ -39,6 +39,12 @@ async function hidePageIndicator(tabId) {
 
 // Persist the safe default for first installs and older profiles without this preference.
 // Do not overwrite an explicit user choice when the extension is updated.
+chrome.runtime.onStartup.addListener(() => {
+  chrome.storage.local.remove('autoGenreStatus').catch((error) => {
+    console.debug('Could not clear stale automatic genre status on startup:', errorMessage(error));
+  });
+});
+
 chrome.runtime.onInstalled.addListener(() => {
   // EN/RU/UK: Remove the obsolete preference from older builds; it no longer controls any UI.
   chrome.storage.local.remove('showCaptureTabCircle').catch(() => {});
@@ -208,13 +214,18 @@ async function applySavedAudioSettingsToOffscreen(tabId = currentCapturedTabId) 
     if (typeof profile.nightModeEnabled === 'boolean') effective.nightModeEnabled = profile.nightModeEnabled;
   }
 
-  await sendToOffscreen({
+  const result = await sendToOffscreen({
     type: 'UPDATE_VOLUME',
     ...effective,
+    bassBoostDb: Math.round(effective.bassBoostDb),
+    voiceBoostDb: Math.round(effective.voiceBoostDb),
     muted: data.muted === true,
     bassManualOverride: data.autoGenreBassManualOverride === true,
     voiceManualOverride: data.autoGenreVoiceManualOverride === true
   });
+  if (!result || result.success !== true) {
+    console.warn('Offscreen audio settings were not applied:', result && result.error ? result.error : 'No confirmation from audio processor.');
+  }
 }
 
 // EN: Waits for an earlier tab capture to release before another capture starts.
@@ -537,32 +548,35 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       sendResponse({ success: false, error: 'Invalid visualizer settings.' });
       return false;
     }
-    // Persisted preferences are applied after a capture is established; don't open an offscreen document needlessly.
-    if (currentCapturedTabId === null) {
-      sendResponse({ success: true, deferred: true });
-      return false;
-    }
-    sendToOffscreen({ type: 'VISUALIZER_SETTINGS', bandCount: message.bandCount, sampleIntervalMs }).then((result) => {
-      sendResponse(result || { success: true });
-    }).catch((error) => {
-      sendResponse({ success: false, error: errorMessage(error) });
+    const resultPromise = enqueueCaptureTask(async () => {
+      await reconcileCapturedTabState();
+      if (!Number.isInteger(currentCapturedTabId)) return { success: true, deferred: true };
+      return sendToOffscreen({ type: 'VISUALIZER_SETTINGS', bandCount: message.bandCount, sampleIntervalMs });
     });
+    resultPromise.then(
+      (result) => sendResponse(result || { success: true }),
+      (error) => sendResponse({ success: false, error: errorMessage(error) })
+    );
     return true;
   }
 
   if (message.type === 'VISUALIZER_CONTROL') {
-    if (typeof message.enabled !== 'boolean' || (message.enabled && currentCapturedTabId === null)) {
-      sendResponse({ success: false, error: 'No active capture for visualizer.' });
+    if (typeof message.enabled !== 'boolean') {
+      sendResponse({ success: false, error: 'Invalid visualizer control.' });
       return false;
     }
-    sendToOffscreen({
-      type: 'VISUALIZER_CONTROL',
-      enabled: message.enabled
-    }).then((result) => {
-      sendResponse(result || { success: true });
-    }).catch((error) => {
-      sendResponse({ success: false, error: errorMessage(error) });
+    const resultPromise = enqueueCaptureTask(async () => {
+      await reconcileCapturedTabState();
+      if (message.enabled && !Number.isInteger(currentCapturedTabId)) {
+        return { success: false, error: 'No active capture for visualizer.' };
+      }
+      if (!Number.isInteger(currentCapturedTabId) && !message.enabled) return { success: true, deferred: true };
+      return sendToOffscreen({ type: 'VISUALIZER_CONTROL', enabled: message.enabled });
     });
+    resultPromise.then(
+      (result) => sendResponse(result || { success: true }),
+      (error) => sendResponse({ success: false, error: errorMessage(error) })
+    );
     return true;
   }
 
@@ -573,15 +587,16 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       sendResponse({ success: false, error: 'Invalid badge value.' });
       return false;
     }
-    chrome.action.setBadgeText({ text });
-
-    if (text && Number.parseInt(text, 10) > 100) {
-      chrome.action.setBadgeBackgroundColor({ color: '#f97316' });
-      chrome.action.setBadgeTextColor({ color: '#ffffff' });
-    } else {
-      chrome.action.setBadgeBackgroundColor({ color: '#ffffff' });
-      chrome.action.setBadgeTextColor({ color: '#000000' });
-    }
+    const isBoostBadge = Boolean(text && Number.parseInt(text, 10) > 100);
+    const backgroundColor = isBoostBadge ? '#f97316' : '#ffffff';
+    const textColor = isBoostBadge ? '#ffffff' : '#000000';
+    Promise.all([
+      chrome.action.setBadgeText({ text }),
+      chrome.action.setBadgeBackgroundColor({ color: backgroundColor }),
+      chrome.action.setBadgeTextColor({ color: textColor })
+    ]).catch((error) => {
+      console.debug('Could not update extension badge:', errorMessage(error));
+    });
 
     sendResponse({ success: true });
     return false;
