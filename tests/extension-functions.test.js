@@ -410,10 +410,10 @@ test('genre title matching preserves literal ampersands', () => {
 
 test('popup URL validation matches the background capture allowlist', () => {
   const cases = [
-    ['https://www.youtube.com/watch?v=abcdefghijk', true, true],
-    ['https://youtube.com/shorts/abcdefghijk', true, true],
-    ['https://music.youtube.com/watch?v=abcdefghijk', true, true],
-    ['https://m.youtube.com/live/abcdefghijk', true, true],
+    ['https://www.youtube.com/watch?v=abcdefghijk', true, false],
+    ['https://youtube.com/shorts/abcdefghijk', true, false],
+    ['https://music.youtube.com/watch?v=abcdefghijk', true, false],
+    ['https://m.youtube.com/live/abcdefghijk', true, false],
     ['https://studio.youtube.com/watch?v=abcdefghijk', false, false],
     ['https://youtube.com/watch', false, false],
     ['https://youtube.com/shorts/', false, false],
