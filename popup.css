@@ -10,7 +10,7 @@
 }
 
 body {
-  width: 360px;
+  width: 460px;
   font-family: -apple-system, "Segoe UI", system-ui, sans-serif;
   background: linear-gradient(145deg, #1a1d2e 0%, #16182a 100%);
   color: #e8eaf6;
@@ -1226,7 +1226,7 @@ body[data-theme="light"] .power-disable-btn.active { background: #ffe4e6; border
 .settings-label { color: #dce2f8; font-size: 10px; font-weight: 650; line-height: 1.35; }
 .settings-option-copy { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
 .settings-help { color: #8a95b2; font-size: 8.5px; line-height: 1.4; }
-.settings-control { position: relative; display: block; width: 135px; max-width: 48%; flex: 0 0 auto; }
+.settings-control { position: relative; display: block; width: 180px; max-width: 54%; flex: 0 0 auto; min-width: 0; }
 .settings-control::after {
   content: '';
   position: absolute;
@@ -1348,6 +1348,7 @@ body[data-theme="light"] .service-profile-card { border-color: #dfe2f3; backgrou
 .energy-saving-settings-section .settings-subsection-heading { padding-top: 10px; }
 .energy-saving-settings-section .settings-row { gap: 9px; padding: 8px 0; }
 .energy-saving-settings-section .settings-select:disabled { opacity: 0.48; cursor: not-allowed; }
+.energy-saving-settings-section .settings-control { width: 190px; max-width: 58%; }
 .settings-range-control {
   display: flex;
   flex: 0 0 136px;
@@ -2779,7 +2780,7 @@ body[data-theme="light"] .github-link {
    RU: Сохраняем исходные размеры окна расширения и плотность компоновки; редизайн меняет только оформление.
    UK: Зберігаємо початкові розміри вікна розширення та щільність компонування; редизайн змінює лише оформлення. */
 body {
-  width: 360px;
+  width: 460px;
   max-width: none;
   max-height: 600px;
 }
