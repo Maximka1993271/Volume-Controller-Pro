@@ -1,42 +1,42 @@
 # Changelog
 
+## [4.8.30] — 2026-11-22
+
+- Require explicit positive acknowledgements from the offscreen processor for volume/EQ and active visualizer operations; failed or missing responses are no longer treated as successful.
+- Prevent optimistic visualizer rendering after failed activation during capture start, recommended-settings application, factory reset or backup import.
+- Serialize automatic-genre status persistence, prevent stale writes from replacing newer track status, and retry after failed storage writes.
+- Include the active genre profile's volume trim in popup gain-risk calculations so popup warnings match the offscreen audio engine.
+- Document and regression-test the Night Mode programme compressor path independently from the optional final Peak Limiter/Safety Ceiling.
+- Consolidate release documentation and update the supported source package to Manifest V3 version 4.8.30.
+- Automated validation: 133 smoke checks passed; JavaScript syntax, JSON, HTML resources, CSS and extracted ZIP integrity verified.
+
+## [4.8.0–4.8.29] — Feature and UX development
+
+- Added GTA VI visual identity, 25 palettes and themed application icons, volume milestones, visualizers, spectrogram and scrollbar.
+- Rebuilt popup layout, settings accordion, collapsible Quick Settings and palette gallery; improved text sizing, width and footer theme integration.
+- Added multilingual metadata and theme labels for English, Russian and Ukrainian.
+- Improved Bass/Voice AUTO/manual controls, per-card status visibility, recommended settings, backups and legacy-setting migrations.
+- Expanded genre catalogue and shared validation; hardened capture lifecycle, AudioContext cleanup, Spotify track identity and MV3 recovery.
+- Added repeatable smoke/regression tests and corrected multiple edge cases in offscreen acknowledgement and settings persistence.
+
+## [4.7.93–4.7.99] — Capture lifecycle and shared modules
+
+- Fixed AudioContext cleanup races and made STOP_CAPTURE wait for completed cleanup.
+- Added shared validation and genre catalogues, fail-safe initialization, null safety and regression coverage.
+- Fixed a background ReferenceError involving the allowed genre ID set.
+
 ## [4.7.92] — 2026-10-30
 
-- Recover visualizer settings and control requests from the offscreen capture state after a service-worker restart, using the serialized capture queue.
-- Clear stale automatic genre status at browser startup and when the popup confirms that no capture is active.
-- Prevent false genre matches from ambiguous English and Russian/Ukrainian single words in ordinary track titles; normalize Cyrillic aliases consistently.
-- Align popup YouTube/Spotify URL checks with the background allowlist, including host, route, video ID, HTTPS, port, and credential validation.
-- Limit obsolete page-indicator cleanup to supported YouTube and Spotify hosts.
-- Round restored Bass/Voice dB settings to integer values and log rejected offscreen updates.
-- Handle rejected badge API promises; improve status announcements and popup markup semantics.
-- Remove unused popup state helper and simplify a constant compressor knee value.
-- Bump extension version to 4.7.92. Backup schema remains v18; no localization keys added.
+- Recovered visualizer settings and controls after Manifest V3 service-worker restarts.
+- Cleared stale automatic genre status at browser startup and when no capture is active.
+- Reduced false genre matches caused by ambiguous English, Russian and Ukrainian words in track titles.
+- Aligned popup/background URL validation for YouTube and Spotify Web Player.
+- Restricted legacy indicator cleanup to supported media hosts.
+- Rounded restored Bass/Voice dB values and improved offscreen error reporting.
+- Hardened badge handling and popup accessibility.
 
 ## [4.7.91] — 2026-10-28
 
-- Expanded automatic genre aliases with additional English variants and Russian/Ukrainian names for existing genre/subgenre IDs.
-- Added safeguards against false positives from ambiguous single words in ordinary titles and preserved preference for specific subgenres.
-- Added a low-signal gate so silence or near-noise-floor input does not trigger genre changes.
-- Raised the atmospheric audio heuristic to the classifier's minimum confidence threshold.
-- Included confidence and Bass/Voice enable states in the status signature so meaningful UI changes are not suppressed.
-- Added the full [AUTO_GENRE_CATALOG.md](AUTO_GENRE_CATALOG.md) reference.
-- Synced the complete alias table from the v4.7.91 archive into `offscreen.js` and the documentation.
-- Recreate the offscreen document when the browser closes it independently; verify this lifecycle with a regression test.
-- Respect reduced-motion preferences in the page volume indicator.
-
-User-facing highlights for published releases. Older implementation and audit history is preserved in [Readme/Readme.md](Readme/Readme.md).
-
-## [4.7.90] — 2026-10-25
-
-- Restored the Voice Boost AUTO/MANUAL toggle beside the numeric value.
-- Reset track-aware genre analysis when the active track changes.
-- Serialized tab-close and stream-end capture handling to reduce lifecycle race conditions.
-- Improved AudioContext shutdown and restart handling.
-- Set balanced starting defaults to +4 dB Bass and +2 dB Voice.
-- Tightened extension message validation and removed an unnecessary connection in the analysis graph.
-- Improved accessibility labels and EN/RU/UK localization.
-- Removed obsolete `youtube-cinema.css`.
-
-### Validation status
-
-Static checks are now run by a repeatable GitHub Actions workflow. On 2026-10-25, the maintainer reported successful manual use in Microsoft Edge on YouTube, including capture lifecycle, tab changes/closing, Bass Boost, Voice Boost, visualizers, and settings import/export. This runtime report is separate from the automated static checks.
+- Expanded multilingual genre aliases and improved ambiguous-word handling.
+- Added low-signal gating for audio-only genre classification.
+- Improved offscreen document recovery and reduced-motion behavior.
