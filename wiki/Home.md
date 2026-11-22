@@ -21,6 +21,9 @@ Use this Wiki as the user guide. For downloads and the source of truth, use the 
 - Peak Limiter and Night Mode.
 - Automatic genre detection using title context and broad audio-spectrum profiles.
 - Seven spectrum visualizer styles and a configurable spectrogram.
+- 25 GTA VI accent palettes with matching visualizer and spectrogram colors.
+- Quick Settings, configurable effect-card visibility, and independent AUTO/MANUAL readout visibility.
+- Local settings backups using schema version 28.
 - Light, Dark, and System appearance modes, plus English, Russian, and Ukrainian interface languages.
 - Local settings storage and `.cfg` backup import/export.
 
@@ -31,6 +34,10 @@ Use this Wiki as the user guide. For downloads and the source of truth, use the 
 3. Configure [settings and backups](Settings-and-Backups).
 4. Read [Automatic Genre Detection](Automatic-Genre-Detection) to understand its limits.
 5. Use [Troubleshooting](Troubleshooting) if capture or audio processing does not work.
+
+## Recommended balanced settings
+
+The built-in Recommended settings action applies 100% volume, Bass +4 dB, Voice +2 dB, Peak Limiter and clipping warning enabled, Night Mode disabled, Automatic Genre Detection enabled, and Balanced Power Saving. It selects Bars, 48 bands, and a 4-second spectrogram history. YouTube and Spotify profiles are disabled without deleting their saved values. Your language, theme, and GTA palette are preserved.
 
 ## Version and validation
 
