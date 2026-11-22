@@ -33,6 +33,9 @@ jobs:
       - name: Run automated functional tests
         run: node --test tests/extension-functions.test.js
 
+      - name: Run localization and popup smoke checks
+        run: node tests/smoke.js
+
       - name: Validate manifest, locales, HTML resources and safety invariants
         run: |
           python3 - <<'PY'
