@@ -3,9 +3,96 @@
     "message": "Volume Controller Pro"
   },
   "extDescription": {
-    "message": "Volume control up to 600%, Bass/Voice Boost, spectrum, spectrogram and Spotify Web Player support"
+    "message": "Volume up to 600%, Bass/Voice Boost, frequency visualizer, spectrogram, and Spotify Web Player support."
   },
   "actionTitle": {
-    "message": "Volume Controller"
+    "message": "Volume Controller Pro"
+  },
+  "themeViceCityPinkAmethyst": {
+    "message": "Vice City · Pink Amethyst"
+  },
+  "themeLeonidaCoastalHaze": {
+    "message": "Leonida · Coastal Haze"
+  },
+  "themeHavanaVintage": {
+    "message": "Havana · Vintage"
+  },
+  "themeViceCitySunsetBloom": {
+    "message": "Vice City · Sunset Bloom"
+  },
+  "themeLeonidaCrimsonSunset": {
+    "message": "Leonida · Crimson Sunset"
+  },
+  "themeOceanDriveSeaGlass": {
+    "message": "Ocean Drive · Sea Glass"
+  },
+  "themeLeonidaGoldenHour": {
+    "message": "Leonida · Golden Hour"
+  },
+  "themeViceCityDesertAmber": {
+    "message": "Vice City · Desert Amber"
+  },
+  "themeViceCityNightPromenade": {
+    "message": "Vice City · Night Promenade"
+  },
+  "themeGtaPromoPalette": {
+    "message": "GTA VI · Promo Palette"
+  },
+  "themeGtaNeonTriTone": {
+    "message": "GTA VI · Neon Tri-Tone"
+  },
+  "themeGtaSunsetSpectrum": {
+    "message": "GTA VI · Sunset Spectrum"
+  },
+  "themeGtaVioletBloom": {
+    "message": "GTA VI · Violet Bloom"
+  },
+  "themeGtaPastelCoast": {
+    "message": "GTA VI · Pastel Coast"
+  },
+  "themeGtaWarmPastels": {
+    "message": "GTA VI · Warm Pastels"
+  },
+  "themeGtaAnalogViolet": {
+    "message": "GTA VI · Analog Violet"
+  },
+  "themeGtaNightContrast": {
+    "message": "GTA VI · Night Contrast"
+  },
+  "themeGtaPastelSunset": {
+    "message": "GTA VI · Pastel Sunset"
+  },
+  "themeGtaNeonCoast": {
+    "message": "GTA VI · Neon Coast"
+  },
+  "themeGtaOceanAnalog": {
+    "message": "GTA VI · Ocean Analog"
+  },
+  "themeGtaSkyAndNeon": {
+    "message": "GTA VI · Sky & Neon"
+  },
+  "themeGtaPinkVioletUmber": {
+    "message": "GTA VI · Pink, Violet & Umber"
+  },
+  "themeGtaSandAndSea": {
+    "message": "GTA VI · Sand & Sea"
+  },
+  "themeGtaDeepOcean": {
+    "message": "GTA VI · Deep Ocean"
+  },
+  "themeGtaAmberEarth": {
+    "message": "GTA VI · Amber Earth"
+  },
+  "showScrollbarLabel": {
+    "message": "Show scrollbar"
+  },
+  "showScrollbarDescription": {
+    "message": "A slim scrollbar using the selected GTA VI palette. Scrolling remains available when the scrollbar is hidden."
+  },
+  "scrollbarShownStatus": {
+    "message": "Scrollbar shown"
+  },
+  "scrollbarHiddenStatus": {
+    "message": "Scrollbar hidden"
   }
 }

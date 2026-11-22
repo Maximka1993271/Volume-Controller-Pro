@@ -13,13 +13,25 @@
   <link rel="stylesheet" href="popup.css">
 </head>
 <body>
+  <svg class="vcp-svg-defs" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+    <defs>
+      <linearGradient id="vcpGtaIconGradient" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#1c6be0"/>
+        <stop offset="36%" stop-color="#8851cc"/>
+        <stop offset="68%" stop-color="#ef4ba7"/>
+        <stop offset="100%" stop-color="#e48448"/>
+      </linearGradient>
+      <linearGradient id="vcpGtaIconOutlineGradient" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#fdb927"/>
+        <stop offset="52%" stop-color="#ee339c"/>
+        <stop offset="100%" stop-color="#821378"/>
+      </linearGradient>
+    </defs>
+  </svg>
   <div class="app">
     <header class="header">
       <div class="logo">
-        <svg viewBox="0 0 24 24" width="24" height="24" fill="none">
-          <path d="M3 10v4a1 1 0 0 0 1 1h3l4 4V5L7 9H4a1 1 0 0 0-1 1z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
-          <path d="M16 8a5 5 0 0 1 0 8M19 5a9 9 0 0 1 0 14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-        </svg>
+        <img class="brand-mark" src="icons/favicon.png" width="36" height="36" alt="" aria-hidden="true">
         <div class="brand-copy">
           <h1>Volume Controller Pro</h1>
         </div>
@@ -54,26 +66,6 @@
       </div>
     </header>
 
-    <section id="captureStatusIndicator" class="capture-status-indicator" hidden data-state="checking" role="status" aria-live="polite" aria-atomic="true">
-      <span class="capture-status-dot" aria-hidden="true"></span>
-      <span class="capture-status-copy">
-        <strong id="captureStatusTitle" data-i18n="captureStatusCheckingTitle">Проверяю состояние…</strong>
-        <small id="captureStatusDescription" data-i18n="captureStatusCheckingDescription">Определяю доступность захвата для текущей вкладки.</small>
-      </span>
-      <span id="captureSourceBadge" class="capture-status-source" data-i18n="captureStatusSourceUnavailable">Недоступно</span>
-    </section>
-
-    <section id="autoGenreStatusCard" class="auto-genre-status-card" hidden data-state="detecting" role="status" aria-live="polite" aria-atomic="true">
-      <span class="auto-genre-status-icon" aria-hidden="true">♫</span>
-      <span class="auto-genre-status-copy">
-        <strong id="autoGenreStatusTitle" data-i18n="autoGenreCardTitle">Автоопределение жанра</strong>
-        <small id="autoGenreStatusDescription" data-i18n="autoGenreWaitingCapture">Включи захват вручную, чтобы анализировать звучание.</small>
-        <small id="autoGenreTrackTitle" class="auto-genre-track-title" hidden></small>
-        <small id="autoGenreProfileDetails" class="auto-genre-profile-details" hidden></small>
-      </span>
-      <span id="autoGenreStatusBadge" class="auto-genre-status-badge" data-i18n="autoGenreStatusOff">АВТО</span>
-    </section>
-
     <section id="settingsPanel" class="settings-panel" aria-labelledby="settingsHeading" aria-label="Настройки" data-i18n-aria-label="settingsTitle" hidden>
       <div class="settings-panel-header">
         <div class="settings-heading-copy">
@@ -84,7 +76,8 @@
           <svg viewBox="0 0 24 24" width="15" height="15" fill="none" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
         </button>
       </div>
-      <label class="settings-row" for="languageSelect">
+      <nav class="settings-category-menu" aria-label="Категории настроек" data-i18n-aria-label="settingsCategoryMenuLabel"><button type="button" class="settings-category-tab is-active" id="settingsTabAppearance" data-settings-category="appearance" aria-controls="settingsCategoryAppearance" aria-expanded="false"><span class="settings-category-icon" aria-hidden="true">✧</span><span class="settings-category-label" data-i18n="settingsCategoryAppearance">Внешний вид</span><span class="settings-category-chevron" aria-hidden="true">⌄</span></button><button type="button" class="settings-category-tab" id="settingsTabAudio" data-settings-category="audio" aria-controls="settingsCategoryAudio" aria-expanded="false"><span class="settings-category-icon" aria-hidden="true">♫</span><span class="settings-category-label" data-i18n="settingsCategoryAudio">Аудиоэффекты</span><span class="settings-category-chevron" aria-hidden="true">⌄</span></button><button type="button" class="settings-category-tab" id="settingsTabServices" data-settings-category="services" aria-controls="settingsCategoryServices" aria-expanded="false"><span class="settings-category-icon" aria-hidden="true">◎</span><span class="settings-category-label" data-i18n="settingsCategoryServices">Профили сервисов</span><span class="settings-category-chevron" aria-hidden="true">⌄</span></button><button type="button" class="settings-category-tab" id="settingsTabHome" data-settings-category="home" aria-controls="settingsCategoryHome" aria-expanded="false"><span class="settings-category-icon" aria-hidden="true">▦</span><span class="settings-category-label" data-i18n="settingsCategoryHome">Главный экран</span><span class="settings-category-chevron" aria-hidden="true">⌄</span></button><button type="button" class="settings-category-tab" id="settingsTabVisualizers" data-settings-category="visualizers" aria-controls="settingsCategoryVisualizers" aria-expanded="false"><span class="settings-category-icon" aria-hidden="true">▥</span><span class="settings-category-label" data-i18n="settingsCategoryVisualizers">Визуализаторы</span><span class="settings-category-chevron" aria-hidden="true">⌄</span></button><button type="button" class="settings-category-tab" id="settingsTabPerformance" data-settings-category="performance" aria-controls="settingsCategoryPerformance" aria-expanded="false"><span class="settings-category-icon" aria-hidden="true">◷</span><span class="settings-category-label" data-i18n="settingsCategoryPerformance">Производительность</span><span class="settings-category-chevron" aria-hidden="true">⌄</span></button><button type="button" class="settings-category-tab" id="settingsTabProtection" data-settings-category="protection" aria-controls="settingsCategoryProtection" aria-expanded="false"><span class="settings-category-icon" aria-hidden="true">⬡</span><span class="settings-category-label" data-i18n="settingsCategoryProtection">Защита звука</span><span class="settings-category-chevron" aria-hidden="true">⌄</span></button><button type="button" class="settings-category-tab" id="settingsTabProfiles" data-settings-category="profiles" aria-controls="settingsCategoryProfiles" aria-expanded="false"><span class="settings-category-icon" aria-hidden="true">⇄</span><span class="settings-category-label" data-i18n="settingsCategoryProfiles">Профили и резерв</span><span class="settings-category-chevron" aria-hidden="true">⌄</span></button></nav>
+      <div class="settings-category-panels"><section class="settings-category-panel" id="settingsCategoryAppearance" role="region" aria-labelledby="settingsTabAppearance" data-settings-category-panel="appearance" hidden><label class="settings-row" for="languageSelect">
         <span class="settings-label" data-i18n="settingsLanguage">Язык интерфейса</span>
         <span class="settings-control">
           <select id="languageSelect" class="settings-select" aria-label="Язык интерфейса" data-i18n-aria-label="languageLabel">
@@ -94,7 +87,7 @@
           </select>
         </span>
       </label>
-      <label class="settings-row" for="themeSelect">
+<label class="settings-row" for="themeSelect">
         <span class="settings-label" data-i18n="settingsTheme">Тема оформления</span>
         <span class="settings-control">
           <select id="themeSelect" class="settings-select" aria-label="Тема оформления" data-i18n-aria-label="settingsTheme">
@@ -104,7 +97,23 @@
           </select>
         </span>
       </label>
-      <div class="settings-row settings-rgb-row">
+<div class="gta-palette-settings">
+        <button type="button" id="gtaPaletteToggle" class="gta-palette-heading" aria-expanded="true" aria-controls="gtaPaletteContent" data-i18n-aria-label="gtaPaletteLabel">
+          <span class="gta-palette-heading-copy">
+            <span class="settings-label" data-i18n="gtaPaletteLabel">Цветовая палитра GTA VI</span>
+            <span class="settings-help" data-i18n="gtaPaletteDescription">Выберите одну из 25 палитр в галерее градиентов</span>
+          </span>
+          <span class="gta-palette-chevron" aria-hidden="true">⌄</span>
+        </button>
+        <div id="gtaPaletteContent" class="gta-palette-content">
+          <div id="gtaPaletteGallery" class="gta-palette-gallery" role="radiogroup" aria-label="Цветовая палитра GTA VI" data-i18n-aria-label="gtaPaletteLabel"></div>
+          <div class="gta-palette-preview-wrap">
+            <div id="gtaPalettePreview" class="gta-palette-preview" role="img" aria-label="Предпросмотр цветовой палитры"></div>
+            <span id="gtaPalettePreviewName" class="gta-palette-preview-name" data-i18n="gtaPaletteClassic">Классическая</span>
+          </div>
+        </div>
+      </div>
+<div class="settings-row settings-rgb-row">
         <div class="settings-option-copy">
           <span class="settings-label" data-i18n="rgbGlow">RGB-подсветка ползунков</span>
           <span class="settings-help" data-i18n="rgbGlowDescription">Анимированные цветные акценты на регуляторах</span>
@@ -114,7 +123,16 @@
           <span class="toggle-slider"></span>
         </label>
       </div>
-      <section class="audio-effects-settings-section" aria-labelledby="audioEffectsSettingsHeading">
+      <div class="settings-row settings-animation-row">
+        <div class="settings-option-copy">
+          <span class="settings-label" data-i18n="showScrollbarLabel">Показывать полосу прокрутки</span>
+          <span class="settings-help" data-i18n="showScrollbarDescription">Тонкая полоса прокрутки в цветах выбранной палитры. При скрытии прокрутка остаётся доступной.</span>
+        </div>
+        <label class="toggle settings-rgb-toggle" title="Показывать полосу прокрутки" data-i18n-title="showScrollbarLabel">
+          <input type="checkbox" id="showScrollbarToggle" checked data-i18n-aria-label="showScrollbarLabel">
+          <span class="toggle-slider"></span>
+        </label>
+      </div></section><section class="settings-category-panel" id="settingsCategoryAudio" role="region" aria-labelledby="settingsTabAudio" data-settings-category-panel="audio" hidden><section class="audio-effects-settings-section" aria-labelledby="audioEffectsSettingsHeading">
         <div class="settings-subsection-heading">
           <h3 id="audioEffectsSettingsHeading" data-i18n="audioEffectsSettingsTitle">Управление аудиоэффектами</h3>
           <p data-i18n="audioEffectsSettingsDescription">Эти переключатели синхронизированы с кнопками на главном экране</p>
@@ -141,6 +159,26 @@
         </div>
         <div class="settings-row settings-animation-row">
           <div class="settings-option-copy">
+            <span class="settings-label" data-i18n="voiceAutoModeSettingLabel">Показывать строку режима Voice Boost</span>
+            <span class="settings-help" data-i18n="voiceAutoModeSettingDescription">Показывает или скрывает подпись «Авто · dB» / «Ручной · dB» в карточке Voice Boost. Не меняет режим звука.</span>
+          </div>
+          <label class="toggle settings-rgb-toggle" title="Показывать строку режима Voice Boost" data-i18n-title="voiceAutoModeSettingLabel">
+            <input type="checkbox" id="settingsVoiceModeStatusToggle" data-i18n-aria-label="voiceAutoModeSettingLabel">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+        <div class="settings-row settings-animation-row">
+          <div class="settings-option-copy">
+            <span class="settings-label" data-i18n="bassAutoModeSettingLabel">Показывать строку режима Bass Boost</span>
+            <span class="settings-help" data-i18n="bassAutoModeSettingDescription">Показывает или скрывает подпись «Авто · dB» / «Ручной · dB» в карточке Bass Boost. Не меняет режим звука.</span>
+          </div>
+          <label class="toggle settings-rgb-toggle" title="Показывать строку режима Bass Boost" data-i18n-title="bassAutoModeSettingLabel">
+            <input type="checkbox" id="settingsBassModeStatusToggle" data-i18n-aria-label="bassAutoModeSettingLabel">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+        <div class="settings-row settings-animation-row">
+          <div class="settings-option-copy">
             <span class="settings-label" data-i18n="autoGenreLabel">Автоопределение жанра</span>
             <span class="settings-help" data-i18n="autoGenreDescription">Предположительно распознаёт Hip-Hop, Wave и Phonk по названию и звучанию. Корректирует Bass/Voice только во время ручного захвата.</span>
           </div>
@@ -149,8 +187,7 @@
             <span class="toggle-slider"></span>
           </label>
         </div>
-      </section>
-      <section class="service-profiles-settings-section" aria-labelledby="serviceProfilesHeading">
+      </section></section><section class="settings-category-panel" id="settingsCategoryServices" role="region" aria-labelledby="settingsTabServices" data-settings-category-panel="services" hidden><section class="service-profiles-settings-section" aria-labelledby="serviceProfilesHeading">
         <div class="settings-subsection-heading">
           <h3 id="serviceProfilesHeading" data-i18n="serviceProfilesTitle">Отдельные настройки сервисов</h3>
           <p data-i18n="serviceProfilesDescription">Настраивай YouTube и Spotify независимо. Профиль применяется только при ручном включении захвата.</p>
@@ -211,8 +248,7 @@
           <div class="settings-row"><span class="settings-label" data-i18n="peakLimiterLabel">Ограничитель пиков</span><label class="toggle settings-rgb-toggle" title="Ограничитель пиков Spotify" data-i18n-title="peakLimiterLabel"><input type="checkbox" id="spotifyProfileLimiterToggle" checked data-i18n-aria-label="peakLimiterLabel"><span class="toggle-slider"></span></label></div>
           <div class="settings-row"><span class="settings-label" data-i18n="nightModeLabel">Ночной режим звука</span><label class="toggle settings-rgb-toggle" title="Ночной режим Spotify" data-i18n-title="nightModeLabel"><input type="checkbox" id="spotifyProfileNightToggle" data-i18n-aria-label="nightModeLabel"><span class="toggle-slider"></span></label></div>
         </div>
-      </section>
-      <section class="main-screen-items-settings-section" aria-labelledby="mainScreenControlsHeading">
+      </section></section><section class="settings-category-panel" id="settingsCategoryHome" role="region" aria-labelledby="settingsTabHome" data-settings-category-panel="home" hidden><section class="main-screen-items-settings-section" aria-labelledby="mainScreenControlsHeading">
         <div class="settings-subsection-heading">
           <h3 id="mainScreenControlsHeading" data-i18n="mainScreenControlsTitle">Элементы главного экрана</h3>
           <p data-i18n="mainScreenControlsDescription">Выбери, какие блоки показывать на главном экране</p>
@@ -267,8 +303,17 @@
             <span class="toggle-slider"></span>
           </label>
         </div>
-      </section>
-      <section class="visualizer-settings-section" aria-labelledby="visualizerSettingsHeading">
+        <div class="settings-row settings-animation-row">
+          <div class="settings-option-copy">
+            <span class="settings-label" data-i18n="hideInactiveEffectsLabel">Скрывать выключенные аудиоэффекты</span>
+            <span class="settings-help" data-i18n="hideInactiveEffectsDescription">Скрывает карточки Bass Boost и Voice Boost, когда соответствующий эффект выключен. Быстрые переключатели остаются доступными.</span>
+          </div>
+          <label class="toggle settings-rgb-toggle" title="Скрывать выключенные аудиоэффекты" data-i18n-title="hideInactiveEffectsLabel">
+            <input type="checkbox" id="hideInactiveEffectsToggle" data-i18n-aria-label="hideInactiveEffectsLabel">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+      </section></section><section class="settings-category-panel" id="settingsCategoryVisualizers" role="region" aria-labelledby="settingsTabVisualizers" data-settings-category-panel="visualizers" hidden><section class="visualizer-settings-section" aria-labelledby="visualizerSettingsHeading">
         <div class="settings-subsection-heading">
           <h3 id="visualizerSettingsHeading" data-i18n="visualizerSettingsTitle">Настройки визуализатора</h3>
           <p data-i18n="visualizerSettingsDescription">Внешний вид спектра и нагрузка</p>
@@ -311,6 +356,7 @@
           <span class="settings-label" data-i18n="visualizerPaletteLabel">Палитра визуализатора</span>
           <span class="settings-control">
             <select id="visualizerPaletteSelect" class="settings-select" data-i18n-aria-label="visualizerPaletteLabel">
+              <option value="gta" data-i18n="paletteGtaTheme">Тема GTA VI</option>
               <option value="neon" data-i18n="paletteNeon">Неон</option>
               <option value="ocean" data-i18n="paletteOcean">Океан</option>
               <option value="fire" data-i18n="paletteFire">Огонь</option>
@@ -364,6 +410,7 @@
           <span class="settings-label" data-i18n="spectrogramPaletteLabel">Цветовая палитра</span>
           <span class="settings-control">
             <select id="spectrogramPaletteSelect" class="settings-select" data-i18n-aria-label="spectrogramPaletteLabel">
+              <option value="gta" data-i18n="paletteGtaTheme">Тема GTA VI</option>
               <option value="neon" data-i18n="paletteNeon">Неон</option>
               <option value="ocean" data-i18n="paletteOcean">Океан</option>
               <option value="fire" data-i18n="paletteFire">Огонь</option>
@@ -423,8 +470,7 @@
             <span class="toggle-slider"></span>
           </label>
         </div>
-      </section>
-      <section class="energy-saving-settings-section" aria-labelledby="energySavingSettingsHeading">
+      </section></section><section class="settings-category-panel" id="settingsCategoryPerformance" role="region" aria-labelledby="settingsTabPerformance" data-settings-category-panel="performance" hidden><section class="energy-saving-settings-section" aria-labelledby="energySavingSettingsHeading">
         <div class="settings-subsection-heading">
           <h3 id="energySavingSettingsHeading" data-i18n="energySavingTitle">Энергосбережение</h3>
           <p data-i18n="energySavingDescription">Настрой частоту обновления визуализатора и нагрузку</p>
@@ -449,8 +495,7 @@
             </select>
           </span>
         </label>
-      </section>
-      <section class="audio-protection-settings-section" aria-labelledby="audioProtectionSettingsHeading">
+      </section></section><section class="settings-category-panel" id="settingsCategoryProtection" role="region" aria-labelledby="settingsTabProtection" data-settings-category-panel="protection" hidden><section class="audio-protection-settings-section" aria-labelledby="audioProtectionSettingsHeading">
         <div class="settings-subsection-heading">
           <h3 id="audioProtectionSettingsHeading" data-i18n="audioProtectionTitle">Защита от перегрузки звука</h3>
           <p data-i18n="audioProtectionDescription">Ограничитель пиков и контроль возможных искажений</p>
@@ -468,10 +513,20 @@
         <div class="settings-row settings-animation-row">
           <div class="settings-option-copy">
             <span class="settings-label" data-i18n="showClippingWarningLabel">Показывать предупреждения защиты звука на главном экране</span>
-            <span class="settings-help" data-i18n="showClippingWarningDescription">Скрывает все сообщения защиты, включая «Ограничитель пиков выключен». Контроль пиков продолжает работать.</span>
+            <span class="settings-help" data-i18n="showClippingWarningDescription">Скрывает все сообщения защиты. Контроль пиков продолжает работать.</span>
           </div>
           <label class="toggle settings-rgb-toggle" title="Предупреждение о клиппинге" data-i18n-title="showClippingWarningLabel">
             <input type="checkbox" id="showClippingWarningToggle" checked data-i18n-aria-label="showClippingWarningLabel">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+        <div class="settings-row settings-animation-row">
+          <div class="settings-option-copy">
+            <span class="settings-label" data-i18n="showLimiterOffWarningLabel">Показывать предупреждение, если ограничитель выключен</span>
+            <span class="settings-help" data-i18n="showLimiterOffWarningDescription">Скрывает только постоянное сообщение об отключённом лимитере. Предупреждения о реальном клиппинге и высоком уровне усиления остаются.</span>
+          </div>
+          <label class="toggle settings-rgb-toggle" title="Предупреждение об отключённом лимитере" data-i18n-title="showLimiterOffWarningLabel">
+            <input type="checkbox" id="showLimiterOffWarningToggle" data-i18n-aria-label="showLimiterOffWarningLabel">
             <span class="toggle-slider"></span>
           </label>
         </div>
@@ -485,8 +540,15 @@
             <span class="toggle-slider"></span>
           </label>
         </div>
+      </section></section><section class="settings-category-panel" id="settingsCategoryProfiles" role="region" aria-labelledby="settingsTabProfiles" data-settings-category-panel="profiles" hidden><section class="recommended-settings-section" aria-labelledby="recommendedSettingsHeading">
+        <div class="settings-subsection-heading">
+          <h3 id="recommendedSettingsHeading" data-i18n="recommendedSettingsTitle">Сбалансированная настройка</h3>
+          <p data-i18n="recommendedSettingsDescription">Безопасная громкость, умеренный EQ, защита пиков и плавные визуализаторы.</p>
+        </div>
+        <button type="button" id="applyRecommendedSettingsBtn" class="settings-file-btn recommended-settings-btn" data-i18n="recommendedSettingsButton">Применить рекомендуемые настройки</button>
+        <p class="settings-help" data-i18n="recommendedSettingsPreserveNote">Язык и оформление сохраняются. Профили YouTube и Spotify временно отключаются, но их значения не удаляются.</p>
       </section>
-      <section class="profile-presets-section" aria-labelledby="audioPresetsHeading">
+<section class="profile-presets-section" aria-labelledby="audioPresetsHeading">
         <div class="settings-subsection-heading">
           <h3 id="audioPresetsHeading" data-i18n="audioPresetsTitle">Аудиопрофили</h3>
           <p data-i18n="audioPresetsDescription">Подбери звук под тип контента</p>
@@ -538,7 +600,7 @@
           </button>
         </div>
       </section>
-      <section class="settings-backup-section" aria-labelledby="settingsBackupHeading">
+<section class="settings-backup-section" aria-labelledby="settingsBackupHeading">
         <div class="settings-subsection-heading">
           <h3 id="settingsBackupHeading" data-i18n="settingsBackupTitle">Резервная копия настроек</h3>
           <p data-i18n="settingsBackupDescription">Экспортируй или восстанови настройки через файл .cfg</p>
@@ -549,25 +611,55 @@
           <input type="file" id="settingsImportFile" accept=".cfg" hidden>
         </div>
       </section>
-      <section class="factory-reset-section" aria-label="Сброс к заводским настройкам" data-i18n-aria-label="factoryResetTitle">
+<section class="factory-reset-section" aria-label="Сброс к заводским настройкам" data-i18n-aria-label="factoryResetTitle">
         <div class="settings-option-copy">
           <span class="settings-label" data-i18n="factoryResetTitle">Сброс к заводским</span>
           <span class="settings-help" data-i18n="factoryResetDescription">Язык, тема, RGB и все аудионастройки</span>
         </div>
         <button type="button" id="factoryResetBtn" class="factory-reset-btn" data-i18n="factoryResetButton">Сбросить к заводским</button>
         <p class="settings-help settings-autosave-hint" data-i18n="settingsAutoSaveHint">Настройки сохраняются автоматически. Экспортируй файл .cfg, чтобы создать резервную копию.</p>
-      </section>
+      </section></section></div>
+
     </section>
 
+    <main id="mainContent" class="main-content">
+      <!-- 1. Source and track context: capture status, detected genre/track. -->
+      <div class="source-context-group">
+    <section id="captureStatusIndicator" class="capture-status-indicator" hidden data-state="checking" role="status" aria-live="polite" aria-atomic="true">
+      <span class="capture-status-dot" aria-hidden="true"></span>
+      <span class="capture-status-copy">
+        <strong id="captureStatusTitle" data-i18n="captureStatusCheckingTitle">Проверяю состояние…</strong>
+        <small id="captureStatusDescription" data-i18n="captureStatusCheckingDescription">Определяю доступность захвата для текущей вкладки.</small>
+      </span>
+      <span id="captureSourceBadge" class="capture-status-source" data-i18n="captureStatusSourceUnavailable">Недоступно</span>
+    </section>
+
+    <section id="autoGenreStatusCard" class="auto-genre-status-card" hidden data-state="detecting" role="status" aria-live="polite" aria-atomic="true">
+      <span class="auto-genre-status-icon" aria-hidden="true">♫</span>
+      <span class="auto-genre-status-copy">
+        <strong id="autoGenreStatusTitle" data-i18n="autoGenreCardTitle">Автоопределение жанра</strong>
+        <small id="autoGenreStatusDescription" data-i18n="autoGenreWaitingCapture">Включи захват вручную, чтобы анализировать звучание.</small>
+        <small id="autoGenreTrackTitle" class="auto-genre-track-title" hidden></small>
+        <small id="autoGenreProfileDetails" class="auto-genre-profile-details" hidden></small>
+      </span>
+      <span id="autoGenreStatusBadge" class="auto-genre-status-badge" data-i18n="autoGenreStatusOff">АВТО</span>
+    </section>
+
+      </div>
+
+      <!-- 1. Quick settings follow the source context. -->
     <section id="quickSettingsPanel" class="quick-settings-panel" aria-labelledby="quickSettingsHeading">
       <div class="quick-settings-header">
-        <div>
+        <div class="quick-settings-heading-copy">
           <h2 id="quickSettingsHeading" data-i18n="quickSettingsTitle">Быстрые настройки</h2>
           <p data-i18n="quickSettingsDescription">Аудиоэффекты, защита и внешний вид</p>
         </div>
-        <span class="quick-settings-badge" aria-hidden="true">⚡</span>
+        <button type="button" id="quickSettingsExpandToggle" class="quick-settings-disclosure" aria-expanded="false" aria-controls="quickSettingsGrid" aria-label="Развернуть быстрые настройки" data-i18n-aria-label="quickSettingsExpandLabel" title="Развернуть быстрые настройки" data-i18n-title="quickSettingsExpandLabel">
+          <span class="quick-settings-badge" aria-hidden="true">⚡</span>
+          <svg class="quick-settings-chevron" viewBox="0 0 16 16" width="15" height="15" fill="none" aria-hidden="true"><path d="m3.5 6 4.5 4.5L12.5 6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
       </div>
-      <div class="quick-settings-grid">
+      <div id="quickSettingsGrid" class="quick-settings-grid" hidden>
         <div class="quick-setting-card quick-setting-limiter">
           <span class="quick-setting-icon" aria-hidden="true">
             <svg viewBox="0 0 24 24" width="19" height="19" fill="none"><path d="M12 3 20 6v5c0 5-3.2 8.2-8 10-4.8-1.8-8-5-8-10V6l8-3Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="m8.5 12.2 2.2 2.2 4.8-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -627,6 +719,8 @@
       </div>
     </section>
 
+      <!-- 2. Main volume value, slider and 100–600% presets. -->
+      <section class="main-volume-section" aria-label="Управление громкостью" data-i18n-aria-label="volumeControlSection">
     <div class="volume-display">
       <div class="volume-main-row">
         <div class="volume-value" id="volumeValue">100<span>%</span></div>
@@ -642,23 +736,27 @@
       <div class="slider-marks">
         <span>0</span>
         <span>100</span>
-        <span>200</span>
-        <span>300</span>
-        <span>400</span>
-        <span>500</span>
-        <span>600</span>
+        <span data-volume-threshold="200">200</span>
+        <span data-volume-threshold="300">300</span>
+        <span data-volume-threshold="400">400</span>
+        <span data-volume-threshold="500">500</span>
+        <span data-volume-threshold="600">600</span>
       </div>
     </div>
 
     <div class="presets">
       <button type="button" class="preset-btn" data-value="100">100%</button>
-      <button type="button" class="preset-btn" data-value="200">200%</button>
-      <button type="button" class="preset-btn" data-value="300">300%</button>
-      <button type="button" class="preset-btn" data-value="400">400%</button>
-      <button type="button" class="preset-btn" data-value="500">500%</button>
-      <button type="button" class="preset-btn" data-value="600">600%</button>
+      <button type="button" class="preset-btn" data-value="200" data-volume-threshold="200">200%</button>
+      <button type="button" class="preset-btn" data-value="300" data-volume-threshold="300">300%</button>
+      <button type="button" class="preset-btn" data-value="400" data-volume-threshold="400">400%</button>
+      <button type="button" class="preset-btn" data-value="500" data-volume-threshold="500">500%</button>
+      <button type="button" class="preset-btn" data-value="600" data-volume-threshold="600">600%</button>
     </div>
 
+      </section>
+
+      <!-- 2. Peak protection and frequency visualizer. -->
+      <section class="main-monitoring-section" aria-label="Защита звука и визуализатор" data-i18n-aria-label="monitoringSection">
     <section id="audioProtectionIndicator" class="audio-protection-indicator" data-state="waiting" aria-live="polite" role="status" aria-atomic="true">
       <span class="audio-protection-icon" aria-hidden="true">
         <svg viewBox="0 0 24 24" width="17" height="17" fill="none">
@@ -697,13 +795,16 @@
       </div>
     </section>
 
+      </section>
+
+      <!-- 3. Spectrogram followed by detailed Bass Boost and Voice Boost controls. -->
+      <section class="main-audio-details-section" aria-label="Спектрограмма и тонкая настройка звука" data-i18n-aria-label="audioDetailsSection">
     <section class="spectrogram-panel" aria-label="Спектрограмма частот во времени" data-i18n-aria-label="spectrogramLabel">
       <div class="spectrogram-header">
         <div class="spectrogram-copy">
           <div class="spectrogram-title" data-i18n="spectrogramTitle">Спектрограмма</div>
           <div class="spectrogram-subtitle" data-i18n="spectrogramSubtitle">История частот во времени</div>
         </div>
-        <div class="spectrogram-badge"><span class="spectrogram-badge-dot"></span><span id="spectrogramPaletteBadge">WATERFALL</span></div>
       </div>
       <div class="spectrogram-stage" id="spectrogramStage">
         <canvas id="spectrogramCanvas" width="640" height="190" aria-label="Спектрограмма звука: частоты по горизонтали, время по вертикали" data-i18n-aria-label="spectrogramCanvasLabel"></canvas>
@@ -733,7 +834,7 @@
       </div>
       <div class="bass-slider-header">
         <span data-i18n="intensity">Интенсивность</span>
-        <span class="bass-value-wrap"><strong id="bassBoostValue">+4 dB</strong><button id="bassBoostAutoBadge" class="bass-auto-badge" type="button" hidden data-i18n="bassAutoBadge" aria-label="Автоматический режим Bass Boost">AUTO</button></span>
+        <span class="bass-value-wrap"><strong id="bassBoostValue">+4 dB</strong><button id="bassBoostAutoBadge" class="bass-auto-badge" type="button" hidden data-i18n="bassAutoBadge" aria-label="Автоматический режим Bass Boost">Авто</button></span>
       </div>
       <input type="range" id="bassBoostSlider" min="0" max="12" value="4" step="1" aria-label="Интенсивность Bass Boost в децибелах" data-i18n-aria-label="bassSliderLabel">
       <div class="bass-scale">
@@ -757,7 +858,7 @@
       </div>
       <div class="bass-slider-header">
         <span data-i18n="voiceClarity">Чёткость голоса</span>
-        <span class="bass-value-wrap"><strong id="voiceBoostValue">+2 dB</strong><button id="voiceBoostAutoBadge" class="bass-auto-badge" type="button" hidden data-i18n="bassAutoBadge" aria-label="Автоматический режим Voice Boost">AUTO</button></span>
+        <span class="bass-value-wrap"><strong id="voiceBoostValue">+2 dB</strong><button id="voiceBoostAutoBadge" class="bass-auto-badge" type="button" hidden data-i18n="bassAutoBadge" aria-label="Автоматический режим Voice Boost">Авто</button></span>
       </div>
       <input type="range" id="voiceBoostSlider" min="0" max="8" value="2" step="1" aria-label="Интенсивность Voice Boost в децибелах" data-i18n-aria-label="voiceSliderLabel">
       <div class="bass-scale">
@@ -768,12 +869,17 @@
       <div class="bass-note" data-i18n="voiceNote">Рекомендуется +2–4 dB для речи и диалогов. Сильное усиление может сделать голос резким.</div>
     </section>
 
-    <div class="status" id="status" role="status" aria-live="polite" aria-atomic="true" data-i18n="ready">Готово</div>
+        </section>
+
+    <div class="status" id="status" role="status" aria-live="polite" aria-atomic="true" hidden></div>
+
+      <!-- 4. Finish action and footer conclude the scrollable page. -->
+      <button id="doneButton" class="done-button" type="button" data-i18n="doneButton" data-i18n-title="doneButtonTitle" data-i18n-aria-label="doneButtonTitle" title="Закрыть окно" aria-label="Закрыть окно">Готово</button>
 
     <footer class="footer">
       <div class="footer-meta">
         <div class="footer-author"><span data-i18n="author">Автор</span>: <span class="author-name">Maxim Melnikov</span></div>
-        <div class="footer-version"><span data-i18n="versionLabel">Версия</span>: <span id="extensionVersion">4.7.92</span></div>
+        <div class="footer-version"><span data-i18n="versionLabel">Версия</span>: <span id="extensionVersion">4.8.31</span></div>
       </div>
       <a href="https://github.com/Maximka1993271" target="_blank" rel="noopener noreferrer" class="github-link">
         <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor">
@@ -782,7 +888,9 @@
         GitHub
       </a>
     </footer>
+    </main>
   </div>
+  <script src="shared/genres.js"></script>
   <script src="popup.js"></script>
 </body>
 </html>

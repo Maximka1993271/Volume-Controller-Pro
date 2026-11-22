@@ -2,7 +2,7 @@
 
 <p align="center">
   <a href="https://github.com/Maximka1993271/Volume-Controller-Pro/releases">
-    <img src="https://img.shields.io/badge/version-4.8.30-blue.svg?style=for-the-badge&logo=github" alt="Version 4.8.30"/>
+    <img src="https://img.shields.io/badge/version-4.8.31-blue.svg?style=for-the-badge&logo=github" alt="Version 4.8.31"/>
   </a>
   <a href="https://www.microsoft.com/edge">
     <img src="https://img.shields.io/badge/Edge-Chromium-0078D7.svg?style=for-the-badge&logo=microsoft-edge" alt="Microsoft Edge"/>
@@ -42,12 +42,12 @@ This repository is the project's official GitHub home and the only distribution 
 - **Latest release (v4.8.31):** [Download `Volume.Controller.Pro.v4.8.31.zip`](https://github.com/Maximka1993271/Volume-Controller-Pro/releases/download/v4.8.31/Volume.Controller.Pro.v4.8.31.zip)
 - **SHA-256 checksum:** [`Volume.Controller.Pro.v4.8.31.zip.sha256`](https://github.com/Maximka1993271/Volume-Controller-Pro/releases/download/v4.8.31/Volume.Controller.Pro.v4.8.31.zip.sha256)
 - **Full release notes:** [v4.8.31](https://github.com/Maximka1993271/Volume-Controller-Pro/releases/tag/v4.8.31)
-- **Source archive:** [Download the current `main` source ZIP](https://github.com/Maximka1993271/Volume-Controller-Pro/archive/refs/heads/main.zip). The versioned 4.8.30 release ZIP is the recommended download for the latest build; the current `main` source tree is still at 4.7.92 and will be synchronized separately.
+- **Source archive:** [Download the current main source ZIP](https://github.com/Maximka1993271/Volume-Controller-Pro/archive/refs/heads/main.zip). The source tree is synchronized with the published v4.8.31 release.
 - The previous [v4.7.90 release](https://github.com/Maximka1993271/Volume-Controller-Pro/releases/tag/v4.7.90) remains in the release history.
 - No official Chrome Web Store or Microsoft Edge Add-ons listing is currently announced by the author.
 - Be cautious with copies hosted elsewhere; use only files published through the official repository and its Releases page.
 
-> **Repository status:** The unpacked source tree is available in `main` with `manifest.json` at the repository root, but that branch currently contains version 4.7.92. The latest published package is version 4.8.30; use the versioned ZIP above to install that release. The source branch still needs to be synchronized with 4.8.30.
+> **Repository status:** The main branch now contains the unpacked v4.8.31 source, matching manifest, locale catalogs, icons, shared modules and automated tests.
 
 ---
 
@@ -57,8 +57,8 @@ This repository is the project's official GitHub home and the only distribution 
 - 🎚️ **Bass Boost** — adjustable low-frequency enhancement, up to +12 dB.
 - 🎤 **Voice Boost** — speech-clarity controls with AUTO and MANUAL modes.
 - 🎛️ **Audio Profiles** — per-site settings for supported media sites such as YouTube and Spotify.
-- 🎶 **Automatic Genre Detection** — 76 title-based genre/subgenre labels plus five broad audio-only profiles; aliases are synchronized with the v4.8.30 release; see [the full catalog and EQ families](AUTO_GENRE_CATALOG.md).
-- 📊 **Audio Visualizers** — five spectrum styles plus a spectrogram.
+- 🎶 **Automatic Genre Detection** — 76 title-based genre/subgenre labels plus five broad audio-only profiles; aliases are synchronized with the v4.8.31 release; see [the full catalog and EQ families](AUTO_GENRE_CATALOG.md).
+- 📊 **Audio Visualizers** — seven spectrum styles plus a spectrogram.
 - 💾 **Settings Backup** — import/export settings through .cfg files.
 - 🌗 **Themes** — Dark, Light, and System options.
 - 🌙 **Night Mode** — audio dynamics control for quieter listening.
@@ -66,7 +66,7 @@ This repository is the project's official GitHub home and the only distribution 
 - 🎯 **Clipping Detection** — visual warnings when audio peaks are detected.
 - 🌐 **Three Languages** — English, Русский, Українська.
 
-## 🐛 Latest Fixes — v4.8.30
+## 🐛 Latest Fixes — v4.8.31
 
 - **Explicit audio acknowledgements:** volume and EQ updates now require a confirmed `{ success: true }` response from the offscreen audio processor. Missing acknowledgements are treated as failures.
 - **Reliable visualizer control:** settings and enable/disable commands require confirmation during an active capture. Deferred settings remain available and are applied at the next capture start.
@@ -74,10 +74,12 @@ This repository is the project's official GitHub home and the only distribution 
 - **Serialized genre status storage:** delayed writes for an earlier track cannot overwrite a newer track's status; failed writes can be retried.
 - **Accurate high-gain warnings:** popup calculations now include the active genre profile's volume trim and match the offscreen engine's effective-gain calculation.
 - **Night Mode signal path:** the programme compressor remains connected for Night Mode when the separate final Peak Limiter / Safety Ceiling stage is bypassed.
+- **New visualizer styles:** Added Filled area and Radial spectrum modes with EN/RU/UK labels.
+- **Popup layout:** Widened the extension popup to 460 px.
 
-**Validation:** the supplied 4.8.30 package passed 133 smoke checks. Automated tests do not replace real playback and capture tests in Microsoft Edge.
+**Validation:** the supplied 4.8.31 package passed 134 smoke checks. Automated tests do not replace real playback and capture tests in Microsoft Edge.
 
-## ✅ Recommended balanced settings — v4.8.30
+## ✅ Recommended balanced settings — v4.8.31
 
 The one-click recommended configuration provides a moderate starting point for everyday listening:
 
@@ -254,5 +256,5 @@ This project is licensed under the **MIT License**. Read the full terms in [LICE
 
 <p align="center">
   <strong>Made with ❤️ by Maxim Melnikov</strong><br/>
-  <sub>Latest release: 4.8.30 · `main` source: 4.7.92</sub>
+  <sub>Latest release: 4.8.31 · `main` source: 4.8.31</sub>
 </p>
