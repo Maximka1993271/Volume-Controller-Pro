@@ -19,18 +19,18 @@ jobs:
 
       - name: Publish pages to the repository Wiki
         env:
-          WIKI_TOKEN: \${{ secrets.WIKI_TOKEN }}
+          WIKI_TOKEN: ${{ secrets.WIKI_TOKEN }}
         shell: bash
         run: |
           set -euo pipefail
 
-          if [[ -z "\${WIKI_TOKEN:-}" ]]; then
+          if [[ -z "${WIKI_TOKEN:-}" ]]; then
             echo "::error::Add a repository Actions secret named WIKI_TOKEN with write access to the Wiki Git repository."
             exit 1
           fi
 
           wiki_dir="$RUNNER_TEMP/volume-controller-pro-wiki"
-          wiki_remote="https://github.com/\${GITHUB_REPOSITORY}.wiki.git"
+          wiki_remote="https://github.com/${GITHUB_REPOSITORY}.wiki.git"
           auth_header="AUTHORIZATION: basic $(printf 'x-access-token:%s' "$WIKI_TOKEN" | base64 -w0)"
 
           if ! git -c "http.https://github.com/.extraheader=$auth_header" clone "$wiki_remote" "$wiki_dir"; then
