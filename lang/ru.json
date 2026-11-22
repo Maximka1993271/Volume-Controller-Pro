@@ -202,6 +202,8 @@
   "settingsAutoSaveHint": "Настройки сохраняются автоматически. Экспортируй файл .cfg, чтобы создать резервную копию.",
   "visualizerStyleWave": "Волна",
   "visualizerStyleDots": "Точки",
+  "visualizerStyleArea": "Область",
+  "visualizerStyleRadial": "Радиальный",
   "visualizerPaletteLabel": "Палитра визуализатора",
   "visualizerGlowLabel": "Свечение спектра",
   "visualizerGlowDescription": "Мягкое неоновое свечение спектральных элементов",

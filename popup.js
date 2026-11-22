@@ -232,7 +232,7 @@ let energySavingEnabled = false;
 let energySavingMode = 'balanced';
 let settingsPreferencesReady = false;
 const VISUALIZER_BAND_OPTIONS = [24, 36, 48, 64, 96];
-const VISUALIZER_STYLES = ['bars', 'line', 'wave', 'mirror', 'dots'];
+const VISUALIZER_STYLES = ['bars', 'line', 'wave', 'mirror', 'dots', 'area', 'radial'];
 const SPECTROGRAM_PALETTES = ['neon', 'ocean', 'fire', 'mono'];
 const SPECTROGRAM_DURATIONS = [2, 4, 6, 8, 12];
 const systemThemeQuery = window.matchMedia('(prefers-color-scheme: light)');
@@ -2897,7 +2897,45 @@ function drawSpectrum(timestamp = 0, oneShot = false) {
   const lineGradient = createPaletteGradient(context, 0, 0, width, 0, false, true);
   const glowColor = rgbString(getVisualizerPalette()[Math.min(getVisualizerPalette().length - 1, Math.floor(getVisualizerPalette().length * 0.65))], 0.8);
 
-  if (visualizerStyle === 'line' || visualizerStyle === 'wave') {
+  if (visualizerStyle === 'radial') {
+    const palette = getVisualizerPalette();
+    const cx = width * 0.5;
+    const cy = height * 0.5;
+    const radius = Math.max(12, Math.min(width, height) * 0.22);
+    const maxLength = Math.max(8, Math.min(width, height) * 0.25);
+    const strokeWidth = Math.max(1.2, Math.min(4, (Math.PI * 2 * radius / Math.max(1, count)) * 0.62));
+    context.save();
+    context.beginPath();
+    context.arc(cx, cy, radius - 3, 0, Math.PI * 2);
+    context.strokeStyle = 'rgba(148, 163, 184, 0.22)';
+    context.lineWidth = 1;
+    context.stroke();
+    for (let i = 0; i < count; i += 1) {
+      const angle = -Math.PI / 2 + (i / Math.max(1, count)) * Math.PI * 2;
+      const cosine = Math.cos(angle);
+      const sine = Math.sin(angle);
+      const endRadius = radius + 2 + values[i] * maxLength;
+      const color = palette[Math.min(palette.length - 1, Math.floor(i / Math.max(1, count) * palette.length))];
+      context.beginPath();
+      context.moveTo(cx + cosine * radius, cy + sine * radius);
+      context.lineTo(cx + cosine * endRadius, cy + sine * endRadius);
+      context.strokeStyle = rgbString(color, 0.96);
+      context.lineWidth = strokeWidth;
+      context.lineCap = 'round';
+      context.shadowColor = glowColor;
+      context.shadowBlur = visualizerGlowEnabled ? 6 : 0;
+      context.stroke();
+      if (visualizerPeakHoldEnabled) {
+        const peak = Math.min(1, Math.pow(Math.max(0, spectrumState.peaks[i] || 0), 0.78));
+        const peakRadius = radius + 2 + peak * maxLength;
+        context.beginPath();
+        context.arc(cx + cosine * peakRadius, cy + sine * peakRadius, Math.max(1, strokeWidth * 0.55), 0, Math.PI * 2);
+        context.fillStyle = rgbString(palette[palette.length - 1]);
+        context.fill();
+      }
+    }
+    context.restore();
+  } else if (visualizerStyle === 'line' || visualizerStyle === 'wave' || visualizerStyle === 'area') {
     context.beginPath();
     const points = values.map((strength, i) => ({
       x: sidePadding + (count <= 1 ? 0 : i * usableWidth / (count - 1)),
@@ -2905,7 +2943,7 @@ function drawSpectrum(timestamp = 0, oneShot = false) {
     }));
     if (points.length) {
       context.moveTo(points[0].x, points[0].y);
-      if (visualizerStyle === 'wave' && points.length > 2) {
+      if ((visualizerStyle === 'wave' || visualizerStyle === 'area') && points.length > 2) {
         for (let i = 1; i < points.length; i += 1) {
           const midpointX = (points[i - 1].x + points[i].x) / 2;
           const midpointY = (points[i - 1].y + points[i].y) / 2;
@@ -2918,7 +2956,7 @@ function drawSpectrum(timestamp = 0, oneShot = false) {
       }
     }
     context.strokeStyle = lineGradient;
-    context.lineWidth = visualizerStyle === 'wave' ? 2.6 : 2;
+    context.lineWidth = visualizerStyle === 'wave' ? 2.6 : (visualizerStyle === 'area' ? 2.8 : 2);
     context.lineJoin = 'round';
     context.lineCap = 'round';
     context.shadowColor = glowColor;
@@ -2933,8 +2971,8 @@ function drawSpectrum(timestamp = 0, oneShot = false) {
     const palette = getVisualizerPalette();
     const low = palette[0];
     const high = palette[palette.length - 1];
-    fillGradient.addColorStop(0, rgbString(high, 0.24));
-    fillGradient.addColorStop(1, rgbString(low, 0.025));
+    fillGradient.addColorStop(0, rgbString(high, visualizerStyle === 'area' ? 0.48 : 0.24));
+    fillGradient.addColorStop(1, rgbString(low, visualizerStyle === 'area' ? 0.16 : 0.025));
     context.fillStyle = fillGradient;
     context.fill();
     if (visualizerPeakHoldEnabled) {
