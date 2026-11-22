@@ -2261,7 +2261,16 @@ check('popup translation attributes and Russian fallback text match the runtime 
   for (const match of nodes) {
     const key = match[3], text = match[4].trim();
     if (!text) continue;
-    const decoded = text.replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>');
+    // Decode HTML text exactly once; chained replacements can double-decode nested entities.
+    const decoded = text.replace(/&(amp|lt|gt);/g, entity => {
+      switch (entity) {
+        case '&amp;': return '&';
+        case '&lt;': return '<';
+        case '&gt;': return '>';
+        default: return entity;
+      }
+    });
+    assert.notEqual(text.includes('&amp;lt;'), false, 'entity decoder must not recursively parse replacement output');
     assert.equal(decoded, ru[key], `fallback text differs from RU dictionary: ${key}`);
   }
 });
