@@ -1,0 +1,61 @@
+name: Publish documentation to GitHub Wiki
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  publish:
+    name: Publish wiki pages
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: Check out documentation source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: main
+
+      - name: Publish pages to the repository Wiki
+        env:
+          WIKI_TOKEN: \${{ secrets.WIKI_TOKEN }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          if [[ -z "\${WIKI_TOKEN:-}" ]]; then
+            echo "::error::Add a repository Actions secret named WIKI_TOKEN with write access to the Wiki Git repository."
+            exit 1
+          fi
+
+          wiki_dir="$RUNNER_TEMP/volume-controller-pro-wiki"
+          wiki_remote="https://github.com/\${GITHUB_REPOSITORY}.wiki.git"
+          auth_header="AUTHORIZATION: basic $(printf 'x-access-token:%s' "$WIKI_TOKEN" | base64 -w0)"
+
+          if ! git -c "http.https://github.com/.extraheader=$auth_header" clone "$wiki_remote" "$wiki_dir"; then
+            echo "::error::The Wiki Git repository is not initialized or the token cannot write to it. Open the Wiki tab, create and save the initial Home page, then verify WIKI_TOKEN."
+            exit 1
+          fi
+
+          wiki_branch="$(git -C "$wiki_dir" branch --show-current)"
+          if [[ -z "$wiki_branch" ]]; then
+            echo "::error::Could not determine the Wiki default branch."
+            exit 1
+          fi
+
+          # Copy documented pages. Existing pages not managed by this folder are preserved.
+          cp -a "$GITHUB_WORKSPACE/wiki/." "$wiki_dir/"
+
+          git -C "$wiki_dir" config user.name "github-actions[bot]"
+          git -C "$wiki_dir" config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git -C "$wiki_dir" add --all
+
+          if git -C "$wiki_dir" diff --cached --quiet; then
+            echo "The GitHub Wiki is already up to date."
+            exit 0
+          fi
+
+          git -C "$wiki_dir" commit -m "Publish Volume Controller Pro 4.8.31 user guide"
+          git -c "http.https://github.com/.extraheader=$auth_header" -C "$wiki_dir" push origin "HEAD:$wiki_branch"
+          echo "Published the wiki pages to $wiki_branch."
