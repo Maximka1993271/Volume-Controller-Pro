@@ -2,8 +2,11 @@
 
 ## [Unreleased]
 
-- Add filled-area and radial frequency visualizer styles with EN/RU/UK labels.
-- Widen the extension popup to 460 px and expand the power-saving selector for long mode names.
+## [4.8.31] — 2026-11-22
+
+- Added Filled area and Radial frequency visualizer styles with EN/RU/UK labels.
+- Widened the popup to 460 px and expanded the power-saving selector.
+- Synchronized the main source tree and 134-check smoke suite with the published v4.8.31 archive.
 
 ## [4.7.92] — 2026-10-30
 

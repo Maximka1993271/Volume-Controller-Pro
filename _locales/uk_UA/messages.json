@@ -1,0 +1,98 @@
+{
+  "extName": {
+    "message": "Регулятор гучності Pro"
+  },
+  "extDescription": {
+    "message": "Гучність до 600%, Bass/Voice Boost, візуалізатор частот, спектрограма та підтримка Spotify Web Player."
+  },
+  "actionTitle": {
+    "message": "Регулятор гучності Pro"
+  },
+  "themeViceCityPinkAmethyst": {
+    "message": "Vice City · Рожевий аметист"
+  },
+  "themeLeonidaCoastalHaze": {
+    "message": "Leonida · Прибережний серпанок"
+  },
+  "themeHavanaVintage": {
+    "message": "Havana · Вінтаж"
+  },
+  "themeViceCitySunsetBloom": {
+    "message": "Vice City · Квітка заходу"
+  },
+  "themeLeonidaCrimsonSunset": {
+    "message": "Leonida · Багряний захід"
+  },
+  "themeOceanDriveSeaGlass": {
+    "message": "Ocean Drive · Морське скло"
+  },
+  "themeLeonidaGoldenHour": {
+    "message": "Leonida · Золота година"
+  },
+  "themeViceCityDesertAmber": {
+    "message": "Vice City · Пустельний бурштин"
+  },
+  "themeViceCityNightPromenade": {
+    "message": "Vice City · Нічна набережна"
+  },
+  "themeGtaPromoPalette": {
+    "message": "GTA VI · Промо-палітра"
+  },
+  "themeGtaNeonTriTone": {
+    "message": "GTA VI · Неоновий триколор"
+  },
+  "themeGtaSunsetSpectrum": {
+    "message": "GTA VI · Західний спектр"
+  },
+  "themeGtaVioletBloom": {
+    "message": "GTA VI · Фіолетове сяйво"
+  },
+  "themeGtaPastelCoast": {
+    "message": "GTA VI · Пастельне узбережжя"
+  },
+  "themeGtaWarmPastels": {
+    "message": "GTA VI · Тепла пастель"
+  },
+  "themeGtaAnalogViolet": {
+    "message": "GTA VI · Аналоговий фіолетовий"
+  },
+  "themeGtaNightContrast": {
+    "message": "GTA VI · Нічний контраст"
+  },
+  "themeGtaPastelSunset": {
+    "message": "GTA VI · Пастельний захід"
+  },
+  "themeGtaNeonCoast": {
+    "message": "GTA VI · Неонове узбережжя"
+  },
+  "themeGtaOceanAnalog": {
+    "message": "GTA VI · Океанічна гама"
+  },
+  "themeGtaSkyAndNeon": {
+    "message": "GTA VI · Небо й неон"
+  },
+  "themeGtaPinkVioletUmber": {
+    "message": "GTA VI · Рожевий, фіолетовий і коричневий"
+  },
+  "themeGtaSandAndSea": {
+    "message": "GTA VI · Пісок і море"
+  },
+  "themeGtaDeepOcean": {
+    "message": "GTA VI · Глибокий океан"
+  },
+  "themeGtaAmberEarth": {
+    "message": "GTA VI · Бурштинова земля"
+  },
+  "showScrollbarLabel": {
+    "message": "Показувати смугу прокручування"
+  },
+  "showScrollbarDescription": {
+    "message": "Тонка смуга прокручування в кольорах вибраної палітри GTA VI. Коли її приховано, прокручування залишається доступним."
+  },
+  "scrollbarShownStatus": {
+    "message": "Смугу прокручування показано"
+  },
+  "scrollbarHiddenStatus": {
+    "message": "Смугу прокручування приховано"
+  }
+}
