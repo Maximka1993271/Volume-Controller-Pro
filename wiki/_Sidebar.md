@@ -1,4 +1,5 @@
 * [Home](Home)
+* [Release Notes — v4.8.31](Release-Notes-v4.8.31)
 * **Getting started**
   * [Getting Started](Getting-Started)
   * [Features](Features)
