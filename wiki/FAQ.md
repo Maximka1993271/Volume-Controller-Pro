@@ -26,7 +26,19 @@ AUTO allows the active automatic genre profile to determine the relevant Bass or
 
 ## Does hiding a control disable its effect?
 
-No. Visibility settings can hide a panel without turning off the corresponding audio effect.
+No. Visibility settings can hide a panel, effect card, or AUTO/MANUAL readout without turning off the effect or changing its mode.
+
+## What is Quick Settings?
+
+Quick Settings is a collapsible shortcut panel for frequently used controls. It starts collapsed by default.
+
+## What changed in v4.8.31?
+
+The release includes Filled area and Radial visualizer styles, expanded GTA VI palette support, Quick Settings and visibility controls, and more reliable audio/visualizer state confirmation.
+
+## What is the current backup schema?
+
+The v4.8.31 extension exports backup schema version 28. Older supported schemas are migrated during import.
 
 ## Can I move my settings to another installation?
 
