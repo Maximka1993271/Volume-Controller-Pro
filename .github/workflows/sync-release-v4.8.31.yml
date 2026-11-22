@@ -1,0 +1,170 @@
+name: Sync v4.8.31 release sources
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/sync-release-v4.8.31.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: sync-v4.8.31
+  cancel-in-progress: false
+
+jobs:
+  prepare-sync-pr:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Download and verify release archive
+        run: |
+          set -euo pipefail
+          archive="$RUNNER_TEMP/Volume.Controller.Pro.v4.8.31.zip"
+          curl --fail --location --retry 3 "https://github.com/Maximka1993271/Volume-Controller-Pro/releases/download/v4.8.31/Volume.Controller.Pro.v4.8.31.zip" --output "$archive"
+          echo "d36ae858e092ade2402e3cb34432fdef5f4db341b93ac36259c2041316fc5034  $archive" | sha256sum --check
+          mkdir -p "$RUNNER_TEMP/vcp-release"
+          unzip -q "$archive" -d "$RUNNER_TEMP/vcp-release"
+          cp -a "$RUNNER_TEMP/vcp-release/Volume Controller Pro/." .
+
+      - name: Align repository metadata and tests
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p = Path("README.md")
+          s = p.read_text(encoding="utf-8")
+          s = s.replace("4.8.30", "4.8.31").replace("4.7.92", "4.8.31")
+          s = s.replace("five spectrum styles plus a spectrogram", "seven spectrum styles plus a spectrogram")
+          s = s.replace("133 smoke checks", "134 smoke checks")
+          lines = s.splitlines()
+          for i, line in enumerate(lines):
+              if line.startswith("- **Source archive:**"):
+                  lines[i] = "- **Source archive:** [Download the current main source ZIP](https://github.com/Maximka1993271/Volume-Controller-Pro/archive/refs/heads/main.zip). The source tree is synchronized with the published v4.8.31 release."
+              elif line.startswith("> **Repository status:**"):
+                  lines[i] = "> **Repository status:** The main branch now contains the unpacked v4.8.31 source, matching manifest, locale catalogs, icons, shared modules and automated tests."
+          s = "\n".join(lines) + "\n"
+          s = s.replace(
+              "- **Night Mode signal path:** the programme compressor remains connected for Night Mode when the separate final Peak Limiter / Safety Ceiling stage is bypassed.",
+              "- **Night Mode signal path:** the programme compressor remains connected for Night Mode when the separate final Peak Limiter / Safety Ceiling stage is bypassed.\n- **New visualizer styles:** Added Filled area and Radial spectrum modes with EN/RU/UK labels.\n- **Popup layout:** Widened the extension popup to 460 px."
+          )
+          p.write_text(s, encoding="utf-8")
+
+          p = Path("CHANGELOG.md")
+          s = p.read_text(encoding="utf-8")
+          old = "## [Unreleased]\n\n- Add filled-area and radial frequency visualizer styles with EN/RU/UK labels.\n- Widen the extension popup to 460 px and expand the power-saving selector for long mode names."
+          new = "## [Unreleased]\n\n## [4.8.31] — 2026-11-22\n\n- Added Filled area and Radial frequency visualizer styles with EN/RU/UK labels.\n- Widened the popup to 460 px and expanded the power-saving selector.\n- Synchronized the main source tree and 134-check smoke suite with the published v4.8.31 archive."
+          if old in s:
+              s = s.replace(old, new, 1)
+          elif "## [4.8.31]" not in s:
+              raise SystemExit("Expected Unreleased changelog section was not found")
+          p.write_text(s, encoding="utf-8")
+          PY
+
+          cat > tests/extension-functions.test.js <<'EOF'
+          'use strict';
+          const assert = require('node:assert/strict');
+          const path = require('node:path');
+          const { spawnSync } = require('node:child_process');
+          const { test } = require('node:test');
+          test('v4.8.31 production smoke suite passes', () => {
+            const result = spawnSync(process.execPath, [path.join(__dirname, 'smoke.js')], {
+              cwd: path.resolve(__dirname, '..'),
+              encoding: 'utf8',
+              timeout: 120000,
+              maxBuffer: 16 * 1024 * 1024
+            });
+            assert.ifError(result.error);
+            assert.equal(result.status, 0, [result.stdout, result.stderr].filter(Boolean).join('\n'));
+            assert.match(result.stdout || '', /134 smoke checks passed/);
+          });
+          EOF
+
+      - name: Validate source tree
+        run: |
+          set -euo pipefail
+          node --check background.js
+          node --check content.js
+          node --check offscreen.js
+          node --check popup.js
+          node --test tests/extension-functions.test.js
+          python3 - <<'PY'
+          import json, re
+          from html.parser import HTMLParser
+          from pathlib import Path
+          from urllib.parse import unquote
+          root = Path(".").resolve()
+          m = json.loads((root / "manifest.json").read_text(encoding="utf-8"))
+          assert m.get("manifest_version") == 3 and m.get("version") == "4.8.31"
+          for f in ("background.js","content.js","offscreen.html","offscreen.js","popup.css","popup.html","popup.js","styles.css","LICENSE","README.md"):
+              assert (root / f).is_file(), f"missing {f}"
+          for icon in list(m.get("icons",{}).values()) + list(m.get("action",{}).get("default_icon",{}).values()):
+              assert (root / icon).is_file(), f"missing icon {icon}"
+          browser = {p.parent.name: json.loads(p.read_text(encoding="utf-8")) for p in (root/"_locales").glob("*/messages.json")}
+          base = set(browser[m["default_locale"]])
+          assert all(set(d) == base for d in browser.values()), "browser locale key mismatch"
+          langs = {p.stem: json.loads(p.read_text(encoding="utf-8")) for p in (root/"lang").glob("*.json")}
+          assert {"en","ru","uk"} <= set(langs)
+          keys = set(langs["en"])
+          assert all(set(d) == keys for d in langs.values()), "runtime locale key mismatch"
+          class Audit(HTMLParser):
+              def __init__(self):
+                  super().__init__(convert_charrefs=True); self.ids=[]; self.refs=[]; self.i18n=[]
+              def handle_starttag(self, tag, attrs):
+                  a=dict(attrs)
+                  if a.get("id"): self.ids.append(a["id"])
+                  for k in ("src","href"):
+                      v=a.get(k,"")
+                      if v and not v.startswith(("#","http://","https://","data:","javascript:","mailto:")):
+                          self.refs.append(unquote(v.split("#",1)[0].split("?",1)[0]))
+                  self.i18n += [v for k,v in a.items() if (k=="data-i18n" or k.startswith("data-i18n-")) and v]
+          parsed={}
+          for rel in ("popup.html","offscreen.html"):
+              a=Audit(); a.feed((root/rel).read_text(encoding="utf-8")); a.close()
+              assert len(a.ids)==len(set(a.ids)), f"duplicate HTML id in {rel}"
+              for ref in a.refs:
+                  if ref:
+                      target=(root/rel).parent/ref
+                      assert target.resolve().is_relative_to(root) and target.exists(), f"broken local ref {rel}: {ref}"
+              assert not (set(a.i18n)-keys), f"missing HTML locale key in {rel}"
+              parsed[rel]=a
+          js=(root/"popup.js").read_text(encoding="utf-8")
+          ids=set(re.findall(r"""getElementById\(\s*['"]([^'"]+)['"]\s*\)""",js))
+          assert not (ids-set(parsed["popup.html"].ids)), "popup.js references missing HTML ids"
+          used=set(re.findall(r"""\bt\(\s*['"]([^'"]+)['"]""",js))
+          for a in parsed.values(): used.update(a.i18n)
+          assert not (used-keys), f"missing runtime locale keys: {used-keys}"
+          for rel in ("background.js","content.js","offscreen.js","popup.js"):
+              s=(root/rel).read_text(encoding="utf-8")
+              for pattern in (r"\beval\s*\(",r"\bnew\s+Function\b",r"\.innerHTML\s*="):
+                  assert not re.search(pattern,s), f"unsafe code pattern in {rel}: {pattern}"
+          print(f"Validated v{m['version']}: {len(browser)} browser locales; {len(langs)} runtime locales; {len(keys)} runtime keys")
+          PY
+          git diff --check
+
+      - name: Open pull request and enable auto-merge
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          branch="automation/sync-v4.8.31-${GITHUB_RUN_ID}"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git switch -c "$branch"
+          git add -A
+          git diff --cached --check
+          if git diff --cached --quiet; then
+            echo "main already matches v4.8.31"
+            exit 0
+          fi
+          git commit -m "Sync v4.8.31 release sources and fix repository mismatch"
+          git push origin "$branch"
+          gh pr create --repo "${GITHUB_REPOSITORY}" --base main --head "$branch" --title "Sync v4.8.31 release sources into main" --body "Synchronizes the source files with the published v4.8.31 archive (SHA-256 verified), aligns README and changelog metadata, and replaces the outdated test entry point with the 134-check production smoke suite. Static validation and smoke tests passed in this workflow. The PR is opened to comply with protected-branch rules."
+          gh pr checks "$branch" --repo "${GITHUB_REPOSITORY}" --watch --required
+          gh pr merge "$branch" --repo "${GITHUB_REPOSITORY}" --squash
