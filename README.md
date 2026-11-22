@@ -1,8 +1,8 @@
-<h1 align="center">Volume Controller Pro v4.7.92</h1>
+<h1 align="center">Volume Controller Pro v4.8.30</h1>
 
 <p align="center">
   <a href="https://github.com/Maximka1993271/Volume-Controller-Pro/releases">
-    <img src="https://img.shields.io/badge/version-4.7.92-blue.svg?style=for-the-badge&logo=github" alt="Version 4.7.92"/>
+    <img src="https://img.shields.io/badge/version-4.8.30-blue.svg?style=for-the-badge&logo=github" alt="Version 4.8.30"/>
   </a>
   <a href="https://www.microsoft.com/edge">
     <img src="https://img.shields.io/badge/Edge-Chromium-0078D7.svg?style=for-the-badge&logo=microsoft-edge" alt="Microsoft Edge"/>
@@ -39,16 +39,15 @@ This repository is the project's official GitHub home and the only distribution 
 
 - **Official repository:** [Maximka1993271/Volume-Controller-Pro](https://github.com/Maximka1993271/Volume-Controller-Pro)
 - **Releases:** [Download page](https://github.com/Maximka1993271/Volume-Controller-Pro/releases)
-- **Latest release (v4.7.92):** [Download `Volume.Controller.Pro.v4.7.92.zip`](https://github.com/Maximka1993271/Volume-Controller-Pro/releases/download/v4.7.92/Volume.Controller.Pro.v4.7.92.zip)
-- **SHA-256 checksum:** [`Volume.Controller.Pro.v4.7.92.zip.sha256`](https://github.com/Maximka1993271/Volume-Controller-Pro/releases/download/v4.7.92/Volume.Controller.Pro.v4.7.92.zip.sha256)
-- **Full release notes:** [v4.7.91](https://github.com/Maximka1993271/Volume-Controller-Pro/releases/tag/v4.7.92)
-- **Source archive:** [Download the current `main` source ZIP](https://github.com/Maximka1993271/Volume-Controller-Pro/archive/refs/heads/main.zip). The release package is built from the reviewed source tree and includes the full [genre catalog](AUTO_GENRE_CATALOG.md).
+- **Latest release (v4.8.30):** [Download `Volume.Controller.Pro.v4.8.30.zip`](https://github.com/Maximka1993271/Volume-Controller-Pro/releases/download/v4.8.30/Volume.Controller.Pro.v4.8.30.zip)
+- **SHA-256 checksum:** [`Volume.Controller.Pro.v4.8.30.zip.sha256`](https://github.com/Maximka1993271/Volume-Controller-Pro/releases/download/v4.8.30/Volume.Controller.Pro.v4.8.30.zip.sha256)
+- **Full release notes:** [v4.8.30](https://github.com/Maximka1993271/Volume-Controller-Pro/releases/tag/v4.8.30)
+- **Source archive:** [Download the current `main` source ZIP](https://github.com/Maximka1993271/Volume-Controller-Pro/archive/refs/heads/main.zip). The versioned 4.8.30 release ZIP is the recommended download for the latest build; the current `main` source tree is still at 4.7.92 and will be synchronized separately.
 - The previous [v4.7.90 release](https://github.com/Maximka1993271/Volume-Controller-Pro/releases/tag/v4.7.90) remains in the release history.
-- No official Chrome Web Store or Microsoft Edge Add-ons listing is currently announced by the author.
 - No official Chrome Web Store or Microsoft Edge Add-ons listing is currently announced by the author.
 - Be cautious with copies hosted elsewhere; use only files published through the official repository and its Releases page.
 
-> **Repository status:** The complete extension source tree is available in the main branch, with manifest.json at the repository root. You can download the repository as a ZIP or use the Releases page for a versioned package.
+> **Repository status:** The unpacked source tree is available in `main` with `manifest.json` at the repository root, but that branch currently contains version 4.7.92. The latest published package is version 4.8.30; use the versioned ZIP above to install that release. The source branch still needs to be synchronized with 4.8.30.
 
 ---
 
@@ -58,7 +57,7 @@ This repository is the project's official GitHub home and the only distribution 
 - 🎚️ **Bass Boost** — adjustable low-frequency enhancement, up to +12 dB.
 - 🎤 **Voice Boost** — speech-clarity controls with AUTO and MANUAL modes.
 - 🎛️ **Audio Profiles** — per-site settings for supported media sites such as YouTube and Spotify.
-- 🎶 **Automatic Genre Detection** — 76 title-based genre/subgenre labels plus five broad audio-only profiles; aliases are synchronized with the v4.7.92 archive; see [the full catalog and EQ families](AUTO_GENRE_CATALOG.md).
+- 🎶 **Automatic Genre Detection** — 76 title-based genre/subgenre labels plus five broad audio-only profiles; aliases are synchronized with the v4.8.30 release; see [the full catalog and EQ families](AUTO_GENRE_CATALOG.md).
 - 📊 **Audio Visualizers** — five spectrum styles plus a spectrogram.
 - 💾 **Settings Backup** — import/export settings through .cfg files.
 - 🌗 **Themes** — Dark, Light, and System options.
@@ -67,17 +66,30 @@ This repository is the project's official GitHub home and the only distribution 
 - 🎯 **Clipping Detection** — visual warnings when audio peaks are detected.
 - 🌐 **Three Languages** — English, Русский, Українська.
 
-## 🐛 Latest Fixes — v4.7.92
+## 🐛 Latest Fixes — v4.8.30
 
-- **Visualizer recovery:** restores visualizer settings and control after a Manifest V3 service-worker restart.
-- **Stale genre status:** clears outdated automatic genre cards when the browser starts or no capture remains active.
-- **Multilingual genre matching:** avoids false positives from ambiguous English, Russian and Ukrainian words in ordinary track titles.
-- **Consistent capture URL validation:** popup and background now apply matching YouTube/Spotify host, route, video-ID, HTTPS, port and credential checks.
-- **Safer page cleanup:** removes obsolete capture indicators only on supported YouTube and Spotify pages.
-- **Reliable audio settings:** rounds restored Bass/Voice dB values and logs rejected offscreen updates.
-- **Badge and popup improvements:** handles badge API failures, adds accessible status announcements, fixes preset button types and favicon dimensions.
-- **Code cleanup:** removes an unused helper and simplifies a constant compressor parameter.
-- **Compatibility:** backup schema remains v18; no new permissions or localization keys.
+- **Explicit audio acknowledgements:** volume and EQ updates now require a confirmed `{ success: true }` response from the offscreen audio processor. Missing acknowledgements are treated as failures.
+- **Reliable visualizer control:** settings and enable/disable commands require confirmation during an active capture. Deferred settings remain available and are applied at the next capture start.
+- **Consistent popup state:** the interface no longer shows visualizer activation optimistically when the background/offscreen pipeline has not confirmed it. This also applies after capture start, recommended settings, factory reset and backup import.
+- **Serialized genre status storage:** delayed writes for an earlier track cannot overwrite a newer track's status; failed writes can be retried.
+- **Accurate high-gain warnings:** popup calculations now include the active genre profile's volume trim and match the offscreen engine's effective-gain calculation.
+- **Night Mode signal path:** the programme compressor remains connected for Night Mode when the separate final Peak Limiter / Safety Ceiling stage is bypassed.
+
+**Validation:** the supplied 4.8.30 package passed 133 smoke checks. Automated tests do not replace real playback and capture tests in Microsoft Edge.
+
+## ✅ Recommended balanced settings — v4.8.30
+
+The one-click recommended configuration provides a moderate starting point for everyday listening:
+
+- Master volume: 100%, unmuted.
+- Bass Boost: enabled at +4 dB; Voice Boost: enabled at +2 dB; both use AUTO.
+- Peak Limiter and clipping monitoring: enabled; Night Mode: disabled.
+- Automatic genre detection: enabled.
+- Visualizer: GTA VI palette, Bars, 48 bands, balanced performance.
+- Spectrogram history: 4 seconds.
+- YouTube and Spotify profiles are temporarily disabled without deleting their saved values.
+
+The selected language, light/dark theme and GTA VI palette are preserved. This is a balanced starting point, not a universal acoustic calibration.
 
 ## 🔒 Privacy
 
@@ -106,7 +118,7 @@ For vulnerability reporting, see [SECURITY.md](SECURITY.md). Contributors should
 
 ## 📸 Screenshots
 
-The screenshots are arranged in a two-column gallery so you can compare the v4.7.90 interface views side by side.
+The screenshots are arranged in a two-column gallery and show representative interface views.
 
 <table>
   <tr>
@@ -242,5 +254,5 @@ This project is licensed under the **MIT License**. Read the full terms in [LICE
 
 <p align="center">
   <strong>Made with ❤️ by Maxim Melnikov</strong><br/>
-  <sub>Volume Controller Pro v4.7.92</sub>
+  <sub>Latest release: 4.8.30 · `main` source: 4.7.92</sub>
 </p>
