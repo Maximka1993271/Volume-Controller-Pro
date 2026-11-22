@@ -19,6 +19,7 @@ const muteButton = document.getElementById('muteButton');
 const peakLimiterToggle = document.getElementById('peakLimiterToggle');
 const quickPeakLimiterToggle = document.getElementById('quickPeakLimiterToggle');
 const showClippingWarningToggle = document.getElementById('showClippingWarningToggle');
+const showLimiterOffWarningToggle = document.getElementById('showLimiterOffWarningToggle');
 const showAllMessagesToggle = document.getElementById('showAllMessagesToggle');
 
 // EN: Restrict legacy-indicator cleanup to supported media player hosts.
@@ -57,6 +58,8 @@ void removeObsoleteCaptureCircleFromActiveTab();
 const showCaptureStatusIndicatorToggle = document.getElementById('showCaptureStatusIndicatorToggle');
 const showQuickSettingsToggle = document.getElementById('showQuickSettingsToggle');
 const quickSettingsPanel = document.getElementById('quickSettingsPanel');
+const quickSettingsExpandToggle = document.getElementById('quickSettingsExpandToggle');
+const quickSettingsGrid = document.getElementById('quickSettingsGrid');
 const autoGenreEnabledToggle = document.getElementById('autoGenreEnabledToggle');
 const autoGenreStatusCard = document.getElementById('autoGenreStatusCard');
 const autoGenreStatusTitle = document.getElementById('autoGenreStatusTitle');
@@ -78,17 +81,21 @@ const audioProtectionDescription = document.getElementById('audioProtectionDescr
 const peakLimiterBadge = document.getElementById('peakLimiterBadge');
 const bassBoostToggle = document.getElementById('bassBoostToggle');
 const settingsBassBoostToggle = document.getElementById('settingsBassBoostToggle');
+const settingsBassModeStatusToggle = document.getElementById('settingsBassModeStatusToggle');
 const showBassBoostPanelToggle = document.getElementById('showBassBoostPanelToggle');
 const bassBoostSlider = document.getElementById('bassBoostSlider');
 const bassBoostValue = document.getElementById('bassBoostValue');
 const bassBoostAutoBadge = document.getElementById('bassBoostAutoBadge');
 const voiceBoostToggle = document.getElementById('voiceBoostToggle');
 const settingsVoiceBoostToggle = document.getElementById('settingsVoiceBoostToggle');
+const settingsVoiceModeStatusToggle = document.getElementById('settingsVoiceModeStatusToggle');
 const showVoiceBoostPanelToggle = document.getElementById('showVoiceBoostPanelToggle');
+const hideInactiveEffectsToggle = document.getElementById('hideInactiveEffectsToggle');
 const voiceBoostSlider = document.getElementById('voiceBoostSlider');
 const voiceBoostValue = document.getElementById('voiceBoostValue');
 const voiceBoostAutoBadge = document.getElementById('voiceBoostAutoBadge');
-const status = document.getElementById('status');
+const statusMessageElement = document.getElementById('status');
+const doneButton = document.getElementById('doneButton');
 let statusTimer = null;
 const captureStatusIndicator = document.getElementById('captureStatusIndicator');
 const captureStatusTitle = document.getElementById('captureStatusTitle');
@@ -101,8 +108,16 @@ const enableExtensionBtn = document.getElementById('enableExtensionBtn');
 const disableExtensionBtn = document.getElementById('disableExtensionBtn');
 const settingsPanel = document.getElementById('settingsPanel');
 const settingsCloseBtn = document.getElementById('settingsCloseBtn');
+const settingsCategoryTabs = document.querySelectorAll('[data-settings-category]');
+const settingsCategoryPanels = document.querySelectorAll('[data-settings-category-panel]');
 const themeSelect = document.getElementById('themeSelect');
+const gtaPaletteToggle = document.getElementById('gtaPaletteToggle');
+const gtaPaletteContent = document.getElementById('gtaPaletteContent');
+const gtaPaletteGallery = document.getElementById('gtaPaletteGallery');
+const gtaPalettePreview = document.getElementById('gtaPalettePreview');
+const gtaPalettePreviewName = document.getElementById('gtaPalettePreviewName');
 const rgbGlowToggle = document.getElementById('rgbGlowToggle');
+const showScrollbarToggle = document.getElementById('showScrollbarToggle');
 const visualizerStyleSelect = document.getElementById('visualizerStyleSelect');
 const visualizerPaletteSelect = document.getElementById('visualizerPaletteSelect');
 const visualizerGlowToggle = document.getElementById('visualizerGlowToggle');
@@ -126,6 +141,7 @@ const bassBoostPanel = document.querySelector('.bass-panel');
 const voiceBoostPanel = document.querySelector('.voice-panel');
 const profilePresetBtns = document.querySelectorAll('.profile-preset');
 const factoryResetBtn = document.getElementById('factoryResetBtn');
+const applyRecommendedSettingsBtn = document.getElementById('applyRecommendedSettingsBtn');
 const exportSettingsBtn = document.getElementById('exportSettingsBtn');
 const importSettingsBtn = document.getElementById('importSettingsBtn');
 const settingsImportFile = document.getElementById('settingsImportFile');
@@ -159,8 +175,58 @@ const reducedMotionQuery = window.matchMedia('(prefers-reduced-motion: reduce)')
 // Default cadence stays unchanged unless power saving is explicitly enabled.
 const ENERGY_SAVING_MODES = ['balanced', 'performance', 'efficiency'];
 const SETTINGS_CONFIG_FORMAT = 'volume-controller-pro-settings';
-const SETTINGS_CONFIG_SCHEMA_VERSION = 18;
+const SETTINGS_CONFIG_SCHEMA_VERSION = 28;
+const VISUALIZER_GTA_THEME_VERSION = 1;
 const SETTINGS_CONFIG_MAX_BYTES = 256 * 1024;
+
+// User-selected GTA VI color themes: ten user-supplied palettes (01–10) plus the 15 original image palettes (11–25).
+const GTA6_PALETTE_VERSION = 2;
+const GTA6_COLOR_PALETTES = Object.freeze({
+  'gta-01': Object.freeze(['#EB9998', '#5D549C', '#6F70A2', '#7E3A63', '#A373D3']),
+  'gta-02': Object.freeze(['#7AB3C9', '#7679B5', '#C1E1CD', '#9993C3', '#2B3F5A']),
+  'gta-03': Object.freeze(['#382E23', '#6F5E48', '#EDECEC', '#DCCA9C', '#684549']),
+  'gta-04': Object.freeze(['#EA92A4', '#210B0E', '#FAB67C', '#D395C5', '#712C3E']),
+  'gta-05': Object.freeze(['#230A09', '#C8441F', '#E4C9D0', '#EAC396', '#4D150B']),
+  'gta-06': Object.freeze(['#DFE8F1', '#95A6C9', '#E2DCD2', '#4C9682', '#404541']),
+  'gta-07': Object.freeze(['#BBA87A', '#6E421A', '#D59E46', '#C78A3D', '#845120']),
+  'gta-08': Object.freeze(['#4B3733', '#B6A9AA', '#B17B57', '#E8A759', '#7C3E1A']),
+  'gta-09': Object.freeze(['#231144', '#461C4C', '#1B1C2E', '#5865F2', '#F4A97E']),
+  'gta-10': Object.freeze(['#261868', '#4B165C', '#432026', '#6486D8', '#D466A6', '#F8AE70']),
+  'gta-11': Object.freeze(['#3d6ff6', '#7277fc', '#aa63da', '#d73394', '#f70026', '#fd2100']),
+  'gta-12': Object.freeze(['#ff9347', '#ff726a', '#f143a2', '#c739c3', '#6c43c2', '#335dce']),
+  'gta-13': Object.freeze(['#2c0090', '#4d0baa', '#7927ec', '#aa46ff', '#d55df0', '#f677b0', '#ff8f92', '#fda6b5']),
+  'gta-14': Object.freeze(['#74adc8', '#b7b6dc', '#f8c2c8', '#f3ecdc', '#9fd3c8', '#5fb3b0']),
+  'gta-15': Object.freeze(['#864777', '#d4879a', '#fea76e', '#a99ae2', '#8f6ccc']),
+  'gta-16': Object.freeze(['#4b3c79', '#62599b', '#8f76c1', '#c28aca', '#f79ac9']),
+  'gta-17': Object.freeze(['#f15596', '#bc344e', '#1c0a12', '#2a2058', '#646ee4']),
+  'gta-18': Object.freeze(['#bf8ebd', '#de93b6', '#f69f9f', '#ffbfa0', '#e85351']),
+  'gta-19': Object.freeze(['#e42499', '#ff726b', '#ffbe92', '#7e36bc', '#00133a']),
+  'gta-20': Object.freeze(['#2f7fd0', '#7cc0ec', '#d6eff4', '#5fd8cc', '#10a7a0']),
+  'gta-21': Object.freeze(['#b5d1f9', '#f8c0fe', '#feaaff', '#f78efd', '#a872fc', '#5253ff', '#2437ff']),
+  'gta-22': Object.freeze(['#e6a192', '#dc8bcc', '#cd75f4', '#b563fc', '#9b51ea', '#8643bb', '#6f3b75', '#5f382a']),
+  'gta-23': Object.freeze(['#ecdcb4', '#94d6bd', '#6abcc9', '#4f86b8', '#2f6a8f']),
+  'gta-24': Object.freeze(['#dff2fb', '#46b9d3', '#018aa5', '#00527d', '#1e3a63']),
+  'gta-25': Object.freeze(['#ffcb60', '#f2a048', '#db7128', '#9a4119', '#5a240d'])
+});
+const GTA6_PALETTE_IDS = Object.freeze(['classic', ...Object.keys(GTA6_COLOR_PALETTES)]);
+const DEFAULT_UI_GRADIENT = Object.freeze(['#4bd9ed', '#7d91ff', '#b88aff']);
+
+// Migrates legacy backup IDs: original palettes 01–15 become 11–25, while user palettes 16–25 become 01–10.
+// Current 4.8.2+ settings already use compact IDs 01–10 and are kept unchanged by paletteVersion.
+function migrateLegacyGtaPaletteId(paletteId) {
+  if (paletteId === 'classic') return 'classic';
+  const match = typeof paletteId === 'string' ? /^gta-(\d{2})$/.exec(paletteId) : null;
+  if (!match) return null;
+  const oldNumber = Number(match[1]);
+  if (oldNumber >= 16 && oldNumber <= 25) return `gta-${String(oldNumber - 15).padStart(2, '0')}`;
+  if (oldNumber >= 1 && oldNumber <= 15) return `gta-${String(oldNumber + 10).padStart(2, '0')}`;
+  return null;
+}
+
+function normalizeStoredGtaPaletteId(paletteId, paletteVersion) {
+  const candidate = paletteVersion >= GTA6_PALETTE_VERSION ? paletteId : migrateLegacyGtaPaletteId(paletteId);
+  return GTA6_PALETTE_IDS.includes(candidate) ? candidate : 'classic';
+}
 
 // EN: Storage queue, URL guards and translation helpers keep UI state safe and predictable.
 // RU: Очередь записи, проверки URL и функции переводов делают состояние интерфейса предсказуемым.
@@ -171,6 +237,212 @@ function writeLocalSettings(values) {
   const operation = localSettingsWriteQueue.then(() => chrome.storage.local.set(values));
   localSettingsWriteQueue = operation.catch(() => {});
   return operation;
+}
+
+// EN: Applies a selectable GTA VI gradient as the popup's accent system without changing audio behavior.
+// RU: Применяет выбранный градиент GTA VI к акцентам popup, не затрагивая работу аудиодвижка.
+// UK: Застосовує вибраний градієнт GTA VI до акцентів popup, не змінюючи роботу аудіорушія.
+// EN: Samples five readable volume accents from the selected palette without discarding intermediate stops.
+// RU: Получает пять цветовых акцентов уровней громкости из выбранной палитры, сохраняя промежуточные оттенки.
+// UK: Отримує п'ять кольорових акцентів рівнів гучності з вибраної палітри, зберігаючи проміжні відтінки.
+function interpolateHexColor(startHex, endHex, ratio) {
+  const start = startHex.match(/[0-9a-f]{2}/gi).map((channel) => Number.parseInt(channel, 16));
+  const end = endHex.match(/[0-9a-f]{2}/gi).map((channel) => Number.parseInt(channel, 16));
+  const amount = Math.min(1, Math.max(0, Number(ratio) || 0));
+  const channels = start.map((value, index) => Math.round(value + (end[index] - value) * amount));
+  return `#${channels.map((channel) => channel.toString(16).padStart(2, '0')).join('').toUpperCase()}`;
+}
+
+function getGtaVolumeThresholdColors(colors) {
+  const stops = Array.isArray(colors) && colors.length ? colors : DEFAULT_UI_GRADIENT;
+  return [0, 1, 2, 3, 4].map((step) => {
+    const position = (step / 4) * (stops.length - 1);
+    const lowerIndex = Math.floor(position);
+    const upperIndex = Math.min(stops.length - 1, Math.ceil(position));
+    return interpolateHexColor(stops[lowerIndex], stops[upperIndex], position - lowerIndex);
+  });
+}
+
+function getGtaCurrentVolumeColor(percent, colors) {
+  if (!Array.isArray(colors) || !colors.length || !Number.isFinite(Number(percent)) || Number(percent) <= 100) return null;
+  const thresholdIndex = Math.min(4, Math.max(0, Math.floor(Number(percent) / 100) - 2));
+  return getGtaVolumeThresholdColors(colors)[thresholdIndex] || null;
+}
+
+function applyGtaVolumeNumberColor(percent, colors) {
+  if (!volumeValue) return;
+  const color = getGtaCurrentVolumeColor(percent, colors);
+  if (color) volumeValue.style.setProperty('--vcp-current-volume-color', color);
+  else volumeValue.style.removeProperty('--vcp-current-volume-color');
+}
+
+function applyGtaVolumeThresholdColors(colors) {
+  const thresholdColors = colors ? getGtaVolumeThresholdColors(colors) : [];
+  document.querySelectorAll('[data-volume-threshold]').forEach((element) => {
+    const threshold = Number.parseInt(element.dataset.volumeThreshold, 10);
+    const colorIndex = threshold / 100 - 2;
+    const color = Number.isInteger(colorIndex) && colorIndex >= 0 && colorIndex <= 4 ? thresholdColors[colorIndex] : null;
+    if (color) element.style.setProperty('--vcp-volume-threshold-color', color);
+    else element.style.removeProperty('--vcp-volume-threshold-color');
+  });
+}
+
+function getHexLuminance(hex) {
+  const channels = hex.match(/[0-9a-f]{2}/gi).map((channel) => parseInt(channel, 16) / 255).map((value) =>
+    value <= 0.04045 ? value / 12.92 : ((value + 0.055) / 1.055) ** 2.4
+  );
+  return 0.2126 * channels[0] + 0.7152 * channels[1] + 0.0722 * channels[2];
+}
+
+const GTA6_PALETTE_TRANSLATION_KEYS = Object.freeze({
+  'gta-01': 'themeViceCityPinkAmethyst',
+  'gta-02': 'themeLeonidaCoastalHaze',
+  'gta-03': 'themeHavanaVintage',
+  'gta-04': 'themeViceCitySunsetBloom',
+  'gta-05': 'themeLeonidaCrimsonSunset',
+  'gta-06': 'themeOceanDriveSeaGlass',
+  'gta-07': 'themeLeonidaGoldenHour',
+  'gta-08': 'themeViceCityDesertAmber',
+  'gta-09': 'themeViceCityNightPromenade',
+  'gta-10': 'themeGtaPromoPalette',
+  'gta-11': 'themeGtaNeonTriTone',
+  'gta-12': 'themeGtaSunsetSpectrum',
+  'gta-13': 'themeGtaVioletBloom',
+  'gta-14': 'themeGtaPastelCoast',
+  'gta-15': 'themeGtaWarmPastels',
+  'gta-16': 'themeGtaAnalogViolet',
+  'gta-17': 'themeGtaNightContrast',
+  'gta-18': 'themeGtaPastelSunset',
+  'gta-19': 'themeGtaNeonCoast',
+  'gta-20': 'themeGtaOceanAnalog',
+  'gta-21': 'themeGtaSkyAndNeon',
+  'gta-22': 'themeGtaPinkVioletUmber',
+  'gta-23': 'themeGtaSandAndSea',
+  'gta-24': 'themeGtaDeepOcean',
+  'gta-25': 'themeGtaAmberEarth',
+});
+
+function getGtaPaletteName(paletteId = gtaPalette) {
+  if (paletteId === 'classic') return t('gtaPaletteClassic');
+  const match = /^gta-(\d{2})$/.exec(paletteId);
+  if (!match) return t('gtaPaletteClassic');
+  const translationKey = GTA6_PALETTE_TRANSLATION_KEYS[paletteId] || `gtaPalette${match[1]}`;
+  const translatedName = t(translationKey);
+  return translatedName === translationKey ? `GTA VI · ${match[1]}` : translatedName;
+}
+
+// EN: Renders the 25 selectable palette swatches as a compact, scrollable gallery.
+// RU: Отображает 25 палитр в виде компактной прокручиваемой галереи.
+// UK: Відображає 25 палітр у вигляді компактної прокручуваної галереї.
+function updateGtaPaletteGallerySelection() {
+  if (!gtaPaletteGallery) return;
+  gtaPaletteGallery.querySelectorAll('[data-gta-palette]').forEach((button) => {
+    const isSelected = button.dataset.gtaPalette === gtaPalette;
+    button.setAttribute('aria-checked', String(isSelected));
+    button.tabIndex = isSelected ? 0 : -1;
+    button.classList.toggle('is-selected', isSelected);
+  });
+}
+
+function renderGtaPaletteGallery() {
+  if (!gtaPaletteGallery) return;
+  const fragment = document.createDocumentFragment();
+  GTA6_PALETTE_IDS.forEach((paletteId) => {
+    const colors = GTA6_COLOR_PALETTES[paletteId] || DEFAULT_UI_GRADIENT;
+    const name = getGtaPaletteName(paletteId);
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'gta-palette-card';
+    button.dataset.gtaPalette = paletteId;
+    button.setAttribute('role', 'radio');
+    button.setAttribute('aria-checked', String(paletteId === gtaPalette));
+    button.setAttribute('aria-label', `${name}. ${t('gtaPaletteChoose')}`);
+    button.title = name;
+    button.tabIndex = paletteId === gtaPalette ? 0 : -1;
+
+    const swatch = document.createElement('span');
+    swatch.className = 'gta-palette-card-swatch';
+    swatch.style.background = `linear-gradient(112deg, ${colors.join(', ')})`;
+    swatch.setAttribute('aria-hidden', 'true');
+
+    const label = document.createElement('span');
+    label.className = 'gta-palette-card-label';
+    label.textContent = paletteId === 'classic' ? t('gtaPaletteClassicShort') : paletteId.slice(-2);
+    label.setAttribute('aria-hidden', 'true');
+
+    const nameLabel = document.createElement('span');
+    nameLabel.className = 'gta-palette-card-name';
+    nameLabel.textContent = name;
+    nameLabel.setAttribute('aria-hidden', 'true');
+
+    button.append(swatch, label, nameLabel);
+    fragment.append(button);
+  });
+  gtaPaletteGallery.replaceChildren(fragment);
+  gtaPaletteGallery.setAttribute('aria-label', t('gtaPaletteLabel'));
+  updateGtaPaletteGallerySelection();
+}
+
+// EN: Keeps the GTA VI palette gallery collapsed state and its accessibility attributes in sync.
+// RU: Синхронизирует свёрнутое состояние галереи GTA VI и атрибуты доступности.
+// UK: Синхронізує згорнутий стан галереї GTA VI та атрибути доступності.
+function updateGtaPaletteGalleryDisclosure() {
+  if (!gtaPaletteToggle || !gtaPaletteContent) return;
+  const expanded = gtaPaletteGalleryExpanded === true;
+  gtaPaletteToggle.setAttribute('aria-expanded', String(expanded));
+  gtaPaletteToggle.classList.toggle('is-expanded', expanded);
+  gtaPaletteContent.hidden = !expanded;
+}
+
+// EN: Persists the user's expand/collapse choice and restores the previous state if storage fails.
+// RU: Сохраняет выбор раскрытия галереи и восстанавливает прежнее состояние при ошибке хранилища.
+// UK: Зберігає вибір розкриття галереї та відновлює попередній стан у разі помилки сховища.
+async function setGtaPaletteGalleryExpanded(expanded) {
+  const previous = gtaPaletteGalleryExpanded;
+  const next = Boolean(expanded);
+  if (previous === next) return;
+  gtaPaletteGalleryExpanded = next;
+  updateGtaPaletteGalleryDisclosure();
+  try {
+    await writeLocalSettings({ gtaPaletteGalleryExpanded: next });
+  } catch (error) {
+    gtaPaletteGalleryExpanded = previous;
+    updateGtaPaletteGalleryDisclosure();
+    showStatus(t('settingsSaveError'), true);
+  }
+}
+
+function applyGtaPalette(paletteId = gtaPalette) {
+  const selected = GTA6_PALETTE_IDS.includes(paletteId) ? paletteId : 'classic';
+  document.body.dataset.accentPalette = selected;
+  const customProperties = ['--vcp-gta-deep', '--vcp-gta-bright', '--vcp-gta-gradient', '--vcp-gta-soft', '--vcp-gta-border'];
+  customProperties.forEach((property) => document.body.style.removeProperty(property));
+  const colors = GTA6_COLOR_PALETTES[selected];
+  applyGtaVolumeThresholdColors(colors);
+  applyGtaVolumeNumberColor(Number(slider?.value ?? 100), colors);
+  ['--vcp-visualizer-start', '--vcp-visualizer-mid', '--vcp-visualizer-end'].forEach((property) => document.body.style.removeProperty(property));
+  if (colors && colors.length) {
+    document.body.style.setProperty('--vcp-visualizer-start', colors[0]);
+    document.body.style.setProperty('--vcp-visualizer-mid', colors[Math.floor((colors.length - 1) / 2)]);
+    document.body.style.setProperty('--vcp-visualizer-end', colors[colors.length - 1]);
+  }
+  if (colors) {
+    const ordered = [...colors].sort((left, right) => getHexLuminance(left) - getHexLuminance(right));
+    document.body.style.setProperty('--vcp-gta-deep', ordered[0]);
+    document.body.style.setProperty('--vcp-gta-bright', ordered[ordered.length - 1]);
+    document.body.style.setProperty('--vcp-gta-gradient', `linear-gradient(112deg, ${colors.join(', ')})`);
+    document.body.style.setProperty('--vcp-gta-soft', `color-mix(in srgb, ${ordered[0]} 18%, transparent)`);
+    document.body.style.setProperty('--vcp-gta-border', `color-mix(in srgb, ${ordered[ordered.length - 1]} 48%, transparent)`);
+  }
+  updateGtaPaletteGallerySelection();
+  if (gtaPalettePreview) {
+    const previewColors = colors || DEFAULT_UI_GRADIENT;
+    gtaPalettePreview.style.background = `linear-gradient(90deg, ${previewColors.join(', ')})`;
+    gtaPalettePreview.setAttribute('aria-label', `${t('gtaPalettePreview')}: ${getGtaPaletteName(selected)}`);
+  }
+  if (gtaPalettePreviewName) gtaPalettePreviewName.textContent = getGtaPaletteName(selected);
+  // The live spectrum and waterfall follow the selected GTA VI accent palette when set to "gta".
+  if (typeof updateGtaVisualizerPalette === 'function') updateGtaVisualizerPalette();
 }
 
 // EN: Accepts only the secure Spotify Web Player origin.
@@ -210,9 +482,12 @@ let fallbackTranslations = {};
 const translationCache = new Map();
 let language = 'ru';
 let themeMode = 'system';
+let gtaPalette = 'classic';
+let gtaPaletteGalleryExpanded = true;
 let rgbGlowEnabled = true;
+let showScrollbar = true;
 let visualizerStyle = 'bars';
-let visualizerPaletteMode = 'neon';
+let visualizerPaletteMode = 'gta';
 let visualizerGlowEnabled = true;
 let visualizerPeakHoldEnabled = true;
 let spectrogramGridEnabled = true;
@@ -221,19 +496,22 @@ let spectrogramGlowEnabled = true;
 let visualizerSensitivity = 100;
 let savedVisualizerSensitivity = 100;
 let visualizerBands = 48;
-let spectrogramPaletteMode = 'neon';
+let spectrogramPaletteMode = 'gta';
 let spectrogramDuration = 4;
 let visualizerAnimationEnabled = true;
 let showFrequencyVisualizer = true;
 let showSpectrogram = true;
 let showBassBoostPanel = true;
 let showVoiceBoostPanel = true;
+let showBoostModeValueLabels = true; // Legacy combined preference retained for old backup compatibility.
+let showBassBoostModeStatus = true;
+let showVoiceBoostModeStatus = true;
 let energySavingEnabled = false;
 let energySavingMode = 'balanced';
 let settingsPreferencesReady = false;
 const VISUALIZER_BAND_OPTIONS = [24, 36, 48, 64, 96];
 const VISUALIZER_STYLES = ['bars', 'line', 'wave', 'mirror', 'dots', 'area', 'radial'];
-const SPECTROGRAM_PALETTES = ['neon', 'ocean', 'fire', 'mono'];
+const SPECTROGRAM_PALETTES = ['gta', 'neon', 'ocean', 'fire', 'mono'];
 const SPECTROGRAM_DURATIONS = [2, 4, 6, 8, 12];
 const systemThemeQuery = window.matchMedia('(prefers-color-scheme: light)');
 
@@ -300,28 +578,11 @@ function localizeErrorDetail(detail) {
     'Эта вкладка уже захватывается другим процессом. Остановите другой захват и повторите попытку.': 'tabBusyError',
     'Offscreen-документ не подтвердил запуск захвата.': 'offscreenStartError',
     'Запуск разрешён только для текущей активной вкладки.': 'activeTabOnlyError',
-    'Захват доступен только на YouTube и Spotify Web Player.': 'siteNotSupported'
+    'Захват доступен только на YouTube и Spotify Web Player.': 'siteNotSupported',
+    'The active tab changed or is no longer supported before audio capture started.': 'captureTabChanged'
   };
   const key = knownErrors[String(detail || '').trim()];
   return key ? t(key) : detail;
-}
-
-// EN: Shows the currently selected spectrogram color palette in the interface.
-// RU: Показывает в интерфейсе выбранную цветовую палитру спектрограммы.
-// UK: Показує в інтерфейсі вибрану кольорову палітру спектрограми.
-function updateSpectrogramPaletteBadge() {
-  const badge = document.getElementById('spectrogramPaletteBadge');
-  if (!badge) return;
-  const paletteKeyByMode = {
-    neon: 'paletteNeon',
-    ocean: 'paletteOcean',
-    fire: 'paletteFire',
-    mono: 'paletteMono'
-  };
-  const paletteKey = paletteKeyByMode[spectrogramPaletteMode] || 'paletteNeon';
-  const paletteName = t(paletteKey);
-  badge.textContent = paletteName.toLocaleUpperCase(language);
-  badge.setAttribute('aria-label', `${t('spectrogramPaletteLabel')}: ${paletteName}`);
 }
 
 // EN: Applies dictionary strings to marked HTML text, titles, and accessibility labels.
@@ -333,7 +594,6 @@ function applyTranslations() {
     const key = element.dataset.i18n;
     element.textContent = key === 'spectrogramSubtitle' ? t(key, { seconds: spectrogramDuration }) : t(key);
   });
-  updateSpectrogramPaletteBadge();
   document.querySelectorAll('[data-i18n-title]').forEach((element) => {
     element.title = t(element.dataset.i18nTitle);
   });
@@ -344,7 +604,11 @@ function applyTranslations() {
   languageSelect.setAttribute('aria-label', t('languageLabel'));
   themeSelect.value = themeMode;
   themeSelect.setAttribute('aria-label', t('settingsTheme'));
+  renderGtaPaletteGallery();
+  updateGtaPaletteGalleryDisclosure();
+  applyGtaPalette(gtaPalette);
   rgbGlowToggle.setAttribute('aria-label', t('rgbGlow'));
+  updateScrollbarVisibilityUI();
   if (visualizerStyleSelect) visualizerStyleSelect.setAttribute('aria-label', t('visualizerStyleLabel'));
   if (visualizerPaletteSelect) visualizerPaletteSelect.setAttribute('aria-label', t('visualizerPaletteLabel'));
   if (visualizerGlowToggle) visualizerGlowToggle.setAttribute('aria-label', t('visualizerGlowLabel'));
@@ -364,6 +628,8 @@ function applyTranslations() {
   if (peakLimiterToggle) peakLimiterToggle.setAttribute('aria-label', t('peakLimiterLabel'));
   if (quickPeakLimiterToggle) quickPeakLimiterToggle.setAttribute('aria-label', t('peakLimiterLabel'));
   if (showClippingWarningToggle) showClippingWarningToggle.setAttribute('aria-label', t('showClippingWarningLabel'));
+  if (showLimiterOffWarningToggle) showLimiterOffWarningToggle.setAttribute('aria-label', t('showLimiterOffWarningLabel'));
+  if (hideInactiveEffectsToggle) hideInactiveEffectsToggle.setAttribute('aria-label', t('hideInactiveEffectsLabel'));
   if (showAllMessagesToggle) showAllMessagesToggle.setAttribute('aria-label', t('showAllMessagesLabel'));
   if (nightModeToggle) nightModeToggle.setAttribute('aria-label', t('nightModeLabel'));
   if (quickNightModeToggle) quickNightModeToggle.setAttribute('aria-label', t('nightModeLabel')); 
@@ -388,6 +654,7 @@ function applyTheme(mode = themeMode) {
   const effectiveTheme = mode === 'system' ? (systemThemeQuery.matches ? 'light' : 'dark') : mode;
   document.body.dataset.theme = effectiveTheme;
   document.body.classList.toggle('rgb-glow', rgbGlowEnabled);
+  applyGtaPalette(gtaPalette);
   if (themeSelect) themeSelect.value = mode;
   if (rgbGlowToggle) rgbGlowToggle.checked = rgbGlowEnabled;
   if (quickRgbGlowToggle) quickRgbGlowToggle.checked = rgbGlowEnabled;
@@ -401,6 +668,50 @@ function setSettingsPanelOpen(isOpen) {
   settingsBtn.setAttribute('aria-expanded', String(isOpen));
   settingsBtn.classList.toggle('active', isOpen);
 }
+
+// EN: Settings categories behave as an accordion: click once to expand, click the same item again to collapse.
+// RU: Категории настроек работают как аккордеон: первое нажатие раскрывает раздел, повторное — сворачивает.
+// UK: Категорії налаштувань працюють як акордеон: перше натискання відкриває розділ, повторне — згортає.
+let expandedSettingsCategory = null;
+
+function setSettingsCategory(category) {
+  const activeTab = Array.from(settingsCategoryTabs).find((tab) => tab.dataset.settingsCategory === category);
+  if (!activeTab) return false;
+
+  const shouldExpand = expandedSettingsCategory !== category;
+  expandedSettingsCategory = shouldExpand ? category : null;
+
+  settingsCategoryTabs.forEach((tab) => {
+    const isExpanded = shouldExpand && tab === activeTab;
+    tab.classList.toggle('is-active', isExpanded);
+    tab.setAttribute('aria-expanded', String(isExpanded));
+  });
+
+  settingsCategoryPanels.forEach((panel) => {
+    const isExpanded = shouldExpand && panel.dataset.settingsCategoryPanel === category;
+    panel.hidden = !isExpanded;
+    panel.classList.toggle('is-active', isExpanded);
+  });
+
+  settingsPanel.dataset.activeCategory = expandedSettingsCategory || '';
+  return shouldExpand;
+}
+
+settingsCategoryTabs.forEach((tab, index) => {
+  tab.addEventListener('click', () => setSettingsCategory(tab.dataset.settingsCategory));
+  tab.addEventListener('keydown', (event) => {
+    const keyMoves = ['ArrowRight', 'ArrowDown', 'ArrowLeft', 'ArrowUp', 'Home', 'End'];
+    if (!keyMoves.includes(event.key) || !settingsCategoryTabs.length) return;
+    event.preventDefault();
+    let nextIndex = index;
+    if (event.key === 'Home') nextIndex = 0;
+    else if (event.key === 'End') nextIndex = settingsCategoryTabs.length - 1;
+    else if (event.key === 'ArrowRight' || event.key === 'ArrowDown') nextIndex = (index + 1) % settingsCategoryTabs.length;
+    else nextIndex = (index - 1 + settingsCategoryTabs.length) % settingsCategoryTabs.length;
+    // Arrow keys move focus only. Enter/Space or pointer click activates the focused button.
+    settingsCategoryTabs[nextIndex].focus();
+  });
+});
 
 // EN: Persists a theme choice and applies it to the popup.
 // RU: Сохраняет выбор темы и применяет его к popup.
@@ -423,6 +734,28 @@ async function setTheme(nextTheme) {
   }
 }
 
+// EN: Persists the selected GTA VI accent palette and rolls back if storage fails.
+// RU: Сохраняет выбранную палитру GTA VI и возвращает прежнюю, если запись в хранилище не удалась.
+// UK: Зберігає вибрану палітру GTA VI та повертає попередню, якщо запис у сховище не вдався.
+async function setGtaPalette(nextPalette) {
+  if (!GTA6_PALETTE_IDS.includes(nextPalette)) {
+    updateGtaPaletteGallerySelection();
+    return;
+  }
+  if (nextPalette === gtaPalette) return;
+  const previous = gtaPalette;
+  gtaPalette = nextPalette;
+  applyGtaPalette(gtaPalette);
+  try {
+    await writeLocalSettings({ gtaPalette, gtaPaletteVersion: GTA6_PALETTE_VERSION });
+    showStatus(t('gtaPaletteSet', { palette: getGtaPaletteName(gtaPalette) }));
+  } catch (error) {
+    gtaPalette = previous;
+    applyGtaPalette(gtaPalette);
+    showStatus(t('settingsSaveError'), true);
+  }
+}
+
 // EN: Persists and applies the optional RGB glow effect.
 // RU: Сохраняет и применяет необязательный эффект RGB-подсветки.
 // UK: Зберігає та застосовує необов’язковий ефект RGB-підсвічування.
@@ -438,6 +771,34 @@ async function setRgbGlow(enabled) {
     rgbGlowEnabled = previousValue;
     applyTheme(themeMode);
     showStatus(t('settingsSaveError'), true);
+  }
+}
+
+// EN: Applies scrollbar visibility without disabling scrolling; its thumb follows the active GTA VI palette.
+// RU: Управляет только видимостью полосы прокрутки, не отключая прокрутку; цвет ползунка следует активной палитре GTA VI.
+// UK: Керує лише видимістю смуги прокручування, не вимикаючи прокручування; колір повзунка відповідає активній палітрі GTA VI.
+function updateScrollbarVisibilityUI() {
+  document.body.dataset.showScrollbar = showScrollbar ? 'true' : 'false';
+  if (showScrollbarToggle) {
+    showScrollbarToggle.checked = showScrollbar;
+    showScrollbarToggle.disabled = !settingsPreferencesReady;
+    showScrollbarToggle.setAttribute('aria-label', t('showScrollbarLabel'));
+  }
+}
+
+async function setShowScrollbar(enabled) {
+  const previous = showScrollbar;
+  showScrollbar = enabled === true;
+  updateScrollbarVisibilityUI();
+  try {
+    await writeLocalSettings({ showScrollbar });
+    showStatus(t(showScrollbar ? 'scrollbarShownStatus' : 'scrollbarHiddenStatus'));
+    return true;
+  } catch (error) {
+    showScrollbar = previous;
+    updateScrollbarVisibilityUI();
+    showStatus(t('settingsSaveError'), true);
+    return false;
   }
 }
 
@@ -492,9 +853,12 @@ let voiceBoostEnabled = true;
 let voiceBoostDb = 2;
 let peakLimiterEnabled = true;
 let showClippingWarning = true;
+let showLimiterOffWarning = false;
+let hideInactiveEffects = false;
 let showAllMessages = true;
 let showCaptureStatusIndicator = true;
 let showQuickSettings = true;
+let quickSettingsExpanded = false;
 let autoGenreEnabled = true;
 let autoGenreBassManualOverride = false; // false means AUTO by default
 let autoGenreVoiceManualOverride = false; // false means AUTO by default
@@ -813,13 +1177,13 @@ function bindServiceProfileControls() {
 // UK: Дозволяє змінювати налаштування лише після безпечного завантаження параметрів.
 function setSettingsPreferencesReady(ready) {
   const preferenceControls = [
-    languageSelect, themeSelect, rgbGlowToggle,
+    languageSelect, themeSelect, rgbGlowToggle, showScrollbarToggle, settingsBassModeStatusToggle, settingsVoiceModeStatusToggle,
     visualizerStyleSelect, visualizerPaletteSelect, visualizerGlowToggle, visualizerPeakHoldToggle,
     spectrogramGridToggle, spectrogramSmoothingToggle, spectrogramGlowToggle,
     visualizerSensitivitySlider, visualizerBandsSelect, spectrogramPaletteSelect,
     spectrogramDurationSelect, visualizerAnimationToggle,
     showFrequencyVisualizerToggle, showSpectrogramToggle,
-    showBassBoostPanelToggle, showVoiceBoostPanelToggle, showClippingWarningToggle, showAllMessagesToggle, showCaptureStatusIndicatorToggle, showQuickSettingsToggle, autoGenreEnabledToggle,
+    showBassBoostPanelToggle, showVoiceBoostPanelToggle, hideInactiveEffectsToggle, showClippingWarningToggle, showLimiterOffWarningToggle, showAllMessagesToggle, showCaptureStatusIndicatorToggle, showQuickSettingsToggle, quickSettingsExpandToggle, autoGenreEnabledToggle,
     quickAutoGenreToggle, quickRgbGlowToggle, quickYoutubeProfileToggle, quickSpotifyProfileToggle, ...getServiceProfileControlsList(),
     energySavingToggle, energySavingModeSelect
   ];
@@ -831,6 +1195,8 @@ function setSettingsPreferencesReady(ready) {
   // Let users choose them before starting capture; the selection is saved for next time.
   updateBassUI();
   updateVoiceUI();
+  updateBoostModeValueLabelsUI();
+  updateScrollbarVisibilityUI();
   updateProtectionUI();
   updateNightModeUI();
   updateEnergySavingUI();
@@ -907,7 +1273,7 @@ async function setEnergySavingPreferences(enabled, mode) {
 // RU: Разрешает экспорт, импорт и сброс после инициализации настроек.
 // UK: Дозволяє експорт, імпорт і скидання після ініціалізації налаштувань.
 function setSettingsBackupReady(ready) {
-  [factoryResetBtn, exportSettingsBtn, importSettingsBtn, settingsImportFile].forEach((control) => {
+  [applyRecommendedSettingsBtn, factoryResetBtn, exportSettingsBtn, importSettingsBtn, settingsImportFile].forEach((control) => {
     if (control) control.disabled = !ready;
   });
 }
@@ -934,6 +1300,7 @@ function updateUI(value) {
   // Update a text node instead of parsing dynamic content as HTML.
   volumeNumberText.textContent = String(percent);
   volumeValue.classList.toggle('boosted', percent > 100);
+  applyGtaVolumeNumberColor(percent, GTA6_COLOR_PALETTES[gtaPalette]);
   sliderFill.style.width = `${(percent / 600) * 100}%`;
   updateBadge(percent);
   presetBtns.forEach(btn => {
@@ -958,6 +1325,10 @@ function updateMuteButton() {
 // EN: Shows/hides the Bass Boost and Voice Boost cards from saved preferences.
 // RU: Показывает или скрывает карточки Bass Boost и Voice Boost согласно настройкам.
 // UK: Показує або приховує картки Bass Boost і Voice Boost відповідно до налаштувань.
+function isAudioEffectPanelVisible(userVisible, effectEnabled, hideInactive) {
+  return userVisible === true && (hideInactive !== true || effectEnabled === true);
+}
+
 function updateAudioPanelVisibilityUI() {
   if (showBassBoostPanelToggle) {
     showBassBoostPanelToggle.checked = showBassBoostPanel;
@@ -969,8 +1340,75 @@ function updateAudioPanelVisibilityUI() {
     showVoiceBoostPanelToggle.disabled = !settingsPreferencesReady;
     showVoiceBoostPanelToggle.setAttribute('aria-label', t('showVoiceBoostPanelLabel'));
   }
-  if (bassBoostPanel) bassBoostPanel.hidden = !showBassBoostPanel;
-  if (voiceBoostPanel) voiceBoostPanel.hidden = !showVoiceBoostPanel;
+  if (hideInactiveEffectsToggle) {
+    hideInactiveEffectsToggle.checked = hideInactiveEffects;
+    hideInactiveEffectsToggle.disabled = !settingsPreferencesReady;
+    hideInactiveEffectsToggle.setAttribute('aria-label', t('hideInactiveEffectsLabel'));
+  }
+  if (bassBoostPanel) bassBoostPanel.hidden = !isAudioEffectPanelVisible(showBassBoostPanel, bassBoostEnabled, hideInactiveEffects);
+  if (voiceBoostPanel) voiceBoostPanel.hidden = !isAudioEffectPanelVisible(showVoiceBoostPanel, voiceBoostEnabled, hideInactiveEffects);
+}
+
+async function setHideInactiveEffects(enabled) {
+  const previous = hideInactiveEffects;
+  hideInactiveEffects = enabled === true;
+  updateAudioPanelVisibilityUI();
+  try {
+    await writeLocalSettings({ hideInactiveEffects });
+    return true;
+  } catch (error) {
+    hideInactiveEffects = previous;
+    updateAudioPanelVisibilityUI();
+    showStatus(t('settingsSaveError'), true);
+    return false;
+  }
+}
+
+// EN: Shows or hides the AUTO/MANUAL · dB readout independently on each EQ card.
+// RU: Независимо показывает или скрывает строку «Авто/Ручной · dB» в каждой карточке EQ.
+// UK: Незалежно показує або приховує рядок «Авто/Ручний · dB» у кожній картці EQ.
+function updateBoostModeValueLabelsUI() {
+  // Preserve the legacy combined key as true; new per-card preferences own visibility.
+  showBoostModeValueLabels = true;
+  if (bassBoostValue) bassBoostValue.hidden = !showBassBoostModeStatus;
+  if (voiceBoostValue) voiceBoostValue.hidden = !showVoiceBoostModeStatus;
+  if (settingsBassModeStatusToggle) {
+    settingsBassModeStatusToggle.checked = showBassBoostModeStatus;
+    settingsBassModeStatusToggle.disabled = !settingsPreferencesReady;
+    settingsBassModeStatusToggle.setAttribute('aria-label', t('bassAutoModeSettingLabel'));
+  }
+  if (settingsVoiceModeStatusToggle) {
+    settingsVoiceModeStatusToggle.checked = showVoiceBoostModeStatus;
+    settingsVoiceModeStatusToggle.disabled = !settingsPreferencesReady;
+    settingsVoiceModeStatusToggle.setAttribute('aria-label', t('voiceAutoModeSettingLabel'));
+  }
+}
+
+// EN: Toggles only the mode/value readout; it never changes the actual AUTO/MANUAL audio mode.
+// RU: Переключает только видимость строки режима и dB, не меняя фактический режим обработки звука.
+// UK: Перемикає лише видимість рядка режиму та dB, не змінюючи фактичний режим обробки звуку.
+async function setBoostModeStatusVisibility(kind, enabled) {
+  const isBass = kind === 'bass';
+  const key = isBass ? 'showBassBoostModeStatus' : 'showVoiceBoostModeStatus';
+  const previous = isBass ? showBassBoostModeStatus : showVoiceBoostModeStatus;
+  const next = enabled === true;
+  if (previous === next) {
+    updateBoostModeValueLabelsUI();
+    return true;
+  }
+  if (isBass) showBassBoostModeStatus = next;
+  else showVoiceBoostModeStatus = next;
+  updateBoostModeValueLabelsUI();
+  try {
+    await writeLocalSettings({ [key]: next });
+    return true;
+  } catch (error) {
+    if (isBass) showBassBoostModeStatus = previous;
+    else showVoiceBoostModeStatus = previous;
+    updateBoostModeValueLabelsUI();
+    showStatus(t('settingsSaveError'), true);
+    return false;
+  }
 }
 
 // EN: Persists a card visibility choice and restores the old value on failure.
@@ -1001,6 +1439,7 @@ function getAvailableAutoGenreProfile(kind) {
   const dbKey = kind === 'bass' ? 'bassBoostDb' : 'voiceBoostDb';
   const enabledKey = kind === 'bass' ? 'bassBoostEnabled' : 'voiceBoostEnabled';
   if (!autoGenreEnabled || autoGenreStatus.enabled !== true || autoGenreStatus.active !== true ||
+      typeof autoGenreStatus.genre !== 'string' ||
       !Object.prototype.hasOwnProperty.call(AUTO_GENRE_LABELS, autoGenreStatus.genre) ||
       typeof autoGenreStatus[enabledKey] !== 'boolean' || !Number.isFinite(autoGenreStatus[dbKey])) return null;
   return {
@@ -1016,6 +1455,20 @@ function getAvailableAutoGenreProfile(kind) {
 function getAppliedAutoBassProfile() {
   if (autoGenreBassManualOverride) return null;
   return getAvailableAutoGenreProfile('bass');
+}
+
+// EN: Formats the displayed dB value consistently for Bass Boost and Voice Boost.
+// RU: Единообразно форматирует значение dB для Bass Boost и Voice Boost.
+// UK: Однаково форматує значення dB для Bass Boost і Voice Boost.
+function formatBoostValueText(effectEnabled, autoProfile, manualDb, manualOverride = false) {
+  // Keep the mode and its effective dB value visible in both AUTO and MANUAL.
+  // When AUTO is selected but no genre profile is available yet, show its safe 0 dB baseline.
+  const usingAuto = manualOverride !== true;
+  const displayedDb = effectEnabled
+    ? (usingAuto ? (autoProfile ? autoProfile.db : 0) : manualDb)
+    : 0;
+  const modeLabel = usingAuto ? t('bassAutoBadge') : t('manualOverrideBadge');
+  return `${modeLabel} · ${displayedDb > 0 ? '+' : ''}${displayedDb} dB`;
 }
 
 // EN: Synchronizes the Bass Boost power switch, dB slider, mode badge, and disabled styling.
@@ -1035,9 +1488,8 @@ function updateBassUI() {
   const displayedBassDb = displayedBassEnabled ? (autoProfile ? autoProfile.db : bassBoostDb) : 0;
   const autoProfileLabel = availableProfile ? t(AUTO_GENRE_LABELS[availableProfile.genre]) : '';
 
-  bassBoostValue.textContent = displayedBassEnabled && autoProfile && autoProfile.db === 0
-    ? t('autoZeroDbLabel')
-    : `${displayedBassDb > 0 ? '+' : ''}${displayedBassDb} dB`;
+  bassBoostValue.textContent = formatBoostValueText(displayedBassEnabled, autoProfile, bassBoostDb, manualOverride);
+  bassBoostValue.hidden = !showBassBoostModeStatus;
   if (bassBoostPanel) bassBoostPanel.classList.toggle('is-effect-disabled', !displayedBassEnabled);
   bassBoostToggle.checked = displayedBassEnabled;
   if (quickBassBoostToggle) { quickBassBoostToggle.checked = displayedBassEnabled; quickBassBoostToggle.disabled = !settingsPreferencesReady; quickBassBoostToggle.setAttribute('aria-label', t('serviceProfileBassEnabledLabel')); }
@@ -1048,6 +1500,11 @@ function updateBassUI() {
     settingsBassBoostToggle.checked = displayedBassEnabled;
     settingsBassBoostToggle.disabled = !settingsPreferencesReady;
     settingsBassBoostToggle.setAttribute('aria-label', t('bassEffectEnabledLabel'));
+  }
+  if (settingsBassModeStatusToggle) {
+    settingsBassModeStatusToggle.checked = showBassBoostModeStatus;
+    settingsBassModeStatusToggle.disabled = !settingsPreferencesReady;
+    settingsBassModeStatusToggle.setAttribute('aria-label', t('bassAutoModeSettingLabel'));
   }
   bassBoostSlider.value = String(displayedBassDb);
   // A disabled effect is shown grey and its intensity slider is inactive.
@@ -1070,6 +1527,7 @@ function updateBassUI() {
   bassBoostSlider.setAttribute('title', autoProfile
     ? t('bassAutoValueTitle', { genre: autoProfileLabel, value: displayedBassDb })
     : t('bassSliderLabel'));
+  updateAudioPanelVisibilityUI();
   updateProtectionUI();
 }
 
@@ -1099,8 +1557,9 @@ function updateVoiceUI() {
   const displayedVoiceDb = displayedVoiceEnabled ? (autoProfile ? autoProfile.db : voiceBoostDb) : 0;
   const autoProfileLabel = availableProfile ? t(AUTO_GENRE_LABELS[availableProfile.genre]) : '';
 
-  // Keep the numeric value separate from the mode badge; never append AUTO to dB.
-  voiceBoostValue.textContent = `${displayedVoiceDb > 0 ? '+' : ''}${displayedVoiceDb} dB`;
+  // Match Bass Boost: an active automatic zero-gain profile reads AUTO · 0 dB.
+  voiceBoostValue.textContent = formatBoostValueText(displayedVoiceEnabled, autoProfile, voiceBoostDb, manualOverride);
+  voiceBoostValue.hidden = !showVoiceBoostModeStatus;
   if (voiceBoostPanel) voiceBoostPanel.classList.toggle('is-effect-disabled', !displayedVoiceEnabled);
   voiceBoostToggle.checked = displayedVoiceEnabled;
   if (quickVoiceBoostToggle) { quickVoiceBoostToggle.checked = displayedVoiceEnabled; quickVoiceBoostToggle.disabled = !settingsPreferencesReady; quickVoiceBoostToggle.setAttribute('aria-label', t('serviceProfileVoiceEnabledLabel')); }
@@ -1109,6 +1568,11 @@ function updateVoiceUI() {
     settingsVoiceBoostToggle.checked = displayedVoiceEnabled;
     settingsVoiceBoostToggle.disabled = !settingsPreferencesReady;
     settingsVoiceBoostToggle.setAttribute('aria-label', t('voiceEffectEnabledLabel'));
+  }
+  if (settingsVoiceModeStatusToggle) {
+    settingsVoiceModeStatusToggle.checked = showVoiceBoostModeStatus;
+    settingsVoiceModeStatusToggle.disabled = !settingsPreferencesReady;
+    settingsVoiceModeStatusToggle.setAttribute('aria-label', t('voiceAutoModeSettingLabel'));
   }
   voiceBoostSlider.value = String(displayedVoiceDb);
   // A disabled effect is shown grey and its intensity slider is inactive.
@@ -1132,13 +1596,14 @@ function updateVoiceUI() {
   voiceBoostSlider.setAttribute('title', autoProfile
     ? t('bassAutoValueTitle', { genre: autoProfileLabel, value: displayedVoiceDb })
     : t('voiceSliderLabel'));
+  updateAudioPanelVisibilityUI();
   updateProtectionUI();
 }
 
 // EN: Stores whether Bass/Voice Boost uses manual values instead of the detected genre.
 // RU: Сохраняет выбор ручного значения вместо профиля определённого жанра.
 // UK: Зберігає вибір ручного значення замість профілю визначеного жанру.
-function setGenreParameterOverride(kind, enabled, refresh = true) {
+function setGenreParameterOverride(kind, enabled, refresh = true, persist = true) {
   const isBass = kind === 'bass';
   const next = enabled === true;
   const previous = isBass ? autoGenreBassManualOverride : autoGenreVoiceManualOverride;
@@ -1149,7 +1614,7 @@ function setGenreParameterOverride(kind, enabled, refresh = true) {
     autoGenreVoiceManualOverride = next;
     autoGenreStatus = { ...autoGenreStatus, voiceManualOverride: next };
   }
-  if (previous !== next) {
+  if (persist && previous !== next) {
     void writeLocalSettings({
       autoGenreBassManualOverride,
       autoGenreVoiceManualOverride,
@@ -1159,6 +1624,62 @@ function setGenreParameterOverride(kind, enabled, refresh = true) {
   if (refresh) {
     if (isBass) updateBassUI(); else updateVoiceUI();
   }
+  return previous !== next;
+}
+
+// EN: Applies and persists one EQ mode before sending it to the live audio graph.
+// RU: Сначала сохраняет отдельный режим EQ, затем передаёт его активному аудиографу.
+// UK: Спочатку зберігає окремий режим EQ, а потім передає його активному аудіографу.
+async function applyGenreParameterMode(kind, manualOverride) {
+  const isBass = kind === 'bass';
+  const previous = isBass ? autoGenreBassManualOverride : autoGenreVoiceManualOverride;
+  const next = manualOverride === true;
+  if (previous === next) {
+    if (isBass) updateBassUI(); else updateVoiceUI();
+    return true;
+  }
+
+  // Update the UI immediately, then ask the service worker to persist and apply
+  // this exact per-effect mode directly to the active offscreen audio graph.
+  setGenreParameterOverride(kind, next, false, false);
+  if (isBass) updateBassUI(); else updateVoiceUI();
+  updateProtectionUI();
+
+  try {
+    const result = await chrome.runtime.sendMessage({
+      type: 'EQ_MODE_SETTINGS',
+      kind,
+      enabled: !next
+    });
+    if (!result || result.success !== true) {
+      throw new Error(result && result.error ? result.error : 'The audio processor did not confirm the EQ mode change.');
+    }
+    if (result.storagePersisted === false && result.applied !== true) {
+      throw new Error('The mode could not be saved or applied to an active audio stream.');
+    }
+    if (result.storagePersisted === false) {
+      showStatus(t('eqModeAppliedNotSaved'), true);
+    } else if (!result.applied) {
+      showStatus(t('audioSettingsSavedPendingCapture'));
+    } else {
+      showStatus(t('audioSettingsApplied'));
+    }
+    return true;
+  } catch (error) {
+    // Roll back both the switch and the displayed mode if saving or live apply failed.
+    setGenreParameterOverride(kind, previous, false, false);
+    if (isBass) updateBassUI(); else updateVoiceUI();
+    updateProtectionUI();
+    // Keep background storage consistent with the rolled-back checkbox state.
+    await chrome.runtime.sendMessage({
+      type: 'EQ_MODE_SETTINGS',
+      kind,
+      enabled: !previous
+    }).catch((rollbackError) => console.warn('Could not restore the previous EQ mode in background:', rollbackError));
+    console.warn('Could not change per-effect AUTO mode:', error);
+    showStatus(t('settingsSaveError'), true);
+    return false;
+  }
 }
 
 // EN: Switches one EQ control between AUTO and MANUAL without changing effect power.
@@ -1167,13 +1688,14 @@ function setGenreParameterOverride(kind, enabled, refresh = true) {
 async function toggleGenreParameterMode(kind) {
   const isBass = kind === 'bass';
   const currentManual = isBass ? autoGenreBassManualOverride : autoGenreVoiceManualOverride;
+  return applyGenreParameterMode(kind, !currentManual);
+}
 
-  // AUTO/MANUAL only selects whether the genre profile or the saved manual dB value
-  // is used. It never changes the independent power toggle for either effect.
-  setGenreParameterOverride(kind, !currentManual, false);
-  if (isBass) updateBassUI(); else updateVoiceUI();
-  updateProtectionUI();
-  await sendVolume(Number.parseInt(slider.value, 10));
+// EN: Sets one effect's AUTO/MANUAL mode directly from its settings checkbox.
+// RU: Напрямую задаёт режим AUTO/РУЧНОЙ для эффекта из переключателя настроек.
+// UK: Безпосередньо задає режим AUTO/РУЧНИЙ для ефекту з перемикача налаштувань.
+async function setGenreParameterAutoMode(kind, enabled) {
+  return applyGenreParameterMode(kind, !enabled);
 }
 
 // EN: Checks the effective current EQ and volume for an excessive-gain warning.
@@ -1189,14 +1711,26 @@ function hasExcessiveGainRisk() {
   const effectiveBassDb = autoBassProfile ? autoBassProfile.db : bassBoostDb;
   const effectiveVoiceEnabled = voiceBoostEnabled && (!autoVoiceProfile || autoVoiceProfile.enabled);
   const effectiveVoiceDb = autoVoiceProfile ? autoVoiceProfile.db : voiceBoostDb;
-  return volumePercent >= 500 ||
-    (volumePercent >= 300 && effectiveBassEnabled && effectiveBassDb >= 3) ||
-    (volumePercent >= 400 && effectiveVoiceEnabled && effectiveVoiceDb >= 5);
+  // Match the offscreen engine: adaptive genre loudness trim contributes to the
+  // effective output gain even when Bass/Voice use a manual dB override.
+  const status = autoGenreStatus && typeof autoGenreStatus === 'object' ? autoGenreStatus : null;
+  const effectiveVolumeTrimDb = autoGenreEnabled && status && status.enabled === true && status.active === true &&
+    typeof status.genre === 'string' && Number.isFinite(status.volumeTrimDb)
+      ? Math.max(-2, Math.min(1, status.volumeTrimDb)) : 0;
+  const effectiveVolume = Math.min(6, (volumePercent / 100) * Math.pow(10, effectiveVolumeTrimDb / 20));
+  return effectiveVolume >= 5 ||
+    (effectiveVolume >= 3 && effectiveBassEnabled && effectiveBassDb >= 3) ||
+    (effectiveVolume >= 4 && effectiveVoiceEnabled && effectiveVoiceDb >= 5);
 }
 
 // EN: Protection state combines limiter preference, recent clipping samples and a high-gain warning.
 // RU: Состояние защиты объединяет настройку ограничителя, недавние пики и предупреждение о чрезмерном усилении.
 // UK: Стан захисту поєднує налаштування обмежувача, недавні піки та попередження про надмірне підсилення.
+function shouldHideProtectionIndicator({ showAll, showWarnings, limiterEnabled, showLimiterOff, highGain, clipping }) {
+  if (!showAll || !showWarnings) return true;
+  return limiterEnabled === false && showLimiterOff !== true && highGain !== true && clipping !== true;
+}
+
 function updateProtectionUI() {
   if (!audioProtectionIndicator || !audioProtectionTitle || !audioProtectionDescription || !peakLimiterBadge) return;
   const highGain = hasExcessiveGainRisk();
@@ -1212,11 +1746,11 @@ function updateProtectionUI() {
     state = 'warning';
     titleKey = 'protectionHighGainTitle';
     descriptionKey = 'protectionHighGainDescription';
-  } else if (!peakLimiterEnabled) {
+  } else if (!peakLimiterEnabled && showLimiterOffWarning) {
     state = 'limiter-off';
     titleKey = 'protectionLimiterOffTitle';
     descriptionKey = 'protectionLimiterOffDescription';
-  } else if (!protectionMonitorActive) {
+  } else if (!protectionMonitorActive && peakLimiterEnabled) {
     state = 'waiting';
     titleKey = 'protectionWaitingTitle';
     descriptionKey = 'protectionWaitingDescription';
@@ -1224,7 +1758,14 @@ function updateProtectionUI() {
 
   // This preference controls visibility of the entire protection status card, including
   // the “Peak limiter is off” message. Peak detection and audio protection keep running.
-  audioProtectionIndicator.hidden = !showAllMessages || !showClippingWarning;
+  audioProtectionIndicator.hidden = shouldHideProtectionIndicator({
+    showAll: showAllMessages,
+    showWarnings: showClippingWarning,
+    limiterEnabled: peakLimiterEnabled,
+    showLimiterOff: showLimiterOffWarning,
+    highGain,
+    clipping: peakClippingDetected
+  });
   audioProtectionIndicator.dataset.state = state;
   audioProtectionTitle.textContent = t(titleKey);
   audioProtectionDescription.textContent = t(descriptionKey);
@@ -1243,10 +1784,33 @@ function updateProtectionUI() {
 // RU: Синхронизирует настройку отображения предупреждений о пиках.
 // UK: Синхронізує налаштування показу попереджень про піки.
 function updateClippingWarningSettingUI() {
-  if (!showClippingWarningToggle) return;
-  showClippingWarningToggle.checked = showClippingWarning;
-  showClippingWarningToggle.disabled = !settingsPreferencesReady;
-  showClippingWarningToggle.setAttribute('aria-label', t('showClippingWarningLabel'));
+  if (showClippingWarningToggle) {
+    showClippingWarningToggle.checked = showClippingWarning;
+    showClippingWarningToggle.disabled = !settingsPreferencesReady;
+    showClippingWarningToggle.setAttribute('aria-label', t('showClippingWarningLabel'));
+  }
+  if (showLimiterOffWarningToggle) {
+    showLimiterOffWarningToggle.checked = showLimiterOffWarning;
+    showLimiterOffWarningToggle.disabled = !settingsPreferencesReady;
+    showLimiterOffWarningToggle.setAttribute('aria-label', t('showLimiterOffWarningLabel'));
+  }
+}
+
+async function setShowLimiterOffWarning(enabled) {
+  const previous = showLimiterOffWarning;
+  showLimiterOffWarning = enabled === true;
+  updateClippingWarningSettingUI();
+  updateProtectionUI();
+  try {
+    await writeLocalSettings({ showLimiterOffWarning });
+    return true;
+  } catch (error) {
+    showLimiterOffWarning = previous;
+    updateClippingWarningSettingUI();
+    updateProtectionUI();
+    showStatus(t('settingsSaveError'), true);
+    return false;
+  }
 }
 
 // EN: Saves clipping-warning visibility and reverts the switch if saving fails.
@@ -1308,13 +1872,15 @@ function updateAllMessagesVisibilityUI() {
 
   // The regular status line is a transient notice surface, not an audio control.
   if (status) {
-    status.hidden = !showAllMessages;
     if (!showAllMessages) {
       clearTimeout(statusTimer);
-      status.textContent = '';
-      status.classList.remove('success', 'error');
-    } else if (!status.textContent) {
-      status.textContent = t('ready');
+      statusMessageElement.textContent = '';
+      statusMessageElement.classList.remove('success', 'error');
+      statusMessageElement.hidden = true;
+    } else {
+      // Keep the status area hidden until there is a real notice; the Done button
+      // is the persistent action at the bottom of the main popup.
+      statusMessageElement.hidden = !statusMessageElement.textContent;
     }
   }
   // The LIVE/IDLE label is also a status badge; hiding it does not stop the visualizer.
@@ -1355,6 +1921,40 @@ function updateQuickSettingsVisibilityUI() {
     showQuickSettingsToggle.setAttribute('aria-label', t('showQuickSettingsLabel'));
   }
   if (quickSettingsPanel) quickSettingsPanel.hidden = !showQuickSettings;
+  updateQuickSettingsExpandedUI();
+}
+
+// EN: Updates the quick-settings accordion without changing any quick-toggle values.
+// RU: Обновляет сворачивание быстрых настроек, не меняя значения быстрых переключателей.
+// UK: Оновлює згортання швидких налаштувань, не змінюючи значення швидких перемикачів.
+function updateQuickSettingsExpandedUI() {
+  const expanded = quickSettingsExpanded === true;
+  if (quickSettingsGrid) quickSettingsGrid.hidden = !expanded;
+  if (quickSettingsExpandToggle) {
+    const label = t(expanded ? 'quickSettingsCollapseLabel' : 'quickSettingsExpandLabel');
+    quickSettingsExpandToggle.setAttribute('aria-expanded', String(expanded));
+    quickSettingsExpandToggle.setAttribute('aria-label', label);
+    quickSettingsExpandToggle.setAttribute('title', label);
+    quickSettingsExpandToggle.classList.toggle('is-expanded', expanded);
+  }
+}
+
+// EN: Persists the expand/collapse state of the quick-settings panel and rolls back on storage errors.
+// RU: Сохраняет состояние раскрытия быстрых настроек и откатывает его при ошибке хранилища.
+// UK: Зберігає стан розгортання швидких налаштувань і повертає його назад у разі помилки сховища.
+async function setQuickSettingsExpanded(expanded) {
+  const previous = quickSettingsExpanded;
+  const next = expanded === true;
+  if (previous === next) return;
+  quickSettingsExpanded = next;
+  updateQuickSettingsExpandedUI();
+  try {
+    await writeLocalSettings({ quickSettingsExpanded: next });
+  } catch (error) {
+    quickSettingsExpanded = previous;
+    updateQuickSettingsExpandedUI();
+    showStatus(t('settingsSaveError'), true);
+  }
 }
 
 // EN: Persists the visibility preference for the quick-settings group.
@@ -1373,89 +1973,10 @@ async function setShowQuickSettings(enabled) {
   }
 }
 
-const AUTO_GENRE_LABELS = {
-  hiphop: 'autoGenreHipHop',
-  trap: 'autoGenreTrap',
-  drill: 'autoGenreDrill',
-  grime: 'autoGenreGrime',
-  phonk: 'autoGenrePhonk',
-  wave: 'autoGenreWave',
-  lofi: 'autoGenreLofi',
-  ambient: 'autoGenreAmbient',
-  newAge: 'autoGenreNewAge',
-  chillout: 'autoGenreChillout',
-  pop: 'autoGenrePop',
-  dancePop: 'autoGenreDancePop',
-  kpop: 'autoGenreKpop',
-  jpop: 'autoGenreJpop',
-  indiePop: 'autoGenreIndiePop',
-  hyperpop: 'autoGenreHyperpop',
-  rock: 'autoGenreRock',
-  altRock: 'autoGenreAltRock',
-  hardRock: 'autoGenreHardRock',
-  postRock: 'autoGenrePostRock',
-  metal: 'autoGenreMetal',
-  metalcore: 'autoGenreMetalcore',
-  punk: 'autoGenrePunk',
-  indie: 'autoGenreIndie',
-  grunge: 'autoGenreGrunge',
-  emo: 'autoGenreEmo',
-  shoegaze: 'autoGenreShoegaze',
-  jazz: 'autoGenreJazz',
-  blues: 'autoGenreBlues',
-  funk: 'autoGenreFunk',
-  soul: 'autoGenreSoul',
-  rnb: 'autoGenreRnb',
-  disco: 'autoGenreDisco',
-  country: 'autoGenreCountry',
-  folk: 'autoGenreFolk',
-  bluegrass: 'autoGenreBluegrass',
-  acoustic: 'autoGenreAcoustic',
-  classical: 'autoGenreClassical',
-  orchestral: 'autoGenreOrchestral',
-  soundtrack: 'autoGenreSoundtrack',
-  gameMusic: 'autoGenreGameMusic',
-  animeMusic: 'autoGenreAnimeMusic',
-  opera: 'autoGenreOpera',
-  electronic: 'autoGenreElectronic',
-  house: 'autoGenreHouse',
-  deepHouse: 'autoGenreDeepHouse',
-  progressiveHouse: 'autoGenreProgressiveHouse',
-  techno: 'autoGenreTechno',
-  trance: 'autoGenreTrance',
-  dubstep: 'autoGenreDubstep',
-  drumBass: 'autoGenreDrumBass',
-  jungle: 'autoGenreJungle',
-  breakbeat: 'autoGenreBreakbeat',
-  electro: 'autoGenreElectro',
-  hardstyle: 'autoGenreHardstyle',
-  synthwave: 'autoGenreSynthwave',
-  vaporwave: 'autoGenreVaporwave',
-  tripHop: 'autoGenreTripHop',
-  garage: 'autoGenreGarage',
-  reggae: 'autoGenreReggae',
-  dancehall: 'autoGenreDancehall',
-  ska: 'autoGenreSka',
-  reggaeton: 'autoGenreReggaeton',
-  salsa: 'autoGenreSalsa',
-  bachata: 'autoGenreBachata',
-  cumbia: 'autoGenreCumbia',
-  afrobeats: 'autoGenreAfrobeats',
-  amapiano: 'autoGenreAmapiano',
-  gospel: 'autoGenreGospel',
-  latin: 'autoGenreLatin',
-  bossaNova: 'autoGenreBossaNova',
-  samba: 'autoGenreSamba',
-  tango: 'autoGenreTango',
-  flamenco: 'autoGenreFlamenco',
-  bollywood: 'autoGenreBollywood',
-  experimental: 'autoGenreExperimental',
-  audioBassHeavy: 'autoGenreAudioBassHeavy',
-  audioElectronic: 'autoGenreAudioElectronic',
-  audioAtmospheric: 'autoGenreAudioAtmospheric',
-  audioVocal: 'autoGenreAudioVocal',
-  audioOther: 'autoGenreAudioOther'
-};
+// Genre labels come from shared/genres.js; keep popup usable if the optional catalogue fails to load.
+const AUTO_GENRE_LABELS = typeof VCPGenres !== 'undefined' && VCPGenres && VCPGenres.labelKeys
+  ? VCPGenres.labelKeys
+  : Object.freeze(Object.create(null));
 
 // EN: Displays detected track/genre status and syncs quick toggles with stored preferences.
 // RU: Показывает состояние трека/жанра и синхронизирует быстрые переключатели с настройками.
@@ -1516,7 +2037,8 @@ function updateAutoGenreStatusUI() {
     autoGenreTrackTitle.title = autoGenreStatus.trackTitle || '';
   }
 
-  const genre = Object.prototype.hasOwnProperty.call(AUTO_GENRE_LABELS, autoGenreStatus.genre)
+  const genre = typeof autoGenreStatus.genre === 'string' &&
+    Object.prototype.hasOwnProperty.call(AUTO_GENRE_LABELS, autoGenreStatus.genre)
     ? autoGenreStatus.genre : null;
   if (!autoGenreStatus.active) {
     autoGenreStatusCard.dataset.state = 'waiting';
@@ -1561,32 +2083,44 @@ function updateAutoGenreStatusUI() {
   }
 }
 
-// EN: Persists genre-analysis mode and resets individual EQ overrides to AUTO.
-// RU: Сохраняет режим определения жанра и возвращает индивидуальные регуляторы EQ в AUTO.
-// UK: Зберігає режим визначення жанру та повертає індивідуальні регулятори EQ в AUTO.
+// EN: Persists global genre analysis without changing the independent Bass/Voice AUTO/MANUAL choices.
+// RU: Сохраняет общий режим определения жанра, не меняя независимые режимы Bass/Voice AUTO/РУЧНОЙ.
+// UK: Зберігає загальний режим визначення жанру, не змінюючи незалежні режими Bass/Voice AUTO/РУЧНИЙ.
 async function setAutoGenreEnabled(enabled) {
   const previous = autoGenreEnabled;
   const previousBassManual = autoGenreBassManualOverride;
   const previousVoiceManual = autoGenreVoiceManualOverride;
   autoGenreEnabled = enabled === true;
-  // Turning genre automation off/on returns both EQ parameters to the default AUTO mode.
-  autoGenreBassManualOverride = false;
-  autoGenreVoiceManualOverride = false;
-  autoGenreStatus = { ...autoGenreStatus, bassManualOverride: false, voiceManualOverride: false };
+  // Global genre detection is independent from the per-effect AUTO/MANUAL choices.
+  // Preserve each user's Bass and Voice preference when detection is paused/resumed.
+  autoGenreStatus = {
+    ...autoGenreStatus,
+    bassManualOverride: autoGenreBassManualOverride,
+    voiceManualOverride: autoGenreVoiceManualOverride
+  };
   updateBassUI();
   updateVoiceUI();
   updateAutoGenreStatusUI();
   try {
-    await writeLocalSettings({
-      autoGenreEnabled,
-      autoGenreBassManualOverride: false,
-      autoGenreVoiceManualOverride: false,
-      genreParameterModeVersion: GENRE_PARAMETER_MODE_VERSION
-    });
+    let settingsPersisted = true;
+    try {
+      await writeLocalSettings({
+        autoGenreEnabled,
+        autoGenreBassManualOverride,
+        autoGenreVoiceManualOverride,
+        genreParameterModeVersion: GENRE_PARAMETER_MODE_VERSION
+      });
+    } catch (storageError) {
+      settingsPersisted = false;
+      console.warn('Could not persist automatic genre setting; continuing with the live setting:', storageError?.message || storageError);
+    }
     const result = await chrome.runtime.sendMessage({ type: 'AUTO_GENRE_SETTINGS', enabled: autoGenreEnabled });
     if (result && result.success === false) throw new Error(result.error || 'Could not apply automatic genre settings');
+    if (result && result.storagePersisted === false) settingsPersisted = false;
     await sendVolume(Number.parseInt(slider.value, 10));
-    showStatus(t(autoGenreEnabled ? 'autoGenreEnabledStatus' : 'autoGenreDisabledStatus'));
+    showStatus(settingsPersisted
+      ? t(autoGenreEnabled ? 'autoGenreEnabledStatus' : 'autoGenreDisabledStatus')
+      : t('autoGenreAppliedNotSaved'), !settingsPersisted);
   } catch (error) {
     autoGenreEnabled = previous;
     autoGenreBassManualOverride = previousBassManual;
@@ -1597,7 +2131,23 @@ async function setAutoGenreEnabled(enabled) {
       autoGenreBassManualOverride: previousBassManual,
       autoGenreVoiceManualOverride: previousVoiceManual,
       genreParameterModeVersion: GENRE_PARAMETER_MODE_VERSION
-    }).catch(() => {});
+    }).catch((storageError) => {
+      console.warn('Could not persist automatic genre rollback:', storageError?.message || storageError);
+    });
+    // The service worker may have persisted/applied the new value before its response
+    // was lost. Explicitly restore its state and reapply the old audio settings too.
+    try {
+      const rollbackResult = await chrome.runtime.sendMessage({
+        type: 'AUTO_GENRE_SETTINGS',
+        enabled: previous
+      });
+      if (rollbackResult && rollbackResult.success === false) {
+        throw new Error(rollbackResult.error || 'Background rejected automatic genre rollback.');
+      }
+      await sendVolume(Number.parseInt(slider.value, 10));
+    } catch (rollbackError) {
+      console.warn('Could not restore the previous automatic genre state:', rollbackError?.message || rollbackError);
+    }
     updateBassUI();
     updateVoiceUI();
     updateAutoGenreStatusUI();
@@ -1610,7 +2160,8 @@ async function setAutoGenreEnabled(enabled) {
 // UK: Перевіряє статус від аудіорушія та оновлює картку жанру.
 function acceptAutoGenreStatus(message) {
   if (!message || typeof message.enabled !== 'boolean' || typeof message.active !== 'boolean') return;
-  const genre = Object.prototype.hasOwnProperty.call(AUTO_GENRE_LABELS, message.genre) ? message.genre : null;
+  const genre = typeof message.genre === 'string' &&
+    Object.prototype.hasOwnProperty.call(AUTO_GENRE_LABELS, message.genre) ? message.genre : null;
   autoGenreStatus = {
     enabled: message.enabled,
     active: message.active,
@@ -1862,22 +2413,228 @@ async function markAudioPresetCustom() {
   await saveAudioPresetSelection('custom');
 }
 
+// EN: Builds a safe, balanced starter configuration while preserving the user's language and appearance choices.
+// RU: Создаёт безопасный сбалансированный профиль, сохраняя язык и выбранное оформление пользователя.
+// UK: Створює безпечний збалансований профіль, зберігаючи мову та вибране оформлення користувача.
+function buildRecommendedSettings(preserved = {}) {
+  const youtubeProfile = normalizeServiceAudioProfile(preserved.youtubeAudioProfile);
+  const spotifyProfile = normalizeServiceAudioProfile(preserved.spotifyAudioProfile);
+  // Keep per-site values intact, but disable their overrides so the recommended global profile is consistent.
+  youtubeProfile.enabled = false;
+  spotifyProfile.enabled = false;
+  return {
+    language: ['ru', 'en', 'uk'].includes(preserved.language) ? preserved.language : 'ru',
+    themeMode: ['dark', 'light', 'system'].includes(preserved.themeMode) ? preserved.themeMode : 'system',
+    gtaPalette: GTA6_PALETTE_IDS.includes(preserved.gtaPalette) ? preserved.gtaPalette : 'gta-21',
+    gtaPaletteVersion: GTA6_PALETTE_VERSION,
+    rgbGlow: true,
+    showScrollbar: true,
+    gtaPaletteGalleryExpanded: false,
+    volume: 1,
+    muted: false,
+    lastBoostValue: 200,
+    bassBoostEnabled: true,
+    bassBoostDb: 4,
+    voiceBoostEnabled: true,
+    voiceBoostDb: 2,
+    activeAudioPreset: 'default',
+    audioPresetTuningVersion: 3,
+    peakLimiterEnabled: true,
+    showClippingWarning: true,
+    showLimiterOffWarning: false,
+    nightModeEnabled: false,
+    autoGenreEnabled: true,
+    autoGenreBassManualOverride: false,
+    autoGenreVoiceManualOverride: false,
+    genreParameterModeVersion: GENRE_PARAMETER_MODE_VERSION,
+    visualizerStyle: 'bars',
+    visualizerPalette: 'gta',
+    visualizerGtaThemeVersion: VISUALIZER_GTA_THEME_VERSION,
+    visualizerGlowEnabled: true,
+    visualizerPeakHoldEnabled: true,
+    spectrogramGridEnabled: true,
+    spectrogramSmoothingEnabled: true,
+    spectrogramGlowEnabled: true,
+    visualizerSensitivity: 100,
+    visualizerBands: 48,
+    spectrogramPalette: 'gta',
+    spectrogramDuration: 4,
+    visualizerAnimationEnabled: true,
+    showFrequencyVisualizer: true,
+    showSpectrogram: true,
+    showBassBoostPanel: true,
+    showVoiceBoostPanel: true,
+    hideInactiveEffects: false,
+    showBoostModeValueLabels: true,
+    showBassBoostModeStatus: true,
+    showVoiceBoostModeStatus: true,
+    showAllMessages: true,
+    showCaptureStatusIndicator: true,
+    showQuickSettings: true,
+    quickSettingsExpanded: false,
+    energySavingEnabled: true,
+    energySavingMode: 'balanced',
+    youtubeAudioProfile: youtubeProfile,
+    spotifyAudioProfile: spotifyProfile,
+    balancedSettingsProfileVersion: 2
+  };
+}
+
+// EN: Applies the recommended profile atomically, then synchronizes the live audio and visualizer pipelines.
+// RU: Применяет рекомендуемый профиль целиком, затем синхронизирует работающий звук и визуализаторы.
+// UK: Застосовує рекомендований профіль повністю, а потім синхронізує активний звук і візуалізатори.
+async function applyRecommendedSettings() {
+  if (!settingsPreferencesReady) return;
+  const recommended = buildRecommendedSettings({
+    language,
+    themeMode,
+    gtaPalette,
+    youtubeAudioProfile: serviceAudioProfiles.youtube,
+    spotifyAudioProfile: serviceAudioProfiles.spotify
+  });
+
+  try {
+    // Persist first: storage failure must not leave half-updated runtime/UI state.
+    await writeLocalSettings(recommended);
+
+    bassBoostEnabled = recommended.bassBoostEnabled;
+    bassBoostDb = recommended.bassBoostDb;
+    voiceBoostEnabled = recommended.voiceBoostEnabled;
+    voiceBoostDb = recommended.voiceBoostDb;
+    peakLimiterEnabled = recommended.peakLimiterEnabled;
+    showClippingWarning = recommended.showClippingWarning;
+    showLimiterOffWarning = recommended.showLimiterOffWarning;
+    nightModeEnabled = recommended.nightModeEnabled;
+    autoGenreEnabled = recommended.autoGenreEnabled;
+    autoGenreBassManualOverride = recommended.autoGenreBassManualOverride;
+    autoGenreVoiceManualOverride = recommended.autoGenreVoiceManualOverride;
+    autoGenreStatus = { ...autoGenreStatus, enabled: true, bassManualOverride: false, voiceManualOverride: false };
+    activeAudioPreset = recommended.activeAudioPreset;
+    isMuted = recommended.muted;
+    lastBoostValue = recommended.lastBoostValue;
+    serviceAudioProfiles = {
+      youtube: normalizeServiceAudioProfile(recommended.youtubeAudioProfile),
+      spotify: normalizeServiceAudioProfile(recommended.spotifyAudioProfile)
+    };
+    activePlatformProfileKey = null;
+    globalAudioSettings = {
+      volume: recommended.volume,
+      muted: recommended.muted,
+      bassBoostEnabled: recommended.bassBoostEnabled,
+      bassBoostDb: recommended.bassBoostDb,
+      voiceBoostEnabled: recommended.voiceBoostEnabled,
+      voiceBoostDb: recommended.voiceBoostDb,
+      peakLimiterEnabled: recommended.peakLimiterEnabled,
+      nightModeEnabled: recommended.nightModeEnabled,
+      activeAudioPreset: recommended.activeAudioPreset,
+      lastBoostValue: recommended.lastBoostValue
+    };
+
+    rgbGlowEnabled = recommended.rgbGlow;
+    showScrollbar = recommended.showScrollbar;
+    gtaPaletteGalleryExpanded = recommended.gtaPaletteGalleryExpanded;
+    quickSettingsExpanded = recommended.quickSettingsExpanded;
+    visualizerStyle = recommended.visualizerStyle;
+    visualizerPaletteMode = recommended.visualizerPalette;
+    visualizerGlowEnabled = recommended.visualizerGlowEnabled;
+    visualizerPeakHoldEnabled = recommended.visualizerPeakHoldEnabled;
+    spectrogramGridEnabled = recommended.spectrogramGridEnabled;
+    spectrogramSmoothingEnabled = recommended.spectrogramSmoothingEnabled;
+    spectrogramGlowEnabled = recommended.spectrogramGlowEnabled;
+    visualizerSensitivity = recommended.visualizerSensitivity;
+    savedVisualizerSensitivity = recommended.visualizerSensitivity;
+    visualizerBands = recommended.visualizerBands;
+    spectrogramPaletteMode = recommended.spectrogramPalette;
+    spectrogramDuration = recommended.spectrogramDuration;
+    visualizerAnimationEnabled = recommended.visualizerAnimationEnabled;
+    showFrequencyVisualizer = recommended.showFrequencyVisualizer;
+    showSpectrogram = recommended.showSpectrogram;
+    showBassBoostPanel = recommended.showBassBoostPanel;
+    showVoiceBoostPanel = recommended.showVoiceBoostPanel;
+    hideInactiveEffects = recommended.hideInactiveEffects;
+    showBoostModeValueLabels = true;
+    showBassBoostModeStatus = recommended.showBassBoostModeStatus;
+    showVoiceBoostModeStatus = recommended.showVoiceBoostModeStatus;
+    showAllMessages = recommended.showAllMessages;
+    showCaptureStatusIndicator = recommended.showCaptureStatusIndicator;
+    showQuickSettings = recommended.showQuickSettings;
+    energySavingEnabled = recommended.energySavingEnabled;
+    energySavingMode = recommended.energySavingMode;
+
+    slider.value = '100';
+    updateUI(100);
+    updateMuteButton();
+    updateBassUI();
+    updateVoiceUI();
+    updateAudioPresetUI();
+    updateBoostModeValueLabelsUI();
+    updateEnergySavingUI();
+    updateNightModeUI();
+    updateClippingWarningSettingUI();
+    updateProtectionUI();
+    updateCaptureStatusIndicatorVisibilityUI();
+    updateAllMessagesVisibilityUI();
+    updateQuickSettingsVisibilityUI();
+    updateAudioPanelVisibilityUI();
+    updateAutoGenreStatusUI();
+    updateGtaPaletteGalleryDisclosure();
+    updateScrollbarVisibilityUI();
+    applyTheme(themeMode);
+    syncServiceProfileUI();
+
+    spectrogramState.maxRows = Math.max(1, Math.round((spectrogramDuration * 1000) / getEnergySavingProfile().sampleIntervalMs));
+    spectrogramState.history = [];
+    resizeSpectrumBuffers(visualizerBands);
+    resizeSpectrumCanvas();
+    resizeSpectrogramCanvas();
+    updateVisualizerSettingsUI({ clearHistory: true, redraw: true });
+
+    const autoGenreResult = await chrome.runtime.sendMessage({ type: 'AUTO_GENRE_SETTINGS', enabled: true }).catch(() => null);
+    const visualizerSettingsSaved = await persistVisualizerOptionsToBackground();
+    if (spectrumState.captureActive) {
+      const visualizerResult = await chrome.runtime.sendMessage({ type: 'VISUALIZER_CONTROL', enabled: shouldSampleSpectrum() }).catch(() => null);
+      if (!visualizerResult || visualizerResult.success !== true) {
+        console.warn('Recommended profile saved, but visualizer sampling could not be refreshed.');
+        acceptSpectrumMessage({ type: 'SPECTRUM_DATA', active: false, bins: [] });
+        stopSpectrumRendering();
+      } else if (shouldRenderFrequencySpectrum()) startSpectrumRendering();
+      else stopSpectrumRendering();
+    }
+
+    let liveAudioApplied = true;
+    if (currentTabHasCapture()) liveAudioApplied = await sendVolume(100);
+    if (autoGenreResult && autoGenreResult.success === false) console.warn('Recommended profile saved, but auto-genre settings could not be refreshed.');
+    if (!visualizerSettingsSaved) console.warn('Recommended profile saved, but visualizer settings could not be refreshed.');
+
+    if (!currentTabHasCapture()) {
+      showStatus(t('recommendedSettingsSavedPendingCapture'));
+    } else if (liveAudioApplied) {
+      showStatus(t('recommendedSettingsApplied'));
+    } else {
+      showStatus(t('recommendedSettingsSavedPendingAudio'), true);
+    }
+  } catch (error) {
+    console.error('Could not apply recommended settings:', error);
+    showStatus(t('recommendedSettingsFailed'), true);
+  }
+}
+
 // EN: Factory reset writes the full defaults first, then updates all UI/runtime state together.
 // RU: Сброс сначала сохраняет полный набор значений по умолчанию, затем обновляет интерфейс и runtime-состояние.
 // UK: Скидання спочатку зберігає повний набір типових значень, а потім оновлює інтерфейс і runtime-стан.
 async function resetFactorySettings() {
   const defaults = {
-    language: 'ru', themeMode: 'system', rgbGlow: true,
+    language: 'ru', themeMode: 'system', gtaPalette: 'classic', gtaPaletteVersion: GTA6_PALETTE_VERSION, rgbGlow: true, showScrollbar: true, gtaPaletteGalleryExpanded: true,
     volume: 1, muted: false, lastBoostValue: 200,
     bassBoostEnabled: true, bassBoostDb: 4,
     voiceBoostEnabled: true, voiceBoostDb: 2,
-    visualizerStyle: 'bars', visualizerPalette: 'neon', visualizerGlowEnabled: true, visualizerPeakHoldEnabled: true,
+    visualizerStyle: 'bars', visualizerPalette: 'gta', visualizerGtaThemeVersion: VISUALIZER_GTA_THEME_VERSION, visualizerGlowEnabled: true, visualizerPeakHoldEnabled: true,
     spectrogramGridEnabled: true, spectrogramSmoothingEnabled: true, spectrogramGlowEnabled: true,
     visualizerSensitivity: 100, visualizerBands: 48,
-    spectrogramPalette: 'neon', spectrogramDuration: 4, visualizerAnimationEnabled: true,
+    spectrogramPalette: 'gta', spectrogramDuration: 4, visualizerAnimationEnabled: true,
     showFrequencyVisualizer: true, showSpectrogram: true,
-    showBassBoostPanel: true, showVoiceBoostPanel: true, showQuickSettings: true,
-    peakLimiterEnabled: true, showClippingWarning: true, showAllMessages: true, showCaptureStatusIndicator: true, autoGenreEnabled: true, nightModeEnabled: false,
+    showBassBoostPanel: true, showVoiceBoostPanel: true, hideInactiveEffects: false, showBoostModeValueLabels: true, showBassBoostModeStatus: true, showVoiceBoostModeStatus: true, showQuickSettings: true, quickSettingsExpanded: false,
+    peakLimiterEnabled: true, showClippingWarning: true, showLimiterOffWarning: false, showAllMessages: true, showCaptureStatusIndicator: true, autoGenreEnabled: true, nightModeEnabled: false,
     energySavingEnabled: false, energySavingMode: 'balanced',
     activeAudioPreset: 'default', balancedSettingsProfileVersion: 1, audioPresetTuningVersion: 3,
     autoGenreBassManualOverride: false, autoGenreVoiceManualOverride: false, genreParameterModeVersion: GENRE_PARAMETER_MODE_VERSION,
@@ -1903,7 +2660,12 @@ async function resetFactorySettings() {
     activeAudioPreset = defaults.activeAudioPreset;
     language = defaults.language;
     themeMode = defaults.themeMode;
+    gtaPalette = defaults.gtaPalette;
     rgbGlowEnabled = defaults.rgbGlow;
+    showScrollbar = defaults.showScrollbar;
+    gtaPaletteGalleryExpanded = defaults.gtaPaletteGalleryExpanded;
+    updateGtaPaletteGalleryDisclosure();
+    updateScrollbarVisibilityUI();
     visualizerStyle = defaults.visualizerStyle;
     visualizerPaletteMode = defaults.visualizerPalette;
     visualizerGlowEnabled = defaults.visualizerGlowEnabled;
@@ -1920,11 +2682,17 @@ async function resetFactorySettings() {
     showSpectrogram = defaults.showSpectrogram;
     showBassBoostPanel = defaults.showBassBoostPanel;
     showVoiceBoostPanel = defaults.showVoiceBoostPanel;
+    hideInactiveEffects = defaults.hideInactiveEffects;
+    showBoostModeValueLabels = defaults.showBoostModeValueLabels;
+    showBassBoostModeStatus = defaults.showBassBoostModeStatus;
+    showVoiceBoostModeStatus = defaults.showVoiceBoostModeStatus;
     peakLimiterEnabled = defaults.peakLimiterEnabled;
     showClippingWarning = defaults.showClippingWarning;
+    showLimiterOffWarning = defaults.showLimiterOffWarning;
     showAllMessages = defaults.showAllMessages;
     showCaptureStatusIndicator = defaults.showCaptureStatusIndicator;
     showQuickSettings = defaults.showQuickSettings;
+    quickSettingsExpanded = defaults.quickSettingsExpanded;
     autoGenreEnabled = defaults.autoGenreEnabled;
     autoGenreBassManualOverride = false;
     autoGenreVoiceManualOverride = false;
@@ -1935,6 +2703,7 @@ async function resetFactorySettings() {
     updateEnergySavingUI();
     updateNightModeUI();
     updateClippingWarningSettingUI();
+    updateScrollbarVisibilityUI();
     updateCaptureStatusIndicatorVisibilityUI();
     updateAllMessagesVisibilityUI();
     updateQuickSettingsVisibilityUI();
@@ -1950,11 +2719,16 @@ async function resetFactorySettings() {
     syncServiceProfileUI();
     await persistVisualizerOptionsToBackground();
     if (spectrumState.captureActive) {
-      await chrome.runtime.sendMessage({ type: 'VISUALIZER_CONTROL', enabled: shouldSampleSpectrum() }).catch((error) => {
+      const visualizerResult = await chrome.runtime.sendMessage({ type: 'VISUALIZER_CONTROL', enabled: shouldSampleSpectrum() }).catch((error) => {
         console.debug('Could not apply visualizer sampling setting:', error?.message || error);
         return null;
       });
-      if (shouldRenderFrequencySpectrum()) startSpectrumRendering(); else stopSpectrumRendering();
+      if (!visualizerResult || visualizerResult.success !== true) {
+        console.warn('Factory reset completed, but offscreen did not confirm visualizer settings.');
+        acceptSpectrumMessage({ type: 'SPECTRUM_DATA', active: false, bins: [] });
+        stopSpectrumRendering();
+      } else if (shouldRenderFrequencySpectrum()) startSpectrumRendering();
+      else stopSpectrumRendering();
     }
 
     await loadTranslations(language);
@@ -1963,6 +2737,7 @@ async function resetFactorySettings() {
     updateMuteButton();
     updateBassUI();
     updateVoiceUI();
+    updateBoostModeValueLabelsUI();
     updateAudioPresetUI();
     updateUI(100);
     const appliedLive = await sendVolume(100);
@@ -2026,8 +2801,15 @@ function validateSettingsConfig(config) {
   const autoGenreKeys = ['autoGenreEnabled'];
   const serviceProfileKeys = ['youtubeAudioProfile', 'spotifyAudioProfile'];
   const genreParameterModeKeys = ['bassBoostMode', 'voiceBoostMode'];
+  const boostModeValueLabelKeys = ['showBoostModeValueLabels'];
+  const boostModeStatusVisibilityKeys = ['showBassBoostModeStatus', 'showVoiceBoostModeStatus'];
+  const v25DisplayPreferenceKeys = ['hideInactiveEffects', 'showLimiterOffWarning'];
+  const v26AppearanceKeys = ['showScrollbar'];
+  const v27AppearanceKeys = ['gtaPaletteGalleryExpanded'];
+  const v28QuickSettingsKeys = ['quickSettingsExpanded'];
   const nightModeKeys = ['nightModeEnabled'];
   const energySavingKeys = ['energySavingEnabled', 'energySavingMode'];
+  const gtaPaletteKeys = ['gtaPalette'];
   const visualizerEffectsKeys = ['visualizerPalette', 'visualizerGlowEnabled', 'visualizerPeakHoldEnabled', 'spectrogramGridEnabled', 'spectrogramSmoothingEnabled', 'spectrogramGlowEnabled'];
   if (!hasOwnSettingsKeys(value, requiredKeys)) throw invalid();
   if (config.schemaVersion >= 2 && !hasOwnSettingsKeys(value, visualizerKeys)) throw invalid();
@@ -2044,22 +2826,31 @@ function validateSettingsConfig(config) {
   if (config.schemaVersion >= 15 && !hasOwnSettingsKeys(value, serviceProfileKeys)) throw invalid();
   if (config.schemaVersion >= 16 && !hasOwnSettingsKeys(value, genreParameterModeKeys)) throw invalid();
   if (config.schemaVersion >= 17 && !hasOwnSettingsKeys(value, allMessagesKeys)) throw invalid();
+  if (config.schemaVersion >= 19 && !hasOwnSettingsKeys(value, gtaPaletteKeys)) throw invalid();
+  if (config.schemaVersion >= 22 && !hasOwnSettingsKeys(value, boostModeValueLabelKeys)) throw invalid();
+  if (config.schemaVersion >= 23 && !hasOwnSettingsKeys(value, boostModeStatusVisibilityKeys)) throw invalid();
+  if (config.schemaVersion >= 25 && !hasOwnSettingsKeys(value, v25DisplayPreferenceKeys)) throw invalid();
+  if (config.schemaVersion >= 26 && !hasOwnSettingsKeys(value, v26AppearanceKeys)) throw invalid();
+  if (config.schemaVersion >= 27 && !hasOwnSettingsKeys(value, v27AppearanceKeys)) throw invalid();
+  if (config.schemaVersion >= 28 && !hasOwnSettingsKeys(value, v28QuickSettingsKeys)) throw invalid();
+  // Schema v19 (4.8.0) adds selectable GTA VI palettes; older backups import as classic.
+  // Schema v20 (4.8.1) used the extended palette IDs; schema v21 (4.8.2) compacts the 10 retained palettes and migrates older IDs.
   // Schema v18 (4.7.85): no new required keys beyond v17. The obsolete showCaptureTabCircle
   // field is intentionally ignored; background.js removes it during extension update cleanup.
   const importedYoutubeProfile = config.schemaVersion >= 15 ? value.youtubeAudioProfile : createDefaultServiceAudioProfile(false);
   const importedSpotifyProfile = config.schemaVersion >= 15 ? value.spotifyAudioProfile : createDefaultServiceAudioProfile(false);
   const vizDefaults = {
-    visualizerStyle: 'bars', visualizerPalette: 'neon', visualizerGlowEnabled: true, visualizerPeakHoldEnabled: true,
+    visualizerStyle: 'bars', visualizerPalette: 'gta', visualizerGlowEnabled: true, visualizerPeakHoldEnabled: true,
     spectrogramGridEnabled: true, spectrogramSmoothingEnabled: true, spectrogramGlowEnabled: true,
     visualizerSensitivity: 100, visualizerBands: 48,
-    spectrogramPalette: 'neon', spectrogramDuration: 4, visualizerAnimationEnabled: true,
+    spectrogramPalette: 'gta', spectrogramDuration: 4, visualizerAnimationEnabled: true,
     showFrequencyVisualizer: true, showSpectrogram: true,
     showBassBoostPanel: true, showVoiceBoostPanel: true
   };
   const viz = config.schemaVersion === 1 ? { ...vizDefaults } : { ...vizDefaults, ...value };
   if (config.schemaVersion < 11) {
     Object.assign(viz, {
-      visualizerPalette: 'neon', visualizerGlowEnabled: true, visualizerPeakHoldEnabled: true,
+      visualizerPalette: 'gta', visualizerGlowEnabled: true, visualizerPeakHoldEnabled: true,
       spectrogramGridEnabled: true, spectrogramSmoothingEnabled: true, spectrogramGlowEnabled: true
     });
   }
@@ -2071,9 +2862,19 @@ function validateSettingsConfig(config) {
   const importedAutoGenreEnabled = config.schemaVersion >= 14 ? value.autoGenreEnabled : true;
   const importedBassBoostManualOverride = config.schemaVersion >= 16 ? value.bassBoostMode === 'manual' : false;
   const importedVoiceBoostManualOverride = config.schemaVersion >= 16 ? value.voiceBoostMode === 'manual' : false;
+  const importedShowBoostModeValueLabels = true; // Legacy combined display key is retained for older backups.
+  const importedShowBassBoostModeStatus = config.schemaVersion >= 23 ? value.showBassBoostModeStatus : true;
+  const importedShowVoiceBoostModeStatus = config.schemaVersion >= 23 ? value.showVoiceBoostModeStatus : true;
+  const importedHideInactiveEffects = config.schemaVersion >= 25 ? value.hideInactiveEffects : false;
+  const importedShowLimiterOffWarning = config.schemaVersion >= 25 ? value.showLimiterOffWarning : false;
+  const importedShowScrollbar = config.schemaVersion >= 26 ? value.showScrollbar : true;
+  const importedGtaPaletteGalleryExpanded = config.schemaVersion >= 27 ? value.gtaPaletteGalleryExpanded : true;
+  const importedQuickSettingsExpanded = config.schemaVersion >= 28 ? value.quickSettingsExpanded : false;
   const importedNightModeEnabled = config.schemaVersion >= 5 ? value.nightModeEnabled : false;
   const importedEnergySavingEnabled = config.schemaVersion >= 6 ? value.energySavingEnabled : false;
   const importedEnergySavingMode = config.schemaVersion >= 6 ? value.energySavingMode : 'balanced';
+  const importedGtaPaletteRaw = config.schemaVersion >= 19 ? value.gtaPalette : 'classic';
+  const importedGtaPalette = config.schemaVersion >= 21 ? importedGtaPaletteRaw : migrateLegacyGtaPaletteId(importedGtaPaletteRaw);
 
   // Keep validation in named groups: each mirrors a settings panel/domain while preserving the same schema rules.
   // Блоки ниже соответствуют разделам настроек; условия совместимости старых схем остаются без изменений.
@@ -2081,6 +2882,7 @@ function validateSettingsConfig(config) {
   const validCoreAudioSettings =
     ['ru', 'en', 'uk'].includes(value.language) &&
     ['dark', 'light', 'system'].includes(value.themeMode) &&
+    GTA6_PALETTE_IDS.includes(importedGtaPalette) &&
     typeof value.rgbGlow === 'boolean' &&
     typeof value.volume === 'number' && Number.isFinite(value.volume) && value.volume >= 0 && value.volume <= 6 &&
     typeof value.muted === 'boolean' &&
@@ -2116,6 +2918,14 @@ function validateSettingsConfig(config) {
     typeof importedShowAllMessages === 'boolean' &&
     typeof importedShowQuickSettings === 'boolean' &&
     typeof importedAutoGenreEnabled === 'boolean' &&
+    typeof importedShowBoostModeValueLabels === 'boolean' &&
+    typeof importedShowBassBoostModeStatus === 'boolean' &&
+    typeof importedShowVoiceBoostModeStatus === 'boolean' &&
+    typeof importedHideInactiveEffects === 'boolean' &&
+    typeof importedShowLimiterOffWarning === 'boolean' &&
+    typeof importedShowScrollbar === 'boolean' &&
+    typeof importedGtaPaletteGalleryExpanded === 'boolean' &&
+    typeof importedQuickSettingsExpanded === 'boolean' &&
     (config.schemaVersion < 16 || (['auto', 'manual'].includes(value.bassBoostMode) && ['auto', 'manual'].includes(value.voiceBoostMode))) &&
     typeof importedNightModeEnabled === 'boolean';
 
@@ -2133,6 +2943,7 @@ function validateSettingsConfig(config) {
   const normalized = {
     language: value.language,
     themeMode: value.themeMode,
+    gtaPalette: importedGtaPalette,
     rgbGlow: value.rgbGlow,
     volume: Math.round(value.volume * 100) / 100,
     muted: value.muted,
@@ -2158,14 +2969,22 @@ function validateSettingsConfig(config) {
     showSpectrogram: viz.showSpectrogram,
     showBassBoostPanel: viz.showBassBoostPanel,
     showVoiceBoostPanel: viz.showVoiceBoostPanel,
+    hideInactiveEffects: importedHideInactiveEffects,
+    showScrollbar: importedShowScrollbar,
+    gtaPaletteGalleryExpanded: importedGtaPaletteGalleryExpanded,
+    quickSettingsExpanded: importedQuickSettingsExpanded,
     peakLimiterEnabled: limiterEnabled,
     showClippingWarning: importedShowClippingWarning,
+    showLimiterOffWarning: importedShowLimiterOffWarning,
     showAllMessages: importedShowAllMessages,
     showCaptureStatusIndicator: importedShowCaptureStatusIndicator,
     showQuickSettings: importedShowQuickSettings,
     autoGenreEnabled: importedAutoGenreEnabled,
     autoGenreBassManualOverride: importedBassBoostManualOverride,
     autoGenreVoiceManualOverride: importedVoiceBoostManualOverride,
+    showBoostModeValueLabels: importedShowBoostModeValueLabels,
+    showBassBoostModeStatus: importedShowBassBoostModeStatus,
+    showVoiceBoostModeStatus: importedShowVoiceBoostModeStatus,
     nightModeEnabled: importedNightModeEnabled,
     energySavingEnabled: importedEnergySavingEnabled,
     energySavingMode: importedEnergySavingMode,
@@ -2212,6 +3031,7 @@ function currentSettingsSnapshot() {
   return {
     language,
     themeMode,
+    gtaPalette,
     rgbGlow: rgbGlowEnabled,
     volume: Number.isFinite(globalAudioSettings.volume) ? globalAudioSettings.volume : volumePercent / 100,
     muted: globalAudioSettings.muted === true,
@@ -2239,14 +3059,22 @@ function currentSettingsSnapshot() {
     showSpectrogram,
     showBassBoostPanel,
     showVoiceBoostPanel,
+    hideInactiveEffects,
     peakLimiterEnabled,
     showClippingWarning,
+    showLimiterOffWarning,
     showAllMessages,
     showCaptureStatusIndicator,
     showQuickSettings,
     autoGenreEnabled,
     bassBoostMode: autoGenreBassManualOverride ? 'manual' : 'auto',
     voiceBoostMode: autoGenreVoiceManualOverride ? 'manual' : 'auto',
+    showBoostModeValueLabels,
+    showScrollbar,
+    gtaPaletteGalleryExpanded,
+    quickSettingsExpanded,
+    showBassBoostModeStatus,
+    showVoiceBoostModeStatus,
     nightModeEnabled,
     energySavingEnabled,
     energySavingMode
@@ -2307,6 +3135,8 @@ async function importSettingsFromCfg(file) {
     await writeLocalSettings({
       language: imported.language,
       themeMode: imported.themeMode,
+      gtaPalette: imported.gtaPalette,
+      gtaPaletteVersion: GTA6_PALETTE_VERSION,
       rgbGlow: imported.rgbGlow,
       volume: imported.volume,
       muted: imported.muted,
@@ -2319,6 +3149,7 @@ async function importSettingsFromCfg(file) {
       lastBoostValue: imported.lastBoostValue,
       visualizerStyle: imported.visualizerStyle,
       visualizerPalette: imported.visualizerPalette,
+      visualizerGtaThemeVersion: VISUALIZER_GTA_THEME_VERSION,
       visualizerGlowEnabled: imported.visualizerGlowEnabled,
       visualizerPeakHoldEnabled: imported.visualizerPeakHoldEnabled,
       spectrogramGridEnabled: imported.spectrogramGridEnabled,
@@ -2333,14 +3164,22 @@ async function importSettingsFromCfg(file) {
       showSpectrogram: imported.showSpectrogram,
       showBassBoostPanel: imported.showBassBoostPanel,
       showVoiceBoostPanel: imported.showVoiceBoostPanel,
+      hideInactiveEffects: imported.hideInactiveEffects,
+      showScrollbar: imported.showScrollbar,
+      gtaPaletteGalleryExpanded: imported.gtaPaletteGalleryExpanded,
+      quickSettingsExpanded: imported.quickSettingsExpanded,
       peakLimiterEnabled: imported.peakLimiterEnabled,
       showClippingWarning: imported.showClippingWarning,
+      showLimiterOffWarning: imported.showLimiterOffWarning,
       showAllMessages: imported.showAllMessages,
       showCaptureStatusIndicator: imported.showCaptureStatusIndicator,
       showQuickSettings: imported.showQuickSettings,
       autoGenreEnabled: imported.autoGenreEnabled,
       autoGenreBassManualOverride: imported.autoGenreBassManualOverride,
       autoGenreVoiceManualOverride: imported.autoGenreVoiceManualOverride,
+      showBoostModeValueLabels: imported.showBoostModeValueLabels,
+      showBassBoostModeStatus: imported.showBassBoostModeStatus,
+      showVoiceBoostModeStatus: imported.showVoiceBoostModeStatus,
       genreParameterModeVersion: GENRE_PARAMETER_MODE_VERSION,
       nightModeEnabled: imported.nightModeEnabled,
       energySavingEnabled: imported.energySavingEnabled,
@@ -2352,6 +3191,7 @@ async function importSettingsFromCfg(file) {
 
     language = imported.language;
     themeMode = imported.themeMode;
+    gtaPalette = imported.gtaPalette;
     rgbGlowEnabled = imported.rgbGlow;
     isMuted = imported.muted;
     bassBoostEnabled = imported.bassBoostEnabled;
@@ -2376,8 +3216,18 @@ async function importSettingsFromCfg(file) {
     showSpectrogram = imported.showSpectrogram;
     showBassBoostPanel = imported.showBassBoostPanel;
     showVoiceBoostPanel = imported.showVoiceBoostPanel;
+    hideInactiveEffects = imported.hideInactiveEffects;
+    showScrollbar = imported.showScrollbar;
+    gtaPaletteGalleryExpanded = imported.gtaPaletteGalleryExpanded;
+    quickSettingsExpanded = imported.quickSettingsExpanded;
+    updateGtaPaletteGalleryDisclosure();
+    updateScrollbarVisibilityUI();
+    showBoostModeValueLabels = imported.showBoostModeValueLabels;
+    showBassBoostModeStatus = imported.showBassBoostModeStatus;
+    showVoiceBoostModeStatus = imported.showVoiceBoostModeStatus;
     peakLimiterEnabled = imported.peakLimiterEnabled;
     showClippingWarning = imported.showClippingWarning;
+    showLimiterOffWarning = imported.showLimiterOffWarning;
     showAllMessages = imported.showAllMessages;
     showCaptureStatusIndicator = imported.showCaptureStatusIndicator;
     showQuickSettings = imported.showQuickSettings;
@@ -2412,13 +3262,19 @@ async function importSettingsFromCfg(file) {
     updateProtectionUI();
     updateVisualizerSettingsUI({ clearHistory: true, redraw: true });
     updateAudioPanelVisibilityUI();
+    updateBoostModeValueLabelsUI();
     await persistVisualizerOptionsToBackground();
     if (spectrumState.captureActive) {
-      await chrome.runtime.sendMessage({ type: 'VISUALIZER_CONTROL', enabled: shouldSampleSpectrum() }).catch((error) => {
+      const visualizerResult = await chrome.runtime.sendMessage({ type: 'VISUALIZER_CONTROL', enabled: shouldSampleSpectrum() }).catch((error) => {
         console.debug('Could not apply visualizer sampling setting:', error?.message || error);
         return null;
       });
-      if (shouldRenderFrequencySpectrum()) startSpectrumRendering(); else stopSpectrumRendering();
+      if (!visualizerResult || visualizerResult.success !== true) {
+        console.warn('Backup import completed, but offscreen did not confirm visualizer settings.');
+        acceptSpectrumMessage({ type: 'SPECTRUM_DATA', active: false, bins: [] });
+        stopSpectrumRendering();
+      } else if (shouldRenderFrequencySpectrum()) startSpectrumRendering();
+      else stopSpectrumRendering();
     }
 
     await loadTranslations(language);
@@ -2526,22 +3382,23 @@ async function sendVolume(value) {
 function showStatus(text, isError = false) {
   if (!showAllMessages) {
     clearTimeout(statusTimer);
-    status.textContent = '';
-    status.classList.remove('success', 'error');
-    status.hidden = true;
+    statusMessageElement.textContent = '';
+    statusMessageElement.classList.remove('success', 'error');
+    statusMessageElement.hidden = true;
     return;
   }
-  status.hidden = false;
-  status.textContent = text;
-  status.classList.toggle('success', !isError);
-  status.classList.toggle('error', isError);
+  statusMessageElement.hidden = false;
+  statusMessageElement.textContent = text;
+  statusMessageElement.classList.toggle('success', !isError);
+  statusMessageElement.classList.toggle('error', isError);
   clearTimeout(statusTimer);
 
   // Error details remain visible until the next action; success notices auto-clear.
   if (!isError) {
     statusTimer = setTimeout(() => {
-      status.textContent = t('ready');
-      status.classList.remove('success', 'error');
+      statusMessageElement.textContent = '';
+      statusMessageElement.classList.remove('success', 'error');
+      statusMessageElement.hidden = true;
       statusTimer = null;
     }, 2600);
   }
@@ -2621,7 +3478,7 @@ let spectrogramColorLut = new Uint8Array(256 * 3);
 // RU: Создаёт таблицу цветов для выбранной палитры спектрограммы.
 // UK: Створює таблицю кольорів для вибраної палітри спектрограми.
 function rebuildSpectrogramColorLut() {
-  const palette = SPECTROGRAM_PALETTE_MAP[spectrogramPaletteMode] || SPECTROGRAM_PALETTE_MAP.neon;
+  const palette = getSpectrogramPalette();
   const lut = new Uint8Array(256 * 3);
   for (let sample = 0; sample < 256; sample += 1) {
     const value = sample / 255;
@@ -2648,11 +3505,48 @@ function rgbString(color, alpha = 1) {
   return `rgba(${color[0]}, ${color[1]}, ${color[2]}, ${alpha})`;
 }
 
-// EN: Returns the color stops for the active visualizer palette.
-// RU: Возвращает цветовые точки выбранной палитры визуализатора.
-// UK: Повертає кольорові точки вибраної палітри візуалізатора.
+// EN: Converts the selected GTA VI HEX palette into RGB stops for Canvas rendering.
+// RU: Преобразует выбранную HEX-палитру GTA VI в RGB-точки для Canvas.
+// UK: Перетворює вибрану HEX-палітру GTA VI на RGB-точки для Canvas.
+function getSelectedGtaVisualizerColors() {
+  const hexColors = GTA6_COLOR_PALETTES[gtaPalette] || DEFAULT_UI_GRADIENT;
+  return hexColors.map((hex) => {
+    const value = hex.replace('#', '');
+    return [
+      Number.parseInt(value.slice(0, 2), 16),
+      Number.parseInt(value.slice(2, 4), 16),
+      Number.parseInt(value.slice(4, 6), 16)
+    ];
+  });
+}
+
+// EN: Returns the active visualizer and spectrogram color stops.
+// RU: Возвращает активные цветовые точки визуализатора и спектрограммы.
+// UK: Повертає активні кольорові точки візуалізатора та спектрограми.
 function getVisualizerPalette() {
+  if (visualizerPaletteMode === 'gta') return getSelectedGtaVisualizerColors();
   return SPECTROGRAM_PALETTE_MAP[visualizerPaletteMode] || SPECTROGRAM_PALETTE_MAP.neon;
+}
+
+function getSpectrogramPalette() {
+  if (spectrogramPaletteMode === 'gta') {
+    // Keep a dark zero-energy floor, then blend through the exact active GTA VI palette.
+    return [[7, 11, 27], ...getSelectedGtaVisualizerColors()];
+  }
+  return SPECTROGRAM_PALETTE_MAP[spectrogramPaletteMode] || SPECTROGRAM_PALETTE_MAP.neon;
+}
+
+// EN: Redraws both canvases when the shared GTA VI theme changes.
+// RU: Перерисовывает оба canvas при смене общей темы GTA VI.
+// UK: Перемальовує обидва canvas після зміни спільної теми GTA VI.
+function updateGtaVisualizerPalette() {
+  if (spectrogramPaletteMode === 'gta') {
+    rebuildSpectrogramColorLut();
+    renderSpectrogram();
+  }
+  if (visualizerPaletteMode === 'gta' && showFrequencyVisualizer) {
+    drawSpectrum(0, true);
+  }
 }
 
 // EN: Creates a canvas gradient from a visualizer palette definition.
@@ -2704,7 +3598,7 @@ function renderSpectrogram() {
   }
   const frame = spectrogramState.imageData;
   const pixels = frame.data;
-  const background = [7, 11, 27];
+  const background = getSpectrogramPalette()[0];
   const sampleCount = spectrogramState.history.length;
   const bandCount = Math.max(1, visualizerBands);
   const maxAge = Math.max(0, spectrogramState.maxRows - 1);
@@ -2784,15 +3678,19 @@ function renderSpectrogram() {
   // A luminous time marker clarifies which row is the newest audio frame.
   const baseline = Math.max(1, height - 2);
   const baselineGradient = context.createLinearGradient(0, 0, width, 0);
-  baselineGradient.addColorStop(0, 'rgba(34, 211, 238, 0.9)');
-  baselineGradient.addColorStop(0.52, 'rgba(167, 139, 250, 0.85)');
-  baselineGradient.addColorStop(1, 'rgba(244, 114, 182, 0.9)');
+  const activeColors = getSpectrogramPalette();
+  const firstColor = activeColors[Math.min(1, activeColors.length - 1)];
+  const middleColor = activeColors[Math.floor((activeColors.length - 1) / 2)];
+  const lastColor = activeColors[activeColors.length - 1];
+  baselineGradient.addColorStop(0, rgbString(firstColor, 0.92));
+  baselineGradient.addColorStop(0.52, rgbString(middleColor, 0.88));
+  baselineGradient.addColorStop(1, rgbString(lastColor, 0.92));
   context.save();
   context.strokeStyle = baselineGradient;
   context.globalAlpha = 0.72;
   context.lineWidth = spectrogramGlowEnabled ? 1.5 : 1;
   if (spectrogramGlowEnabled) {
-    context.shadowColor = 'rgba(34, 211, 238, 0.9)';
+    context.shadowColor = rgbString(middleColor, 0.9);
     context.shadowBlur = 7;
   }
   context.beginPath();
@@ -2850,6 +3748,7 @@ function drawSpectrum(timestamp = 0, oneShot = false) {
   if (!oneShot) spectrumState.lastFrame = timestamp;
   context.clearRect(0, 0, width, height);
 
+  if (visualizerStyle !== 'radial') {
   // Subtle level grid and low-opacity frequency guides.
   context.lineWidth = 1;
   context.strokeStyle = 'rgba(148, 163, 184, 0.105)';
@@ -2868,6 +3767,7 @@ function drawSpectrum(timestamp = 0, oneShot = false) {
     context.lineTo(x, height - 4);
     context.stroke();
   });
+  }
 
   const count = spectrumState.current.length;
   const sidePadding = 5;
@@ -2898,42 +3798,54 @@ function drawSpectrum(timestamp = 0, oneShot = false) {
   const glowColor = rgbString(getVisualizerPalette()[Math.min(getVisualizerPalette().length - 1, Math.floor(getVisualizerPalette().length * 0.65))], 0.8);
 
   if (visualizerStyle === 'radial') {
+    // Circular spectrum: every FFT band becomes a radial bar around a central ring.
     const palette = getVisualizerPalette();
-    const cx = width * 0.5;
-    const cy = height * 0.5;
-    const radius = Math.max(12, Math.min(width, height) * 0.22);
-    const maxLength = Math.max(8, Math.min(width, height) * 0.25);
-    const strokeWidth = Math.max(1.2, Math.min(4, (Math.PI * 2 * radius / Math.max(1, count)) * 0.62));
+    const centerX = width * 0.5;
+    const centerY = height * 0.5;
+    const diameter = Math.max(24, Math.min(width, height) - 12);
+    const innerRadius = diameter * 0.22;
+    const maximumBarLength = diameter * 0.25;
+    const radialLineWidth = Math.max(1.2, Math.min(4.2, (Math.PI * 2 * innerRadius / Math.max(1, count)) * 0.62));
+
     context.save();
+    context.lineCap = 'round';
     context.beginPath();
-    context.arc(cx, cy, radius - 3, 0, Math.PI * 2);
+    context.arc(centerX, centerY, innerRadius - 2.5, 0, Math.PI * 2);
     context.strokeStyle = 'rgba(148, 163, 184, 0.22)';
     context.lineWidth = 1;
     context.stroke();
+
     for (let i = 0; i < count; i += 1) {
       const angle = -Math.PI / 2 + (i / Math.max(1, count)) * Math.PI * 2;
       const cosine = Math.cos(angle);
       const sine = Math.sin(angle);
-      const endRadius = radius + 2 + values[i] * maxLength;
-      const color = palette[Math.min(palette.length - 1, Math.floor(i / Math.max(1, count) * palette.length))];
+      const startRadius = innerRadius;
+      const endRadius = startRadius + 2 + values[i] * maximumBarLength;
+      const paletteIndex = Math.min(palette.length - 1, Math.floor(i / Math.max(1, count) * palette.length));
+
       context.beginPath();
-      context.moveTo(cx + cosine * radius, cy + sine * radius);
-      context.lineTo(cx + cosine * endRadius, cy + sine * endRadius);
-      context.strokeStyle = rgbString(color, 0.96);
-      context.lineWidth = strokeWidth;
-      context.lineCap = 'round';
+      context.moveTo(centerX + cosine * startRadius, centerY + sine * startRadius);
+      context.lineTo(centerX + cosine * endRadius, centerY + sine * endRadius);
+      context.strokeStyle = rgbString(palette[paletteIndex], 0.96);
+      context.lineWidth = radialLineWidth;
       context.shadowColor = glowColor;
       context.shadowBlur = visualizerGlowEnabled ? 6 : 0;
       context.stroke();
+
       if (visualizerPeakHoldEnabled) {
-        const peak = Math.min(1, Math.pow(Math.max(0, spectrumState.peaks[i] || 0), 0.78));
-        const peakRadius = radius + 2 + peak * maxLength;
+        const peakStrength = Math.min(1, Math.pow(Math.max(0, spectrumState.peaks[i] || 0), 0.78));
+        const peakRadius = startRadius + 2 + peakStrength * maximumBarLength;
         context.beginPath();
-        context.arc(cx + cosine * peakRadius, cy + sine * peakRadius, Math.max(1, strokeWidth * 0.55), 0, Math.PI * 2);
-        context.fillStyle = rgbString(palette[palette.length - 1]);
-        context.fill();
+        context.moveTo(centerX + cosine * (peakRadius - 1.5), centerY + sine * (peakRadius - 1.5));
+        context.lineTo(centerX + cosine * (peakRadius + 1.5), centerY + sine * (peakRadius + 1.5));
+        context.strokeStyle = rgbString(palette[palette.length - 1], 0.98);
+        context.lineWidth = Math.max(1.2, radialLineWidth * 0.7);
+        context.shadowBlur = visualizerGlowEnabled ? 4 : 0;
+        context.stroke();
       }
     }
+
+    context.shadowBlur = 0;
     context.restore();
   } else if (visualizerStyle === 'line' || visualizerStyle === 'wave' || visualizerStyle === 'area') {
     context.beginPath();
@@ -3304,8 +4216,10 @@ async function enableCaptureForCurrentTab() {
     applyCaptureState(true, currentTabId);
     await persistVisualizerOptionsToBackground();
     const visualizerResult = await chrome.runtime.sendMessage({ type: 'VISUALIZER_CONTROL', enabled: shouldSampleSpectrum() });
-    if (visualizerResult && visualizerResult.success === false) {
+    if (!visualizerResult || visualizerResult.success !== true) {
+      console.warn('Audio capture started, but offscreen did not confirm visualizer activation.');
       acceptSpectrumMessage({ type: 'SPECTRUM_DATA', active: false, bins: [] });
+      stopSpectrumRendering();
     } else {
       acceptSpectrumMessage({ type: 'SPECTRUM_DATA', active: true, bins: new Array(visualizerBands).fill(0) });
       if (shouldRenderFrequencySpectrum()) startSpectrumRendering();
@@ -3378,16 +4292,21 @@ document.addEventListener('DOMContentLoaded', async () => {
   try {
     // Load persisted UI preferences first, falling back to safe defaults.
     const savedPreferences = await chrome.storage.local.get([
-      'language', 'themeMode', 'rgbGlow', 'activeAudioPreset',
-      'visualizerStyle', 'visualizerPalette', 'visualizerGlowEnabled', 'visualizerPeakHoldEnabled', 'spectrogramGridEnabled', 'spectrogramSmoothingEnabled', 'spectrogramGlowEnabled',
+      'language', 'themeMode', 'gtaPalette', 'gtaPaletteVersion', 'rgbGlow', 'showScrollbar', 'gtaPaletteGalleryExpanded', 'quickSettingsExpanded', 'activeAudioPreset',
+      'visualizerStyle', 'visualizerPalette', 'visualizerGtaThemeVersion', 'visualizerGlowEnabled', 'visualizerPeakHoldEnabled', 'spectrogramGridEnabled', 'spectrogramSmoothingEnabled', 'spectrogramGlowEnabled',
       'visualizerSensitivity', 'visualizerBands', 'spectrogramPalette', 'spectrogramDuration', 'visualizerAnimationEnabled',
-      'showFrequencyVisualizer', 'showSpectrogram', 'showBassBoostPanel', 'showVoiceBoostPanel', 'showClippingWarning', 'showAllMessages', 'showCaptureStatusIndicator', 'showQuickSettings', 'autoGenreEnabled', 'autoGenreStatus', 'autoGenreBassManualOverride', 'autoGenreVoiceManualOverride', 'genreParameterModeVersion', 'energySavingEnabled', 'energySavingMode', 'youtubeAudioProfile', 'spotifyAudioProfile'
+      'showFrequencyVisualizer', 'showSpectrogram', 'showBassBoostPanel', 'showVoiceBoostPanel', 'hideInactiveEffects', 'showBoostModeValueLabels', 'showBassBoostModeStatus', 'showVoiceBoostModeStatus', 'showClippingWarning', 'showLimiterOffWarning', 'showAllMessages', 'showCaptureStatusIndicator', 'showQuickSettings', 'autoGenreEnabled', 'autoGenreStatus', 'autoGenreBassManualOverride', 'autoGenreVoiceManualOverride', 'genreParameterModeVersion', 'energySavingEnabled', 'energySavingMode', 'youtubeAudioProfile', 'spotifyAudioProfile'
     ]);
     language = ['ru', 'en', 'uk'].includes(savedPreferences.language) ? savedPreferences.language : 'ru';
     themeMode = ['dark', 'light', 'system'].includes(savedPreferences.themeMode) ? savedPreferences.themeMode : 'system';
+    gtaPalette = normalizeStoredGtaPaletteId(savedPreferences.gtaPalette, savedPreferences.gtaPaletteVersion);
     rgbGlowEnabled = typeof savedPreferences.rgbGlow === 'boolean' ? savedPreferences.rgbGlow : true;
+    showScrollbar = typeof savedPreferences.showScrollbar === 'boolean' ? savedPreferences.showScrollbar : true;
+    gtaPaletteGalleryExpanded = typeof savedPreferences.gtaPaletteGalleryExpanded === 'boolean' ? savedPreferences.gtaPaletteGalleryExpanded : true;
     visualizerStyle = VISUALIZER_STYLES.includes(savedPreferences.visualizerStyle) ? savedPreferences.visualizerStyle : 'bars';
-    visualizerPaletteMode = SPECTROGRAM_PALETTES.includes(savedPreferences.visualizerPalette) ? savedPreferences.visualizerPalette : 'neon';
+    const needsVisualizerGtaThemeMigration = savedPreferences.visualizerGtaThemeVersion !== VISUALIZER_GTA_THEME_VERSION;
+    const storedVisualizerPalette = SPECTROGRAM_PALETTES.includes(savedPreferences.visualizerPalette) ? savedPreferences.visualizerPalette : 'gta';
+    visualizerPaletteMode = needsVisualizerGtaThemeMigration && storedVisualizerPalette === 'neon' ? 'gta' : storedVisualizerPalette;
     visualizerGlowEnabled = savedPreferences.visualizerGlowEnabled !== false;
     visualizerPeakHoldEnabled = savedPreferences.visualizerPeakHoldEnabled !== false;
     spectrogramGridEnabled = savedPreferences.spectrogramGridEnabled !== false;
@@ -3396,17 +4315,24 @@ document.addEventListener('DOMContentLoaded', async () => {
     visualizerSensitivity = Number.isInteger(savedPreferences.visualizerSensitivity) && savedPreferences.visualizerSensitivity >= 50 && savedPreferences.visualizerSensitivity <= 200 && savedPreferences.visualizerSensitivity % 25 === 0 ? savedPreferences.visualizerSensitivity : 100;
     savedVisualizerSensitivity = visualizerSensitivity;
     visualizerBands = VISUALIZER_BAND_OPTIONS.includes(savedPreferences.visualizerBands) ? savedPreferences.visualizerBands : 48;
-    spectrogramPaletteMode = SPECTROGRAM_PALETTES.includes(savedPreferences.spectrogramPalette) ? savedPreferences.spectrogramPalette : 'neon';
+    const storedSpectrogramPalette = SPECTROGRAM_PALETTES.includes(savedPreferences.spectrogramPalette) ? savedPreferences.spectrogramPalette : 'gta';
+    spectrogramPaletteMode = needsVisualizerGtaThemeMigration && storedSpectrogramPalette === 'neon' ? 'gta' : storedSpectrogramPalette;
     spectrogramDuration = SPECTROGRAM_DURATIONS.includes(savedPreferences.spectrogramDuration) ? savedPreferences.spectrogramDuration : 4;
     visualizerAnimationEnabled = savedPreferences.visualizerAnimationEnabled !== false;
     showFrequencyVisualizer = savedPreferences.showFrequencyVisualizer !== false;
     showSpectrogram = savedPreferences.showSpectrogram !== false;
     showBassBoostPanel = savedPreferences.showBassBoostPanel !== false;
     showVoiceBoostPanel = savedPreferences.showVoiceBoostPanel !== false;
+    hideInactiveEffects = savedPreferences.hideInactiveEffects === true;
+    showBoostModeValueLabels = true;
+    showBassBoostModeStatus = savedPreferences.showBassBoostModeStatus !== false;
+    showVoiceBoostModeStatus = savedPreferences.showVoiceBoostModeStatus !== false;
     showClippingWarning = savedPreferences.showClippingWarning !== false;
+    showLimiterOffWarning = savedPreferences.showLimiterOffWarning === true;
     showAllMessages = savedPreferences.showAllMessages !== false;
     showCaptureStatusIndicator = savedPreferences.showCaptureStatusIndicator !== false;
     showQuickSettings = savedPreferences.showQuickSettings !== false;
+    quickSettingsExpanded = savedPreferences.quickSettingsExpanded === true;
     autoGenreEnabled = typeof savedPreferences.autoGenreEnabled === 'boolean' ? savedPreferences.autoGenreEnabled : true;
     serviceAudioProfileConfigured = {
       youtube: isValidServiceAudioProfile(savedPreferences.youtubeAudioProfile),
@@ -3443,8 +4369,22 @@ document.addEventListener('DOMContentLoaded', async () => {
     energySavingEnabled = savedPreferences.energySavingEnabled === true;
     energySavingMode = ENERGY_SAVING_MODES.includes(savedPreferences.energySavingMode) ? savedPreferences.energySavingMode : 'balanced';
     const newDefaultPreferences = {};
+    if (needsVisualizerGtaThemeMigration) {
+      newDefaultPreferences.visualizerGtaThemeVersion = VISUALIZER_GTA_THEME_VERSION;
+      if (storedVisualizerPalette !== visualizerPaletteMode) newDefaultPreferences.visualizerPalette = visualizerPaletteMode;
+      if (storedSpectrogramPalette !== spectrogramPaletteMode) newDefaultPreferences.spectrogramPalette = spectrogramPaletteMode;
+    }
     if (typeof savedPreferences.rgbGlow !== 'boolean') newDefaultPreferences.rgbGlow = true;
+    if (typeof savedPreferences.gtaPaletteGalleryExpanded !== 'boolean') newDefaultPreferences.gtaPaletteGalleryExpanded = true;
+    if (typeof savedPreferences.quickSettingsExpanded !== 'boolean') newDefaultPreferences.quickSettingsExpanded = false;
+    if (savedPreferences.gtaPaletteVersion !== GTA6_PALETTE_VERSION || savedPreferences.gtaPalette !== gtaPalette) {
+      newDefaultPreferences.gtaPalette = gtaPalette;
+      newDefaultPreferences.gtaPaletteVersion = GTA6_PALETTE_VERSION;
+    }
     if (typeof savedPreferences.autoGenreEnabled !== 'boolean') newDefaultPreferences.autoGenreEnabled = true;
+    if (savedPreferences.showBoostModeValueLabels !== true) newDefaultPreferences.showBoostModeValueLabels = true;
+    if (typeof savedPreferences.showBassBoostModeStatus !== 'boolean') newDefaultPreferences.showBassBoostModeStatus = true;
+    if (typeof savedPreferences.showVoiceBoostModeStatus !== 'boolean') newDefaultPreferences.showVoiceBoostModeStatus = true;
     if (Object.keys(newDefaultPreferences).length) await writeLocalSettings(newDefaultPreferences);
     syncServiceProfileUI();
     activeAudioPreset = ['default', 'podcasts', 'audiobooks', 'music', 'video', 'series', 'movies', 'games', 'sports', 'broadcasts', 'streams', 'custom'].includes(savedPreferences.activeAudioPreset) ? savedPreferences.activeAudioPreset : 'default';
@@ -3452,6 +4392,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   } catch (error) {
     language = 'ru';
     themeMode = 'system';
+    gtaPalette = 'classic';
     rgbGlowEnabled = true;
     energySavingEnabled = false;
     energySavingMode = 'balanced';
@@ -3616,7 +4557,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         console.debug('Could not apply visualizer sampling setting:', error?.message || error);
         return null;
       });
-      if (visualizerResult && visualizerResult.success !== false) {
+      if (visualizerResult && visualizerResult.success === true) {
         acceptSpectrumMessage({ type: 'SPECTRUM_DATA', active: true, bins: new Array(visualizerBands).fill(0) });
         if (shouldRenderFrequencySpectrum()) startSpectrumRendering();
       } else {
@@ -3683,6 +4624,11 @@ if (settingsBassBoostToggle) {
     setBassBoostEnabledFromControl(event.target.checked);
   });
 }
+if (settingsBassModeStatusToggle) {
+  settingsBassModeStatusToggle.addEventListener('change', (event) => {
+    void setBoostModeStatusVisibility('bass', event.target.checked);
+  });
+}
 
 bassBoostSlider.addEventListener('input', (event) => {
   // Moving the intensity slider explicitly switches only this EQ parameter to
@@ -3716,7 +4662,11 @@ if (settingsVoiceBoostToggle) {
     setVoiceBoostEnabledFromControl(event.target.checked);
   });
 }
-
+if (settingsVoiceModeStatusToggle) {
+  settingsVoiceModeStatusToggle.addEventListener('change', (event) => {
+    void setBoostModeStatusVisibility('voice', event.target.checked);
+  });
+}
 voiceBoostSlider.addEventListener('input', (event) => {
   // Moving the intensity slider explicitly switches only this EQ parameter to
   // manual mode. It never toggles the effect's separate power switch.
@@ -3747,7 +4697,6 @@ if (voiceBoostAutoBadge) voiceBoostAutoBadge.addEventListener('click', (event) =
 function updateVisualizerSettingsUI({ clearHistory = false, redraw = false } = {}) {
   const spectrogramSubtitle = document.querySelector('.spectrogram-subtitle');
   if (spectrogramSubtitle) spectrogramSubtitle.textContent = t('spectrogramSubtitle', { seconds: spectrogramDuration });
-  updateSpectrogramPaletteBadge();
   if (visualizerStyleSelect) visualizerStyleSelect.value = visualizerStyle;
   if (visualizerPaletteSelect) visualizerPaletteSelect.value = visualizerPaletteMode;
   if (visualizerGlowToggle) visualizerGlowToggle.checked = visualizerGlowEnabled;
@@ -3858,7 +4807,7 @@ function stopSpectrumRendering() {
 async function persistVisualizerOptionsToBackground() {
   try {
     const result = await chrome.runtime.sendMessage({ type: 'VISUALIZER_SETTINGS', bandCount: visualizerBands, sampleIntervalMs: getEnergySavingSampleIntervalMs() });
-    return !result || result.success !== false;
+    return Boolean(result && result.success === true);
   } catch (error) {
     console.debug('Could not persist visualizer options to the background:', error?.message || error);
     return false;
@@ -3872,6 +4821,7 @@ async function persistVisualizerPreferences() {
   const settings = {
     visualizerStyle,
     visualizerPalette: visualizerPaletteMode,
+    visualizerGtaThemeVersion: VISUALIZER_GTA_THEME_VERSION,
     visualizerGlowEnabled,
     visualizerPeakHoldEnabled,
     spectrogramGridEnabled,
@@ -3963,7 +4913,34 @@ async function setVisualizationVisibility(kind, enabled) {
 // UK: Обробники пов'язують елементи інтерфейсу з налаштуваннями; дубльовані перемикачі використовують спільні функції для синхронізації.
 languageSelect.addEventListener('change', (event) => setLanguage(event.target.value));
 themeSelect.addEventListener('change', (event) => setTheme(event.target.value));
+if (gtaPaletteToggle) {
+  gtaPaletteToggle.addEventListener('click', () => {
+    void setGtaPaletteGalleryExpanded(!gtaPaletteGalleryExpanded);
+  });
+}
+if (gtaPaletteGallery) {
+  gtaPaletteGallery.addEventListener('click', (event) => {
+    const button = event.target.closest('[data-gta-palette]');
+    if (button && gtaPaletteGallery.contains(button)) void setGtaPalette(button.dataset.gtaPalette);
+  });
+  gtaPaletteGallery.addEventListener('keydown', (event) => {
+    const buttons = [...gtaPaletteGallery.querySelectorAll('[data-gta-palette]')];
+    const currentIndex = buttons.indexOf(event.target.closest('[data-gta-palette]'));
+    if (currentIndex < 0 || !buttons.length) return;
+    let nextIndex = currentIndex;
+    if (event.key === 'ArrowRight' || event.key === 'ArrowDown') nextIndex = (currentIndex + 1) % buttons.length;
+    else if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') nextIndex = (currentIndex - 1 + buttons.length) % buttons.length;
+    else if (event.key === 'Home') nextIndex = 0;
+    else if (event.key === 'End') nextIndex = buttons.length - 1;
+    else return;
+    event.preventDefault();
+    const nextButton = buttons[nextIndex];
+    nextButton.focus();
+    void setGtaPalette(nextButton.dataset.gtaPalette);
+  });
+}
 rgbGlowToggle.addEventListener('change', (event) => setRgbGlow(event.target.checked));
+if (showScrollbarToggle) showScrollbarToggle.addEventListener('change', (event) => { void setShowScrollbar(event.target.checked); });
 if (quickRgbGlowToggle) quickRgbGlowToggle.addEventListener('change', (event) => { void setRgbGlow(event.target.checked); });
 if (quickBassBoostToggle) quickBassBoostToggle.addEventListener('change', (event) => setBassBoostEnabledFromControl(event.target.checked));
 if (quickVoiceBoostToggle) quickVoiceBoostToggle.addEventListener('change', (event) => setVoiceBoostEnabledFromControl(event.target.checked));
@@ -3972,9 +4949,12 @@ bindServiceProfileControls();
 peakLimiterToggle.addEventListener('change', (event) => { void setPeakLimiterEnabled(event.target.checked); });
 if (quickPeakLimiterToggle) quickPeakLimiterToggle.addEventListener('change', (event) => { void setPeakLimiterEnabled(event.target.checked); });
 showClippingWarningToggle.addEventListener('change', (event) => { void setShowClippingWarning(event.target.checked); });
+if (showLimiterOffWarningToggle) showLimiterOffWarningToggle.addEventListener('change', (event) => { void setShowLimiterOffWarning(event.target.checked); });
+if (hideInactiveEffectsToggle) hideInactiveEffectsToggle.addEventListener('change', (event) => { void setHideInactiveEffects(event.target.checked); });
 showAllMessagesToggle.addEventListener('change', (event) => { void setShowAllMessages(event.target.checked); });
 showCaptureStatusIndicatorToggle.addEventListener('change', (event) => { void setShowCaptureStatusIndicator(event.target.checked); });
 showQuickSettingsToggle.addEventListener('change', (event) => { void setShowQuickSettings(event.target.checked); });
+if (quickSettingsExpandToggle) quickSettingsExpandToggle.addEventListener('click', () => { void setQuickSettingsExpanded(!quickSettingsExpanded); });
 autoGenreEnabledToggle.addEventListener('change', (event) => { void setAutoGenreEnabled(event.target.checked); });
 nightModeToggle.addEventListener('change', (event) => { void setNightModeEnabled(event.target.checked); });
 if (quickNightModeToggle) quickNightModeToggle.addEventListener('change', (event) => { void setNightModeEnabled(event.target.checked); });
@@ -4094,6 +5074,9 @@ showVoiceBoostPanelToggle.addEventListener('change', (event) => { void setAudioP
 energySavingToggle.addEventListener('change', (event) => { void setEnergySavingPreferences(event.target.checked, energySavingMode); });
 energySavingModeSelect.addEventListener('change', (event) => { void setEnergySavingPreferences(energySavingEnabled, event.target.value); });
 settingsBtn.addEventListener('click', () => setSettingsPanelOpen(settingsPanel.hidden));
+
+// All controls apply immediately; Done simply closes the popup when the user finishes.
+doneButton?.addEventListener('click', () => window.close());
 if (enableExtensionBtn) enableExtensionBtn.addEventListener('click', () => { void enableCaptureForCurrentTab(); });
 if (disableExtensionBtn) disableExtensionBtn.addEventListener('click', () => { void disableCapture(); });
 settingsCloseBtn.addEventListener('click', () => setSettingsPanelOpen(false));
@@ -4106,6 +5089,10 @@ systemThemeQuery.addEventListener?.('change', () => {
 
 profilePresetBtns.forEach((button) => {
   button.addEventListener('click', () => applyAudioPreset(button.dataset.profile));
+});
+
+applyRecommendedSettingsBtn?.addEventListener('click', () => {
+  if (window.confirm(t('recommendedSettingsConfirm'))) void applyRecommendedSettings();
 });
 
 factoryResetBtn.addEventListener('click', () => {
