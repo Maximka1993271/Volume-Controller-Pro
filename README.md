@@ -213,7 +213,11 @@ Volume-Controller-Pro/
 │       ├── sync-release-notes.yml
 │       └── validate-extension.yml
 ├── Readme/
+│   ├── INDEX.md
 │   ├── Readme.md
+│   ├── RELEASE_DESCRIPTION_v4.8.31.md
+│   ├── RELEASE_DESCRIPTION_v4.7.92.md
+│   ├── RELEASE_DESCRIPTION_v4.7.91.md
 │   └── RELEASE_DESCRIPTION_v4.7.90.md
 ├── screenshots/
 ├── background.js
@@ -259,6 +263,10 @@ Volume-Controller-Pro/
 ## 📚 Project documentation
 
 - [User guide and v4.8.31 Wiki](https://github.com/Maximka1993271/Volume-Controller-Pro/tree/main/wiki)
+- [Readme documentation archive](Readme/INDEX.md)
+- [Detailed technical audit and history](Readme/Readme.md)
+- [Release description — v4.8.31](Readme/RELEASE_DESCRIPTION_v4.8.31.md)
+- [Archived release descriptions — v4.7.90–v4.7.92](Readme/)
 - [Full automatic genre catalog](AUTO_GENRE_CATALOG.md)
 - [Changelog](CHANGELOG.md)
 - [Privacy notes](PRIVACY.md)
