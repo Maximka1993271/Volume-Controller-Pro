@@ -5,6 +5,7 @@ This folder contains the current release description and the detailed technical 
 ## Current release
 
 - [Volume Controller Pro 4.8.31 — release description](RELEASE_DESCRIPTION_v4.8.31.md)
+- [Localization audit — EN / RU / UK](LOCALIZATION_AUDIT_v4.8.31.md)
 - [Project Wiki and user guide](https://github.com/Maximka1993271/Volume-Controller-Pro/tree/main/wiki)
 - [Main README](../README.md)
 - [Changelog](../CHANGELOG.md)

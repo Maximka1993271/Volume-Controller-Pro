@@ -174,7 +174,7 @@
   "energySavingTitle": "Енергозбереження",
   "energySavingDescription": "Налаштуй частоту оновлення візуалізатора та навантаження",
   "energySavingToggleLabel": "Увімкнути енергозбереження",
-  "energySavingToggleDescription": "Вимкнено за замовчуванням; знижує частоту аналізу та відтворення",
+  "energySavingToggleDescription": "Вимкнено за замовчуванням; знижує частоту аналізу та промальовування спектра",
   "energySavingModeLabel": "Режим енергозбереження",
   "energySavingModeBalanced": "Збалансований",
   "energySavingModePerformance": "Оптимальна продуктивність",
