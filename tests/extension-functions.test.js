@@ -362,6 +362,14 @@ test('settings backup validation rejects out-of-range audio values, incomplete f
   assert.throws(() => popup.validateSettingsConfig(invalidMode), (error) => error.code === 'invalid');
 });
 
+test('area and radial visualizer modes are accepted in settings backups', () => {
+  for (const style of ['area', 'radial']) {
+    assert.ok(popup.VISUALIZER_STYLES.includes(style));
+    const normalized = plain(popup.validateSettingsConfig(validSettingsConfig({ visualizerStyle: style })));
+    assert.equal(normalized.visualizerStyle, style);
+  }
+});
+
 test('genre text normalization ignores case, punctuation and diacritics', () => {
   assert.equal(offscreen.normalizeGenreText('  DRÍFT---PHONK!! '), 'drift phonk');
   assert.equal(offscreen.normalizeGenreText(null), '');
