@@ -6,9 +6,53 @@
  * UK: Фоновий сервіс MV3. Він серіалізує запуск/зупинку захоплення, перевіряє команди popup,
  *     з'єднує інтерфейс з offscreen-аудіографом і зберігає статуси.
  */
+importScripts('shared/validation.js');
+try {
+  importScripts('shared/genres.js');
+} catch (error) {
+  // Genre automation is optional: a missing/broken catalogue must not disable capture or volume controls.
+  console.error('Automatic genre catalogue failed to load; genre status will be ignored:', error);
+}
+const backgroundGenreApi = typeof VCPGenres !== 'undefined' && VCPGenres && typeof VCPGenres === 'object'
+  ? VCPGenres : null;
+function isBackgroundGenreApiConsistent(api) {
+  if (!api || !Array.isArray(api.catalog) || !Array.isArray(api.allowedGenreIds) ||
+      !Array.isArray(api.allowedStates)) return false;
+  const allowedFamilies = new Set([
+    'hiphop', 'bassHeavy', 'pop', 'rock', 'electronic', 'atmosphere',
+    'jazz', 'vocal', 'acoustic', 'classical', 'world', 'neutral'
+  ]);
+  const catalog = api.catalog;
+  const allowedIds = api.allowedGenreIds;
+  if (catalog.length !== allowedIds.length) return false;
+  if (!catalog.every((item) => item && typeof item.id === 'string' && item.id.length > 0 &&
+      typeof item.label === 'string' && allowedFamilies.has(item.family) &&
+      Array.isArray(item.aliases) && item.aliases.every((alias) => typeof alias === 'string'))) return false;
+  const catalogIdSet = new Set(catalog.map((item) => item.id));
+  const allowedIdSet = new Set(allowedIds);
+  if (catalogIdSet.size !== catalog.length || allowedIdSet.size !== allowedIds.length) return false;
+  if (!Array.from(catalogIdSet).every((id) => allowedIdSet.has(id))) return false;
+  const requiredStates = ['disabled', 'waiting-capture', 'detected', 'detecting'];
+  return requiredStates.every((state) => api.allowedStates.includes(state)) &&
+    new Set(api.allowedStates).size === api.allowedStates.length &&
+    api.allowedStates.every((state) => typeof state === 'string');
+}
+const backgroundGenreApiIsConsistent = isBackgroundGenreApiConsistent(backgroundGenreApi);
+if (!backgroundGenreApiIsConsistent) {
+  console.error('Automatic genre catalogue is unavailable or inconsistent; capture and volume controls remain available.');
+}
+const allowedGenreIdSet = new Set(backgroundGenreApiIsConsistent ? backgroundGenreApi.allowedGenreIds : []);
+const allowedGenreStateSet = new Set(backgroundGenreApiIsConsistent
+  ? backgroundGenreApi.allowedStates
+  : ['disabled', 'waiting-capture', 'detected', 'detecting']);
+
 let currentCapturedTabId = null;
 let offscreenSetupPromise = null;
+/** @type {Promise<void>} */
 let captureQueue = Promise.resolve();
+let lastVolumeIndicatorWarningAt = 0;
+let lastPersistedAutoGenreStatusSignature = '';
+let autoGenreStatusPersistenceQueue = Promise.resolve();
 
 // EN: Serialize all capture lifecycle transitions, including browser events, to prevent stale STOP/START races.
 // RU: Сериализуем все переходы захвата, включая события браузера, чтобы старый STOP не прервал новый START.
@@ -19,6 +63,11 @@ let captureQueue = Promise.resolve();
 // EN: Serializes capture lifecycle tasks so delayed events cannot race newer starts.
 // RU: Сериализует операции захвата, чтобы запоздавшие события не мешали новому запуску.
 // UK: Серіалізує операції захоплення, щоб запізнілі події не заважали новому запуску.
+/**
+ * @template T
+ * @param {() => Promise<T> | T} task
+ * @returns {Promise<T>}
+ */
 function enqueueCaptureTask(task) {
   const resultPromise = captureQueue.then(task);
   captureQueue = resultPromise.then(() => undefined, () => undefined);
@@ -40,6 +89,7 @@ async function hidePageIndicator(tabId) {
 // Persist the safe default for first installs and older profiles without this preference.
 // Do not overwrite an explicit user choice when the extension is updated.
 chrome.runtime.onStartup.addListener(() => {
+  lastPersistedAutoGenreStatusSignature = '';
   chrome.storage.local.remove('autoGenreStatus').catch((error) => {
     console.debug('Could not clear stale automatic genre status on startup:', errorMessage(error));
   });
@@ -135,6 +185,24 @@ function sendToOffscreen(message) {
   });
 }
 
+// EN: Serializes automatic-genre status writes and retries after failed persistence.
+// RU: Сериализует сохранение статуса автожанра и позволяет повторить запись после ошибки.
+// UK: Серіалізує збереження статусу автожанру та дозволяє повторити запис після помилки.
+function enqueueAutoGenreStatusPersistence(storageArea, statusSnapshot, persistenceSignature) {
+  const snapshot = { ...statusSnapshot };
+  autoGenreStatusPersistenceQueue = autoGenreStatusPersistenceQueue
+    .catch(() => undefined)
+    // Invoke storage.set inside the chain so both synchronous throws and rejected promises are handled.
+    .then(() => storageArea.set({ autoGenreStatus: snapshot }))
+    .catch((error) => {
+      if (lastPersistedAutoGenreStatusSignature === persistenceSignature) {
+        lastPersistedAutoGenreStatusSignature = '';
+      }
+      console.warn('Could not persist automatic genre status:', errorMessage(error));
+    });
+  return autoGenreStatusPersistenceQueue;
+}
+
 // MV3 service workers can be suspended and restarted while the offscreen
 // document keeps processing the captured stream. Reconstruct this volatile
 // state from the offscreen document instead of unnecessarily stopping audio.
@@ -168,7 +236,7 @@ async function reconcileCapturedTabState() {
 // EN: Resolve the effective global or site-specific settings, then apply them to the active audio graph.
 // RU: Выбирает общие или сайт-специфичные параметры и передаёт их активному аудиографу.
 // UK: Обирає загальні або специфічні для сайту параметри й передає їх активному аудіографу.
-async function applySavedAudioSettingsToOffscreen(tabId = currentCapturedTabId) {
+async function applySavedAudioSettingsToOffscreen(tabId = currentCapturedTabId, modeOverrides = {}) {
   const data = await chrome.storage.local.get([
     'volume', 'muted', 'bassBoostEnabled', 'bassBoostDb', 'voiceBoostEnabled', 'voiceBoostDb',
     'peakLimiterEnabled', 'nightModeEnabled', 'youtubeAudioProfile', 'spotifyAudioProfile',
@@ -220,12 +288,17 @@ async function applySavedAudioSettingsToOffscreen(tabId = currentCapturedTabId) 
     bassBoostDb: Math.round(effective.bassBoostDb),
     voiceBoostDb: Math.round(effective.voiceBoostDb),
     muted: data.muted === true,
-    bassManualOverride: data.autoGenreBassManualOverride === true,
-    voiceManualOverride: data.autoGenreVoiceManualOverride === true
+    bassManualOverride: typeof modeOverrides.bassManualOverride === 'boolean'
+      ? modeOverrides.bassManualOverride : data.autoGenreBassManualOverride === true,
+    voiceManualOverride: typeof modeOverrides.voiceManualOverride === 'boolean'
+      ? modeOverrides.voiceManualOverride : data.autoGenreVoiceManualOverride === true
   });
   if (!result || result.success !== true) {
-    console.warn('Offscreen audio settings were not applied:', result && result.error ? result.error : 'No confirmation from audio processor.');
+    const reason = result && result.error ? result.error : 'No confirmation from audio processor.';
+    console.warn('Offscreen audio settings were not applied:', reason);
+    throw new Error(reason);
   }
+  return true;
 }
 
 // EN: Waits for an earlier tab capture to release before another capture starts.
@@ -264,6 +337,23 @@ function getTrackIdFromUrl(url) {
     return match ? `spotify:${match[1]}` : '';
   } catch (_) {}
   return '';
+}
+
+// EN: Resolve track metadata without allowing a stale DOM snapshot to override the current URL's canonical ID.
+// RU: Выбирает метаданные трека так, чтобы устаревший снимок DOM не подменял канонический ID из текущего URL.
+// UK: Визначає метадані треку так, щоб застарілий знімок DOM не підміняв канонічний ID з поточного URL.
+function resolveCaptureSourceMetadata(tab, pageTrack) {
+  const urlTrackId = getTrackIdFromUrl(tab && tab.url);
+  const pageTrackId = pageTrack && typeof pageTrack.trackId === 'string' && pageTrack.trackId.length <= 280
+    ? pageTrack.trackId : '';
+  const pageTrackMatchesUrl = !urlTrackId || !pageTrackId || pageTrackId === urlTrackId;
+  const pageTitle = pageTrackMatchesUrl && pageTrack && typeof pageTrack.title === 'string'
+    ? pageTrack.title.trim().slice(0, 500) : '';
+  const tabTitle = tab && typeof tab.title === 'string' ? tab.title.trim().slice(0, 500) : '';
+  return {
+    sourceTitle: pageTitle || tabTitle,
+    sourceTrackId: urlTrackId || pageTrackId
+  };
 }
 
 // EN: Restrict capture to known HTTPS player hosts and real media routes; reject lookalike hosts, credentials, and custom ports.
@@ -308,21 +398,9 @@ function isTrustedPopupSender(sender) {
     sender.url === chrome.runtime.getURL('popup.html'));
 }
 
-// EN: Validates bounds and types of audio settings before they reach the audio graph.
-// RU: Проверяет типы и допустимые диапазоны аудионастроек перед передачей в аудиограф.
-// UK: Перевіряє типи й допустимі діапазони аудіоналаштувань перед передаванням до аудіографа.
+// Shared with offscreen.js through shared/validation.js.
 function validAudioSettingsMessage(message) {
-  return Number.isInteger(message.tabId) &&
-    typeof message.volume === 'number' && Number.isFinite(message.volume) && message.volume >= 0 && message.volume <= 6 &&
-    typeof message.muted === 'boolean' &&
-    typeof message.bassBoostEnabled === 'boolean' &&
-    Number.isInteger(message.bassBoostDb) && message.bassBoostDb >= 0 && message.bassBoostDb <= 12 &&
-    typeof message.voiceBoostEnabled === 'boolean' &&
-    Number.isInteger(message.voiceBoostDb) && message.voiceBoostDb >= 0 && message.voiceBoostDb <= 8 &&
-    typeof message.peakLimiterEnabled === 'boolean' &&
-    typeof message.nightModeEnabled === 'boolean' &&
-    (message.bassManualOverride === undefined || typeof message.bassManualOverride === 'boolean') &&
-    (message.voiceManualOverride === undefined || typeof message.voiceManualOverride === 'boolean');
+  return VCPValidation.isValidAudioSettingsMessage(message, { requireTabId: true });
 }
 
 // EN: Applies a validated volume/EQ command to the active offscreen audio graph.
@@ -344,7 +422,15 @@ async function handleVolumeUpdate(message) {
     type: 'SET_VOLUME',
     volume: message.volume,
     muted: message.muted
-  }).catch(() => {});
+  }).catch((error) => {
+    // The floating indicator is optional; keep audio control working but leave a
+    // rate-limited diagnostic when the content script is missing after navigation.
+    const now = Date.now();
+    if (now - lastVolumeIndicatorWarningAt >= 5000) {
+      lastVolumeIndicatorWarningAt = now;
+      console.debug('Page volume indicator is unavailable; audio processing remains active:', errorMessage(error));
+    }
+  });
 
   const result = await sendToOffscreen({
     type: 'UPDATE_VOLUME',
@@ -359,8 +445,10 @@ async function handleVolumeUpdate(message) {
     bassManualOverride: message.bassManualOverride === true,
     voiceManualOverride: message.voiceManualOverride === true
   });
-  if (result && result.success === false) {
-    return { success: false, error: 'Audio processor rejected the settings.' };
+  if (!result || result.success !== true) {
+    const detail = result && typeof result.error === 'string' ? result.error : 'No acknowledgement from the audio processor.';
+    console.warn('Audio processor did not confirm volume/EQ settings:', detail);
+    return { success: false, error: detail };
   }
   return { success: true };
 }
@@ -381,25 +469,24 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     if (!trustedOffscreen) return;
     if (message.target !== 'popup') return;
 
-    const allowedGenres = ["hiphop", "trap", "drill", "grime", "phonk", "wave", "lofi", "ambient", "newAge", "chillout", "pop", "dancePop", "kpop", "jpop", "indiePop", "hyperpop", "rock", "altRock", "hardRock", "postRock", "metal", "metalcore", "punk", "indie", "grunge", "emo", "shoegaze", "jazz", "blues", "funk", "soul", "rnb", "disco", "country", "folk", "bluegrass", "acoustic", "classical", "orchestral", "soundtrack", "gameMusic", "animeMusic", "opera", "electronic", "house", "deepHouse", "progressiveHouse", "techno", "trance", "dubstep", "drumBass", "jungle", "breakbeat", "electro", "hardstyle", "synthwave", "vaporwave", "tripHop", "garage", "reggae", "dancehall", "ska", "reggaeton", "salsa", "bachata", "cumbia", "afrobeats", "amapiano", "gospel", "latin", "bossaNova", "samba", "tango", "flamenco", "bollywood", "experimental", "audioBassHeavy", "audioElectronic", "audioAtmospheric", "audioVocal", "audioOther"];
-    const allowedStates = ['disabled', 'waiting-capture', 'detected', 'detecting'];
+    const validGenre = allowedGenreIdSet.has(message.genre);
     const persistedStatus = {
       enabled: message.enabled === true,
       active: message.active === true,
-      genre: allowedGenres.includes(message.genre) ? message.genre : null,
+      genre: validGenre ? message.genre : null,
       confidence: typeof message.confidence === 'number' && Number.isFinite(message.confidence)
         ? Math.max(0, Math.min(1, message.confidence)) : 0,
       source: message.source === 'title' || message.source === 'audio' ? message.source : null,
       trackId: typeof message.trackId === 'string' && message.trackId.length <= 280 ? message.trackId : '',
       trackTitle: typeof message.trackTitle === 'string' && message.trackTitle.length <= 500 ? message.trackTitle : '',
-      bassBoostEnabled: allowedGenres.includes(message.genre) && typeof message.bassBoostEnabled === 'boolean' ? message.bassBoostEnabled : null,
-      bassBoostDb: allowedGenres.includes(message.genre) && Number.isFinite(message.bassBoostDb) ? Math.max(0, Math.min(12, message.bassBoostDb)) : null,
-      voiceBoostEnabled: allowedGenres.includes(message.genre) && typeof message.voiceBoostEnabled === 'boolean' ? message.voiceBoostEnabled : null,
-      voiceBoostDb: allowedGenres.includes(message.genre) && Number.isFinite(message.voiceBoostDb) ? Math.max(0, Math.min(8, message.voiceBoostDb)) : null,
-      volumeTrimDb: allowedGenres.includes(message.genre) && Number.isFinite(message.volumeTrimDb) ? Math.max(-2, Math.min(1, message.volumeTrimDb)) : null,
+      bassBoostEnabled: validGenre && typeof message.bassBoostEnabled === 'boolean' ? message.bassBoostEnabled : null,
+      bassBoostDb: validGenre && Number.isFinite(message.bassBoostDb) ? Math.max(0, Math.min(12, message.bassBoostDb)) : null,
+      voiceBoostEnabled: validGenre && typeof message.voiceBoostEnabled === 'boolean' ? message.voiceBoostEnabled : null,
+      voiceBoostDb: validGenre && Number.isFinite(message.voiceBoostDb) ? Math.max(0, Math.min(8, message.voiceBoostDb)) : null,
+      volumeTrimDb: validGenre && Number.isFinite(message.volumeTrimDb) ? Math.max(-2, Math.min(1, message.volumeTrimDb)) : null,
       bassManualOverride: message.bassManualOverride === true,
       voiceManualOverride: message.voiceManualOverride === true,
-      state: allowedStates.includes(message.state) ? message.state : 'detecting',
+      state: allowedGenreStateSet.has(message.state) ? message.state : 'detecting',
       updatedAt: typeof message.updatedAt === 'number' && Number.isFinite(message.updatedAt)
         ? message.updatedAt : Date.now()
     };
@@ -407,9 +494,16 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     try {
       const storageArea = chrome.storage && chrome.storage.local;
       if (storageArea && typeof storageArea.set === 'function') {
-        const savePromise = storageArea.set({ autoGenreStatus: persistedStatus });
-        if (savePromise && typeof savePromise.catch === 'function') {
-          savePromise.catch((error) => console.warn('Could not persist automatic genre status:', errorMessage(error)));
+        // Confidence can fluctuate on every analysis pass. Persist only material
+        // status changes and confidence changes of at least 0.1 to avoid excess I/O.
+        persistedStatus.confidence = Math.round(persistedStatus.confidence * 10) / 10;
+        const persistenceSnapshot = { ...persistedStatus };
+        delete persistenceSnapshot.updatedAt;
+        const persistenceSignature = JSON.stringify(persistenceSnapshot);
+        if (persistenceSignature !== lastPersistedAutoGenreStatusSignature) {
+          lastPersistedAutoGenreStatusSignature = persistenceSignature;
+          // Serialize writes so a slow older track cannot overwrite a newer status.
+          enqueueAutoGenreStatusPersistence(storageArea, persistedStatus, persistenceSignature);
         }
       } else {
         console.warn('Storage API unavailable while persisting automatic genre status.');
@@ -456,24 +550,76 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   // other extension contexts cannot start/stop capture or change global audio state.
   if (!isTrustedPopupSender(sender)) return;
 
+  if (message.type === 'EQ_MODE_SETTINGS') {
+    if (!['bass', 'voice'].includes(message.kind) || typeof message.enabled !== 'boolean') {
+      sendResponse({ success: false, error: 'Invalid Bass/Voice AUTO mode setting.' });
+      return false;
+    }
+    const isBass = message.kind === 'bass';
+    const key = isBass ? 'autoGenreBassManualOverride' : 'autoGenreVoiceManualOverride';
+    const manualOverride = message.enabled !== true;
+    const resultPromise = captureQueue.then(async () => {
+      let storagePersisted = true;
+      try {
+        await chrome.storage.local.set({
+          [key]: manualOverride,
+          genreParameterModeVersion: 1
+        });
+      } catch (storageError) {
+        storagePersisted = false;
+        console.warn('Could not persist per-effect AUTO mode; applying the current session value:', errorMessage(storageError));
+      }
+
+      await reconcileCapturedTabState();
+      const applied = Number.isInteger(currentCapturedTabId);
+      if (applied) {
+        await applySavedAudioSettingsToOffscreen(currentCapturedTabId, isBass
+          ? { bassManualOverride: manualOverride }
+          : { voiceManualOverride: manualOverride });
+      }
+      return { success: true, kind: message.kind, enabled: message.enabled, storagePersisted, applied };
+    });
+    captureQueue = resultPromise.then(() => undefined, () => undefined);
+    resultPromise.then(
+      (result) => sendResponse(result),
+      (error) => {
+        console.warn('Could not apply per-effect AUTO mode:', errorMessage(error));
+        sendResponse({ success: false, error: errorMessage(error) });
+      }
+    );
+    return true;
+  }
+
   if (message.type === 'AUTO_GENRE_SETTINGS') {
     if (typeof message.enabled !== 'boolean') {
       sendResponse({ success: false, error: 'Invalid auto genre setting.' });
       return false;
     }
     const resultPromise = captureQueue.then(async () => {
-      await chrome.storage.local.set({ autoGenreEnabled: message.enabled });
+      let storagePersisted = true;
+      try {
+        await chrome.storage.local.set({ autoGenreEnabled: message.enabled });
+      } catch (storageError) {
+        storagePersisted = false;
+        console.warn('Could not persist automatic genre setting; applying it for the current session:', errorMessage(storageError));
+      }
       await reconcileCapturedTabState();
       if (Number.isInteger(currentCapturedTabId)) {
         const capturedTab = await chrome.tabs.get(currentCapturedTabId).catch(() => null);
-        await sendToOffscreen({
+        const offscreenResult = await sendToOffscreen({
           type: 'AUTO_GENRE_SETTINGS',
           enabled: message.enabled,
           title: capturedTab && typeof capturedTab.title === 'string' ? capturedTab.title.slice(0, 500) : '',
           trackId: capturedTab ? getTrackIdFromUrl(capturedTab.url) : ''
         });
+        if (!offscreenResult || offscreenResult.success !== true) {
+          const rejectionReason = offscreenResult && offscreenResult.error
+            ? offscreenResult.error : 'Offscreen document did not apply automatic genre settings.';
+          console.warn('Offscreen rejected automatic genre settings:', rejectionReason);
+          throw new Error(rejectionReason);
+        }
       }
-      return { success: true, enabled: message.enabled };
+      return { success: true, enabled: message.enabled, storagePersisted };
     });
     captureQueue = resultPromise.then(() => undefined, () => undefined);
     resultPromise.then(
@@ -551,10 +697,14 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     const resultPromise = enqueueCaptureTask(async () => {
       await reconcileCapturedTabState();
       if (!Number.isInteger(currentCapturedTabId)) return { success: true, deferred: true };
-      return sendToOffscreen({ type: 'VISUALIZER_SETTINGS', bandCount: message.bandCount, sampleIntervalMs });
+      const result = await sendToOffscreen({ type: 'VISUALIZER_SETTINGS', bandCount: message.bandCount, sampleIntervalMs });
+      if (!result || result.success !== true) {
+        throw new Error(result && result.error ? result.error : 'Offscreen did not confirm visualizer settings.');
+      }
+      return result;
     });
     resultPromise.then(
-      (result) => sendResponse(result || { success: true }),
+      (result) => sendResponse(result),
       (error) => sendResponse({ success: false, error: errorMessage(error) })
     );
     return true;
@@ -571,10 +721,14 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
         return { success: false, error: 'No active capture for visualizer.' };
       }
       if (!Number.isInteger(currentCapturedTabId) && !message.enabled) return { success: true, deferred: true };
-      return sendToOffscreen({ type: 'VISUALIZER_CONTROL', enabled: message.enabled });
+      const result = await sendToOffscreen({ type: 'VISUALIZER_CONTROL', enabled: message.enabled });
+      if (!result || result.success !== true) {
+        throw new Error(result && result.error ? result.error : 'Offscreen did not confirm visualizer state.');
+      }
+      return result;
     });
     resultPromise.then(
-      (result) => sendResponse(result || { success: true }),
+      (result) => sendResponse(result),
       (error) => sendResponse({ success: false, error: errorMessage(error) })
     );
     return true;
@@ -621,7 +775,10 @@ async function handleStopCapture() {
       await sendToOffscreen({ type: 'VISUALIZER_CONTROL', enabled: false }).catch((error) => {
         console.debug('Could not disable visualizer before stopping capture:', errorMessage(error));
       });
-      await sendToOffscreen({ type: 'STOP_CAPTURE' });
+      const stopResult = await sendToOffscreen({ type: 'STOP_CAPTURE' });
+      if (!stopResult || stopResult.success !== true) {
+        throw new Error(stopResult && stopResult.error ? stopResult.error : 'Offscreen-документ не подтвердил остановку захвата.');
+      }
     }
     currentCapturedTabId = null;
     await hidePageIndicator(stoppedTabId);
@@ -668,8 +825,11 @@ async function handleStartCapture(tabId) {
 
     const previousTabId = currentCapturedTabId;
 
-    // Wait until offscreen has stopped the old stream before asking Chrome for a new ID.
-    await sendToOffscreen({ type: 'STOP_CAPTURE' });
+    // Wait for offscreen cleanup to finish before requesting a new single-use stream ID.
+    const stopResult = await sendToOffscreen({ type: 'STOP_CAPTURE' });
+    if (!stopResult || stopResult.success !== true) {
+      throw new Error(stopResult && stopResult.error ? stopResult.error : 'Offscreen-документ не подтвердил остановку предыдущего захвата.');
+    }
     currentCapturedTabId = null;
     // A capture handoff must also stop the old tab's metadata polling and remove
     // its floating indicator; otherwise an idle content-script timer can live on.
@@ -689,24 +849,28 @@ async function handleStartCapture(tabId) {
       }
     }
 
-    // Re-check the destination immediately before requesting a single-use stream ID.
-    const [latestActiveTab] = await chrome.tabs.query({ active: true, lastFocusedWindow: true });
-    if (!latestActiveTab || latestActiveTab.id !== tabId || !isSupportedCaptureUrl(latestActiveTab.url)) {
-      throw new Error('Захват доступен только на YouTube и Spotify Web Player.');
-    }
-
-    // A stream ID is single-use and short-lived; create it immediately before forwarding it.
-    const streamId = await chrome.tabCapture.getMediaStreamId({ targetTabId: tabId });
+    // Resolve storage and page metadata before creating the single-use stream ID.
+    // Chrome expires an unused tabCapture stream ID after a few seconds, so no
+    // storage/content-script requests may sit between ID creation and consumption.
     const storedAutoGenre = await chrome.storage.local.get([
       'autoGenreEnabled', 'autoGenreBassManualOverride', 'autoGenreVoiceManualOverride'
     ]);
     const pageTrack = await chrome.tabs.sendMessage(tabId, { type: 'GET_MEDIA_TRACK_METADATA' }).catch(() => null);
-    const sourceTitle = pageTrack && typeof pageTrack.title === 'string' && pageTrack.title.trim()
-      ? pageTrack.title.slice(0, 500)
-      : (typeof latestActiveTab.title === 'string' ? latestActiveTab.title.slice(0, 500) : '');
-    const sourceTrackId = pageTrack && typeof pageTrack.trackId === 'string' && pageTrack.trackId.length <= 280
-      ? pageTrack.trackId
-      : getTrackIdFromUrl(latestActiveTab.url);
+
+    // The tab may have navigated or lost activeTab permission while metadata was read.
+    // Revalidate immediately before requesting the one-time stream ID.
+    const [captureActiveTab] = await chrome.tabs.query({ active: true, lastFocusedWindow: true });
+    const captureTab = await chrome.tabs.get(tabId).catch(() => null);
+    if (!captureActiveTab || captureActiveTab.id !== tabId || !captureTab ||
+        !isSupportedCaptureUrl(captureTab.url) ||
+        getSupportedCapturePlatform(captureTab.url) !== getSupportedCapturePlatform(captureActiveTab.url)) {
+      throw new Error('The active tab changed or is no longer supported before audio capture started.');
+    }
+
+    const { sourceTitle, sourceTrackId } = resolveCaptureSourceMetadata(captureTab, pageTrack);
+
+    // Create the ID only after all awaited preparation, then consume it immediately.
+    const streamId = await chrome.tabCapture.getMediaStreamId({ targetTabId: tabId });
     const captureResult = await sendToOffscreen({
       type: 'START_CAPTURE',
       streamId,
@@ -747,7 +911,11 @@ async function handleStartCapture(tabId) {
     // could otherwise arrive after the next START and stop that newer stream.
     currentCapturedTabId = null;
     try {
-      await sendToOffscreen({ type: 'STOP_CAPTURE' });
+      const cleanupResult = await sendToOffscreen({ type: 'STOP_CAPTURE' });
+      if (!cleanupResult || cleanupResult.success !== true) {
+        console.warn('Offscreen did not confirm cleanup after failed capture startup:',
+          cleanupResult && cleanupResult.error ? cleanupResult.error : 'No STOP_CAPTURE confirmation.');
+      }
     } catch (cleanupError) {
       console.warn('Could not clean up failed capture startup:', errorMessage(cleanupError));
     }
