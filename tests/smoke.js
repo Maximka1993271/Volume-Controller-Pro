@@ -2262,15 +2262,13 @@ check('popup translation attributes and Russian fallback text match the runtime 
     const key = match[3], text = match[4].trim();
     if (!text) continue;
     // Decode HTML text exactly once; chained replacements can double-decode nested entities.
-    const decoded = text.replace(/&(amp|lt|gt);/g, entity => {
-      switch (entity) {
-        case '&amp;': return '&';
-        case '&lt;': return '<';
-        case '&gt;': return '>';
-        default: return entity;
-      }
-    });
-    assert.notEqual(text.includes('&amp;lt;'), false, 'entity decoder must not recursively parse replacement output');
+    const decodeHtmlText = value => value.replace(/&(amp|lt|gt);/g, entity => ({
+      '&amp;': '&',
+      '&lt;': '<',
+      '&gt;': '>'
+    })[entity] || entity);
+    assert.equal(decodeHtmlText('&amp;lt;'), '&lt;', 'nested entities must only be decoded once');
+    const decoded = decodeHtmlText(text);
     assert.equal(decoded, ru[key], `fallback text differs from RU dictionary: ${key}`);
   }
 });
