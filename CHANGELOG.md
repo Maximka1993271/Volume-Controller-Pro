@@ -1,5 +1,10 @@
 # Changelog
 
+## [Unreleased]
+
+- Add filled-area and radial frequency visualizer styles with EN/RU/UK labels.
+- Widen the extension popup to 460 px and expand the power-saving selector for long mode names.
+
 ## [4.7.92] — 2026-10-30
 
 - Recover visualizer settings and control requests from the offscreen capture state after a service-worker restart, using the serialized capture queue.
