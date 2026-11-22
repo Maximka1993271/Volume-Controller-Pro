@@ -374,8 +374,36 @@ if (vcpExtensionContextActive && !window.volumeControllerInjected) {
 if (vcpExtensionContextActive && !window.volumeControllerTrackWatcherInjected) {
   window.volumeControllerTrackWatcherInjected = true;
   let trackWatcherTimer = null;
+  let trackWatcherActive = false;
   let navigationDebounceTimer = null;
   let lastTrackSnapshotKey = '';
+
+  // EN: Resolve Spotify's stable current-track ID from now-playing links/URIs before using localized text as a last resort.
+  // RU: Сначала получает стабильный ID текущего трека Spotify из ссылок/URI плеера и лишь затем допускает текстовый fallback.
+  // UK: Спочатку отримує стабільний ID поточного треку Spotify з посилань/URI плеєра й лише потім використовує текстовий fallback.
+  function getSpotifyTrackIdFromDom() {
+    const trackLink = document.querySelector([
+      '#now-playing-bar a[href*="/track/"]',
+      '[data-testid="now-playing-widget"] a[href*="/track/"]',
+      '[data-testid="context-item-info-title"] a[href*="/track/"]',
+      'a[data-testid="context-item-link"][href*="/track/"]',
+      '[data-testid="nowplaying-track-link"][href*="/track/"]'
+    ].join(', '));
+    const hrefValue = trackLink && (trackLink.href || (typeof trackLink.getAttribute === 'function' && trackLink.getAttribute('href')));
+    const hrefMatch = String(hrefValue || '').match(/\/track\/([A-Za-z0-9]+)/);
+    if (hrefMatch) return hrefMatch[1];
+
+    const trackUriNode = document.querySelector([
+      '#now-playing-bar [data-uri^="spotify:track:"]',
+      '[data-testid="now-playing-widget"] [data-uri^="spotify:track:"]',
+      '[data-testid="now-playing-widget"][data-uri^="spotify:track:"]',
+      '[data-testid="nowplaying-track-link"][data-uri^="spotify:track:"]'
+    ].join(', '));
+    const uriValue = trackUriNode && typeof trackUriNode.getAttribute === 'function'
+      ? trackUriNode.getAttribute('data-uri') : '';
+    const uriMatch = String(uriValue || '').match(/^spotify:track:([A-Za-z0-9]+)/);
+    return uriMatch ? uriMatch[1] : '';
+  }
 
   // EN: Read current player metadata from supported DOM selectors; return no result until a real title/identity exists.
   // RU: Читает метаданные текущего плеера через поддерживаемые DOM-селекторы; возвращает пустой результат, пока данных нет.
@@ -427,10 +455,9 @@ if (vcpExtensionContextActive && !window.volumeControllerTrackWatcherInjected) {
         const text = node ? String(node.innerText || node.textContent || '').replace(/\s+/g, ' ').trim() : '';
         if (text) { artist = text.slice(0, 200); break; }
       }
-      const trackLink = document.querySelector('#now-playing-bar a[href*="/track/"], [data-testid="now-playing-widget"] a[href*="/track/"], [data-testid="context-item-info-title"] a[href*="/track/"], a[data-testid="context-item-link"][href*="/track/"]');
-      const hrefMatch = String((trackLink && trackLink.href) || '').match(/\/track\/([A-Za-z0-9]+)/);
       const pageMatch = pageUrl.pathname.match(/\/track\/([A-Za-z0-9]+)/);
-      const id = (hrefMatch && hrefMatch[1]) || (pageMatch && pageMatch[1]) || '';
+      // The now-playing link/URI is more stable across Spotify UI-language changes than title/artist text.
+      const id = getSpotifyTrackIdFromDom() || (pageMatch && pageMatch[1]) || '';
       if (!title) {
         title = String(document.title || '').replace(/\s*[|•-]\s*Spotify\s*$/i, '').trim();
       }
@@ -477,20 +504,52 @@ if (vcpExtensionContextActive && !window.volumeControllerTrackWatcherInjected) {
   // RU: Запускает отслеживание метаданных медиа, чтобы название и ID трека оставались актуальными.
   // UK: Запускає відстеження метаданих медіа, щоб назва та ID треку залишалися актуальними.
   function startTrackWatcher() {
-    if (trackWatcherTimer) return;
+    if (trackWatcherActive) {
+      if (!trackWatcherTimer && document.visibilityState !== 'hidden') {
+        publishTrackSnapshot(true);
+        trackWatcherTimer = setInterval(() => publishTrackSnapshot(false), 1200);
+      }
+      return;
+    }
+    trackWatcherActive = true;
+    // Intentional one-shot snapshot even when hidden: page navigation events can change tracks in the background.
+    // The periodic 1200 ms poll remains paused until the tab becomes visible.
     publishTrackSnapshot(true);
-    trackWatcherTimer = setInterval(() => publishTrackSnapshot(false), 1200);
+    if (document.visibilityState !== 'hidden') {
+      trackWatcherTimer = setInterval(() => publishTrackSnapshot(false), 1200);
+    }
+  }
+
+  // EN: Stop polling while hidden and resume with a fresh snapshot when visible.
+  // RU: Приостанавливает опрос в скрытой вкладке и возобновляет его со свежим снимком при возвращении.
+  // UK: Призупиняє опитування у прихованій вкладці та відновлює його зі свіжим знімком після повернення.
+  function handleTrackWatcherVisibilityChange() {
+    if (!trackWatcherActive) return;
+    if (document.visibilityState === 'hidden') {
+      if (trackWatcherTimer) clearInterval(trackWatcherTimer);
+      trackWatcherTimer = null;
+      return;
+    }
+    if (!trackWatcherTimer) {
+      publishTrackSnapshot(true);
+      trackWatcherTimer = setInterval(() => publishTrackSnapshot(false), 1200);
+    }
   }
 
   // EN: Stops media metadata polling and releases its timer.
   // RU: Останавливает опрос метаданных медиа и освобождает таймер.
   // UK: Зупиняє опитування метаданих медіа та звільняє таймер.
   function stopTrackWatcher() {
+    trackWatcherActive = false;
     if (trackWatcherTimer) clearInterval(trackWatcherTimer);
     trackWatcherTimer = null;
   }
 
-  vcpRegisterContextCleanup(stopTrackWatcher);
+  document.addEventListener('visibilitychange', handleTrackWatcherVisibilityChange);
+  vcpRegisterContextCleanup(() => {
+    stopTrackWatcher();
+    document.removeEventListener('visibilitychange', handleTrackWatcherVisibilityChange);
+  });
 
   try {
     const handleTrackRuntimeMessage = (message, sender, sendResponse) => {

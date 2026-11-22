@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "__MSG_extName__",
-  "version": "4.7.92",
+  "version": "4.8.31",
   "description": "__MSG_extDescription__",
   "permissions": [
     "activeTab",
@@ -28,7 +28,7 @@
     "128": "icons/icon128.png"
   },
   "minimum_chrome_version": "116",
-  "default_locale": "ru",
+  "default_locale": "en",
   "content_security_policy": {
     "extension_pages": "script-src 'self'; object-src 'none'"
   }
