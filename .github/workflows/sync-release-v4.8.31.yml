@@ -9,7 +9,6 @@ on:
 
 permissions:
   contents: write
-  pull-requests: write
 
 concurrency:
   group: sync-v4.8.31
@@ -146,11 +145,15 @@ jobs:
                   assert not re.search(pattern,s), f"unsafe code pattern in {rel}: {pattern}"
           print(f"Validated v{m['version']}: {len(browser)} browser locales; {len(langs)} runtime locales; {len(keys)} runtime keys")
           PY
+          python3 - <<'PY'
+          from pathlib import Path
+          path = Path("popup.html")
+          source = path.read_text(encoding="utf-8")
+          path.write_text("\n".join(line.rstrip() for line in source.splitlines()) + "\n", encoding="utf-8")
+          PY
           git diff --check
 
-      - name: Open pull request and enable auto-merge
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Push validated release-sync branch
         run: |
           set -euo pipefail
           branch="automation/sync-v4.8.31-${GITHUB_RUN_ID}"
@@ -165,6 +168,9 @@ jobs:
           fi
           git commit -m "Sync v4.8.31 release sources and fix repository mismatch"
           git push origin "$branch"
-          gh pr create --repo "${GITHUB_REPOSITORY}" --base main --head "$branch" --title "Sync v4.8.31 release sources into main" --body "Synchronizes the source files with the published v4.8.31 archive (SHA-256 verified), aligns README and changelog metadata, and replaces the outdated test entry point with the 134-check production smoke suite. Static validation and smoke tests passed in this workflow. The PR is opened to comply with protected-branch rules."
-          gh pr checks "$branch" --repo "${GITHUB_REPOSITORY}" --watch --required
-          gh pr merge "$branch" --repo "${GITHUB_REPOSITORY}" --squash
+          {
+            echo "## Release source synchronization branch"
+            echo
+            echo "Branch: `$branch`"
+            echo "Create a pull request from this branch to `main` so the repository's required checks run on the proposed source update."
+          } >> "$GITHUB_STEP_SUMMARY"
