@@ -17,14 +17,25 @@ The extension requires a user action to start tab capture. Automatic genre audio
 - Toggle the relevant effect off and on once, then check whether the popup confirms the update.
 - Stop and restart capture if the capture session has become stale.
 
-The v4.8.30+ audio path requires explicit success acknowledgements from the offscreen processor. An unconfirmed update should be reported as a failure rather than silently displayed as applied.
+In v4.8.31, volume and EQ changes require an explicit success acknowledgement from the offscreen audio processor. If it is missing, the popup treats the update as failed instead of assuming it was applied. Check the displayed error/status, retry, or restart capture.
 
-## The visualizer is blank
+## The visualizer is blank or does not turn on
 
 - Confirm capture is active and playback is running.
 - Check that the spectrum visualizer and spectrogram are enabled.
-- Try another spectrum style.
+- Try another spectrum style or palette.
 - Enable Power Saving if the popup is using too much CPU.
+- If capture is active, check whether the popup confirmed the visualizer command. Unconfirmed activation is not displayed as active.
+
+Visualizer settings saved while capture is inactive can apply at the next capture start.
+
+## A high-gain or clipping warning appears
+
+- Lower master volume or Bass Boost.
+- Check whether a YouTube/Spotify profile or active genre profile changes effective gain.
+- Keep Peak Limiter enabled when appropriate.
+
+The popup includes the active genre profile's volume trim in its high-gain calculation, matching the offscreen engine.
 
 ## Automatic genre detection does not show a genre
 
@@ -36,7 +47,7 @@ See [Automatic Genre Detection](Automatic-Genre-Detection).
 
 - Confirm that the selected file is a Volume Controller Pro `.cfg` backup.
 - Do not edit the structure or numeric fields manually.
-- A backup from a newer schema may not be accepted by an older extension version.
+- The v4.8.31 backup schema is 28. A backup from a newer schema may not be accepted by an older extension version.
 - Keep the original file and try exporting a fresh backup from the current version.
 
 ## The extension changed after an update
