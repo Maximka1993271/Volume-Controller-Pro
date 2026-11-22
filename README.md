@@ -42,6 +42,7 @@ This repository is the project's official GitHub home and the only distribution 
 - **Latest release (v4.8.31):** [Download `Volume.Controller.Pro.v4.8.31.zip`](https://github.com/Maximka1993271/Volume-Controller-Pro/releases/download/v4.8.31/Volume.Controller.Pro.v4.8.31.zip)
 - **SHA-256 checksum:** [`Volume.Controller.Pro.v4.8.31.zip.sha256`](https://github.com/Maximka1993271/Volume-Controller-Pro/releases/download/v4.8.31/Volume.Controller.Pro.v4.8.31.zip.sha256)
 - **Full release notes:** [v4.8.31](https://github.com/Maximka1993271/Volume-Controller-Pro/releases/tag/v4.8.31)
+- **User guide:** [Volume Controller Pro Wiki — v4.8.31](https://github.com/Maximka1993271/Volume-Controller-Pro/tree/main/wiki)
 - **Source archive:** [Download the current main source ZIP](https://github.com/Maximka1993271/Volume-Controller-Pro/archive/refs/heads/main.zip). The source tree is synchronized with the published v4.8.31 release.
 - The previous [v4.7.90 release](https://github.com/Maximka1993271/Volume-Controller-Pro/releases/tag/v4.7.90) remains in the release history.
 - No official Chrome Web Store or Microsoft Edge Add-ons listing is currently announced by the author.
@@ -53,18 +54,20 @@ This repository is the project's official GitHub home and the only distribution 
 
 ## ⭐ Project Highlights
 
-- 🔊 **Volume Control** — presets up to 600%.
-- 🎚️ **Bass Boost** — adjustable low-frequency enhancement, up to +12 dB.
-- 🎤 **Voice Boost** — speech-clarity controls with AUTO and MANUAL modes.
-- 🎛️ **Audio Profiles** — per-site settings for supported media sites such as YouTube and Spotify.
-- 🎶 **Automatic Genre Detection** — 76 title-based genre/subgenre labels plus five broad audio-only profiles; aliases are synchronized with the v4.8.31 release; see [the full catalog and EQ families](AUTO_GENRE_CATALOG.md).
-- 📊 **Audio Visualizers** — seven spectrum styles plus a spectrogram.
-- 💾 **Settings Backup** — import/export settings through .cfg files.
-- 🌗 **Themes** — Dark, Light, and System options.
-- 🌙 **Night Mode** — audio dynamics control for quieter listening.
-- ⚡ **Power Saving** — reduces visualization workload.
-- 🎯 **Clipping Detection** — visual warnings when audio peaks are detected.
-- 🌐 **Three Languages** — English, Русский, Українська.
+- 🔊 **Volume Control** — presets from 0% to 600%.
+- 🎚️ **Bass Boost** — low-frequency enhancement up to +12 dB.
+- 🎤 **Voice Boost** — speech-clarity enhancement up to +8 dB, with an independent AUTO/MANUAL mode.
+- 🎛️ **Audio Profiles** — separate saved settings for supported YouTube and Spotify Web Player pages.
+- 🎶 **Automatic Genre Detection** — 76 title-based genre/subgenre labels and five broad audio-only profiles; see [the full catalog and EQ families](AUTO_GENRE_CATALOG.md).
+- 📊 **Audio Visualizers** — seven spectrum styles (Bars, Line, Wave, Mirror, Dots, Filled area, and Radial) plus a spectrogram.
+- 🎨 **GTA VI Palettes** — 25 selectable color palettes, with matching popup, spectrum, and spectrogram colors.
+- ⚡ **Quick Settings** — collapsible shortcuts for frequently used audio and profile controls.
+- 🛡️ **Audio Protection** — Peak Limiter, clipping warnings, and an optional limiter-off warning.
+- 🌙 **Night Mode** — programme-compressor dynamics for quieter listening.
+- 💾 **Settings Backup** — `.cfg` import/export with current schema version 28 and migration of supported older backups.
+- 🌗 **Appearance** — Light, Dark, and System themes; optional scrollbar and panel visibility settings.
+- ⚡ **Power Saving** — Balanced, Performance, and Efficiency modes for visualization workload.
+- 🌐 **Localization** — English, Russian, and Ukrainian interfaces.
 
 ## 🐛 Latest Fixes — v4.8.31
 
@@ -76,6 +79,15 @@ This repository is the project's official GitHub home and the only distribution 
 - **Night Mode signal path:** the programme compressor remains connected for Night Mode when the separate final Peak Limiter / Safety Ceiling stage is bypassed.
 - **New visualizer styles:** Added Filled area and Radial spectrum modes with EN/RU/UK labels.
 - **Popup layout:** Widened the extension popup to 460 px.
+- **GTA VI palette gallery:** Added 25 selectable palettes plus the classic palette. The selected theme colors popup accents, volume milestone indicators, the frequency visualizer, and the spectrogram.
+- **Visualizer options:** Added the Filled area and Radial spectrum styles; added GTA VI theme support to both the spectrum visualizer and spectrogram.
+- **Quick Settings:** Added a dedicated accessible expand/collapse control. The panel starts collapsed, and its state is saved independently from panel visibility.
+- **Settings navigation:** Grouped settings into accessible collapsible categories and added a bottom Done button that closes the popup without changing audio state.
+- **Independent Bass/Voice modes:** Bass Boost and Voice Boost retain separate AUTO/MANUAL preferences. Global genre detection changes do not force either effect back to AUTO.
+- **Mode readout visibility:** Added independent visibility preferences for Bass and Voice AUTO/MANUAL dB readouts; hiding a readout does not change its effect or mode.
+- **Effect and appearance preferences:** Added Hide inactive effects, scrollbar visibility, and a saved expand/collapse preference for the GTA VI palette gallery.
+- **Protection controls:** Added an optional limiter-off warning and made Voice Boost's power switch available in Audio settings. High-gain warnings include active genre volume trim.
+- **Backup compatibility:** Advanced settings backup schema to version 28, preserving migration paths for supported older backup versions.
 
 **Validation:** the supplied 4.8.31 package passed 134 smoke checks. Automated tests do not replace real playback and capture tests in Microsoft Edge.
 
@@ -87,8 +99,10 @@ The one-click recommended configuration provides a moderate starting point for e
 - Bass Boost: enabled at +4 dB; Voice Boost: enabled at +2 dB; both use AUTO.
 - Peak Limiter and clipping monitoring: enabled; Night Mode: disabled.
 - Automatic genre detection: enabled.
-- Visualizer: GTA VI palette, Bars, 48 bands, balanced performance.
+- Visualizer: Bars, 48 bands, with the GTA VI theme enabled for spectrum and spectrogram.
+- Power Saving: enabled in Balanced mode.
 - Spectrogram history: 4 seconds.
+- Quick Settings: visible and collapsed by default.
 - YouTube and Spotify profiles are temporarily disabled without deleting their saved values.
 
 The selected language, light/dark theme and GTA VI palette are preserved. This is a balanced starting point, not a universal acoustic calibration.
@@ -108,12 +122,14 @@ For vulnerability reporting, see [SECURITY.md](SECURITY.md). Contributors should
 | 🔊 **Volume 0–600%** | Boost playback beyond the standard 100% using presets. |
 | 🎚️ **Bass Boost** | Low-frequency enhancement using a low-shelf filter around 105 Hz, adjustable up to +12 dB. |
 | 🎤 **Voice Boost** | Speech clarity enhancement focused around the 1.25 kHz and 2.8 kHz ranges. |
-| 📊 **Visualizers** | Spectrum: Bars, Line, Wave, Mirror, and Dots; plus a spectrogram. |
+| 📊 **Visualizers** | Seven spectrum styles: Bars, Line, Wave, Mirror, Dots, Filled area, and Radial; plus a configurable spectrogram. |
 | 🎨 **Themes** | Light, Dark, and System options. |
-| 💾 **Settings Backup** | Export/import settings with a .cfg file. |
+| 💾 **Settings Backup** | Export/import `.cfg` settings files; current schema version 28, with migration of supported older schemas. |
 | 🌙 **Night Mode** | Dynamics control intended for quieter listening. |
 | ⚡ **Power Save** | Reduces visualization workload to save CPU. |
-| 🎯 **Clipping Detection** | Visual warning when audio peaks are detected. |
+| 🎯 **Audio Protection** | Clipping warning and optional limiter-off warning, alongside the Peak Limiter. |
+| 🎨 **GTA VI Palettes** | 25 selectable palettes plus the classic palette, shared with the spectrum visualizer and spectrogram. |
+| ⚡ **Quick Settings** | Collapsible shortcut panel with a saved expanded/collapsed state. |
 | 🌐 **Localization** | Russian, Ukrainian, and English. |
 
 ---
@@ -180,9 +196,7 @@ Do not select the documentation-only repository directory unless it contains the
 ```text
 Volume-Controller-Pro/
 ├── _locales/
-│   ├── en/messages.json
-│   ├── ru/messages.json
-│   └── uk/messages.json
+│   └── {en,en_GB,en_US,ru,ru_RU,uk,uk_UA}/messages.json
 ├── icons/
 │   ├── favicon.ico
 │   ├── favicon.png
@@ -211,6 +225,15 @@ Volume-Controller-Pro/
 ├── popup.js
 ├── styles.css
 ├── manifest.json
+├── shared/
+│   ├── genres.js
+│   └── validation.js
+├── tests/
+│   └── smoke.js
+├── wiki/
+│   ├── Home.md
+│   ├── Release-Notes-v4.8.31.md
+│   └── user-guide pages
 ├── AUTO_GENRE_CATALOG.md
 ├── CHANGELOG.md
 ├── CONTRIBUTING.md
@@ -235,6 +258,7 @@ Volume-Controller-Pro/
 
 ## 📚 Project documentation
 
+- [User guide and v4.8.31 Wiki](https://github.com/Maximka1993271/Volume-Controller-Pro/tree/main/wiki)
 - [Full automatic genre catalog](AUTO_GENRE_CATALOG.md)
 - [Changelog](CHANGELOG.md)
 - [Privacy notes](PRIVACY.md)
