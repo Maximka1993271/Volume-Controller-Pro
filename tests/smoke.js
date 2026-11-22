@@ -2232,6 +2232,53 @@ check('programme compressor remains connected for Night Mode independently from 
   assert.match(offscreen, /The programme compressor stays connected in every mode/);
 });
 
+check('EN/RU/UK dictionaries and browser locale catalogs have matching keys and placeholders', () => {
+  const runtime = Object.fromEntries(['en','ru','uk'].map(locale => [locale, JSON.parse(read(`lang/${locale}.json`))]));
+  const baseKeys = Object.keys(runtime.en).sort();
+  const placeholders = value => [...String(value).matchAll(/\{\{\s*([A-Za-z0-9_]+)\s*\}\}|\{\s*([A-Za-z0-9_]+)\s*\}/g)].map(m => m[1] || m[2]).sort();
+  for (const locale of ['ru','uk']) {
+    assert.deepEqual(Object.keys(runtime[locale]).sort(), baseKeys, `${locale} keys must match EN`);
+    for (const key of baseKeys) {
+      assert.ok(typeof runtime[locale][key] === 'string' && runtime[locale][key].trim(), `${locale}/${key} must be non-empty`);
+      assert.deepEqual(placeholders(runtime[locale][key]), placeholders(runtime.en[key]), `${locale}/${key} placeholders must match EN`);
+    }
+  }
+  const locales = ['en','en_GB','en_US','ru','ru_RU','uk','uk_UA'];
+  const browser = Object.fromEntries(locales.map(locale => [locale, JSON.parse(read(`_locales/${locale}/messages.json`))]));
+  const browserKeys = Object.keys(browser.en).sort();
+  for (const locale of locales.slice(1)) assert.deepEqual(Object.keys(browser[locale]).sort(), browserKeys, `${locale} browser keys must match EN`);
+  for (const [regional,parent] of [['en_GB','en'],['en_US','en'],['ru_RU','ru'],['uk_UA','uk']]) {
+    for (const key of browserKeys) assert.equal(browser[regional][key].message, browser[parent][key].message, `${regional}/${key} must match ${parent}`);
+  }
+});
+
+check('popup translation attributes and Russian fallback text match the runtime dictionary', () => {
+  const html = read('popup.html');
+  const ru = JSON.parse(read('lang/ru.json'));
+  const attrs = [...html.matchAll(/\bdata-i18n(?:-[\w-]+)?\s*=\s*["']([^"']+)["']/g)];
+  for (const match of attrs) assert.ok(typeof ru[match[1]] === 'string' && ru[match[1]].trim(), `missing RU key: ${match[1]}`);
+  const nodes = [...html.matchAll(/<([a-z][\w-]*)\b([^>]*\bdata-i18n="([^"]+)"[^>]*)>([^<]*)(?=<)/gi)];
+  for (const match of nodes) {
+    const key = match[3], text = match[4].trim();
+    if (!text) continue;
+    const decoded = text.replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>');
+    assert.equal(decoded, ru[key], `fallback text differs from RU dictionary: ${key}`);
+  }
+});
+
+check('non-English static accessibility attributes have localization bindings', () => {
+  const html = read('popup.html');
+  const attrs = [...html.matchAll(/\b(title|aria-label|placeholder|alt)\s*=\s*(["'])(.*?)\2/g)];
+  for (const match of attrs) {
+    const attribute = match[1], value = match[3];
+    if (!/[А-Яа-яЁёІіЇїЄє]/.test(value)) continue;
+    const start = html.lastIndexOf('<', match.index);
+    const end = html.indexOf('>', match.index);
+    const tag = html.slice(start, end + 1);
+    assert.ok(tag.includes(`data-i18n-${attribute}=`), `missing data-i18n-${attribute}: ${tag.slice(0,160)}`);
+  }
+});
+
 checkQueue.then(() => {
   process.stdout.write(`\n${passed} smoke checks passed.\n`);
 }).catch((error) => {
