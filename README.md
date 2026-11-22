@@ -42,6 +42,7 @@ This repository is the project's official GitHub home and the only distribution 
 - **Latest release (v4.8.31):** [Download `Volume.Controller.Pro.v4.8.31.zip`](https://github.com/Maximka1993271/Volume-Controller-Pro/releases/download/v4.8.31/Volume.Controller.Pro.v4.8.31.zip)
 - **SHA-256 checksum:** [`Volume.Controller.Pro.v4.8.31.zip.sha256`](https://github.com/Maximka1993271/Volume-Controller-Pro/releases/download/v4.8.31/Volume.Controller.Pro.v4.8.31.zip.sha256)
 - **Full release notes:** [v4.8.31](https://github.com/Maximka1993271/Volume-Controller-Pro/releases/tag/v4.8.31)
+- **User guide:** [Wiki](https://github.com/Maximka1993271/Volume-Controller-Pro/wiki) · [Documentation source files](wiki/Home.md)
 - **Source archive:** [Download the current main source ZIP](https://github.com/Maximka1993271/Volume-Controller-Pro/archive/refs/heads/main.zip). The source tree is synchronized with the published v4.8.31 release.
 - The previous [v4.7.90 release](https://github.com/Maximka1993271/Volume-Controller-Pro/releases/tag/v4.7.90) remains in the release history.
 - No official Chrome Web Store or Microsoft Edge Add-ons listing is currently announced by the author.
@@ -108,7 +109,7 @@ For vulnerability reporting, see [SECURITY.md](SECURITY.md). Contributors should
 | 🔊 **Volume 0–600%** | Boost playback beyond the standard 100% using presets. |
 | 🎚️ **Bass Boost** | Low-frequency enhancement using a low-shelf filter around 105 Hz, adjustable up to +12 dB. |
 | 🎤 **Voice Boost** | Speech clarity enhancement focused around the 1.25 kHz and 2.8 kHz ranges. |
-| 📊 **Visualizers** | Spectrum: Bars, Line, Wave, Mirror, and Dots; plus a spectrogram. |
+| 📊 **Visualizers** | Seven spectrum styles: Bars, Line, Wave, Mirror, Dots, Filled area, and Radial; plus a separate spectrogram. |
 | 🎨 **Themes** | Light, Dark, and System options. |
 | 💾 **Settings Backup** | Export/import settings with a .cfg file. |
 | 🌙 **Night Mode** | Dynamics control intended for quieter listening. |
@@ -179,29 +180,20 @@ Do not select the documentation-only repository directory unless it contains the
 
 ```text
 Volume-Controller-Pro/
-├── _locales/
-│   ├── en/messages.json
-│   ├── ru/messages.json
-│   └── uk/messages.json
-├── icons/
-│   ├── favicon.ico
-│   ├── favicon.png
-│   ├── icon16.png
-│   ├── icon48.png
-│   └── icon128.png
-├── lang/
-│   ├── en.json
-│   ├── ru.json
-│   └── uk.json
+├── _locales/                 # en, en_GB, en_US, ru, ru_RU, uk, uk_UA
+├── icons/                    # Browser icons and favicons
+├── lang/                     # en.json, ru.json, uk.json
+├── shared/
+│   ├── genres.js             # Shared automatic-genre catalog
+│   └── validation.js         # Audio-message validation helpers
+├── tests/
+│   ├── extension-functions.test.js
+│   └── smoke.js              # 134 production-source smoke checks
+├── wiki/                     # Source for the GitHub Wiki pages
 ├── .github/
-│   ├── ISSUE_TEMPLATE/
-│   └── workflows/
-│       ├── sync-release-notes.yml
-│       └── validate-extension.yml
-├── Readme/
-│   ├── Readme.md
-│   └── RELEASE_DESCRIPTION_v4.7.90.md
+│   └── workflows/            # Validation, CodeQL, release and Wiki workflows
 ├── screenshots/
+├── Readme/
 ├── background.js
 ├── content.js
 ├── offscreen.html
@@ -235,6 +227,8 @@ Volume-Controller-Pro/
 
 ## 📚 Project documentation
 
+- [User guide — GitHub Wiki](https://github.com/Maximka1993271/Volume-Controller-Pro/wiki) (publication setup is in progress)
+- [User guide source pages](wiki/Home.md)
 - [Full automatic genre catalog](AUTO_GENRE_CATALOG.md)
 - [Changelog](CHANGELOG.md)
 - [Privacy notes](PRIVACY.md)
