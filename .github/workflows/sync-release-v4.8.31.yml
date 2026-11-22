@@ -166,4 +166,5 @@ jobs:
           git commit -m "Sync v4.8.31 release sources and fix repository mismatch"
           git push origin "$branch"
           gh pr create --repo "${GITHUB_REPOSITORY}" --base main --head "$branch" --title "Sync v4.8.31 release sources into main" --body "Synchronizes the source files with the published v4.8.31 archive (SHA-256 verified), aligns README and changelog metadata, and replaces the outdated test entry point with the 134-check production smoke suite. Static validation and smoke tests passed in this workflow. The PR is opened to comply with protected-branch rules."
-          gh pr merge "$branch" --repo "${GITHUB_REPOSITORY}" --auto --squash
+          gh pr checks "$branch" --repo "${GITHUB_REPOSITORY}" --watch --required
+          gh pr merge "$branch" --repo "${GITHUB_REPOSITORY}" --squash
