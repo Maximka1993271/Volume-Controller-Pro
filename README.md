@@ -39,9 +39,9 @@ This repository is the project's official GitHub home and the only distribution 
 
 - **Official repository:** [Maximka1993271/Volume-Controller-Pro](https://github.com/Maximka1993271/Volume-Controller-Pro)
 - **Releases:** [Download page](https://github.com/Maximka1993271/Volume-Controller-Pro/releases)
-- **Latest release (v4.8.30):** [Download `Volume.Controller.Pro.v4.8.30.zip`](https://github.com/Maximka1993271/Volume-Controller-Pro/releases/download/v4.8.30/Volume.Controller.Pro.v4.8.30.zip)
-- **SHA-256 checksum:** [`Volume.Controller.Pro.v4.8.30.zip.sha256`](https://github.com/Maximka1993271/Volume-Controller-Pro/releases/download/v4.8.30/Volume.Controller.Pro.v4.8.30.zip.sha256)
-- **Full release notes:** [v4.8.30](https://github.com/Maximka1993271/Volume-Controller-Pro/releases/tag/v4.8.30)
+- **Latest release (v4.8.31):** [Download `Volume.Controller.Pro.v4.8.31.zip`](https://github.com/Maximka1993271/Volume-Controller-Pro/releases/download/v4.8.31/Volume.Controller.Pro.v4.8.31.zip)
+- **SHA-256 checksum:** [`Volume.Controller.Pro.v4.8.31.zip.sha256`](https://github.com/Maximka1993271/Volume-Controller-Pro/releases/download/v4.8.31/Volume.Controller.Pro.v4.8.31.zip.sha256)
+- **Full release notes:** [v4.8.31](https://github.com/Maximka1993271/Volume-Controller-Pro/releases/tag/v4.8.31)
 - **Source archive:** [Download the current `main` source ZIP](https://github.com/Maximka1993271/Volume-Controller-Pro/archive/refs/heads/main.zip). The versioned 4.8.30 release ZIP is the recommended download for the latest build; the current `main` source tree is still at 4.7.92 and will be synchronized separately.
 - The previous [v4.7.90 release](https://github.com/Maximka1993271/Volume-Controller-Pro/releases/tag/v4.7.90) remains in the release history.
 - No official Chrome Web Store or Microsoft Edge Add-ons listing is currently announced by the author.
