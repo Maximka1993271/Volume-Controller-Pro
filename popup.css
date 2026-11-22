@@ -61,7 +61,7 @@ body {
 }
 
 .logo h1 {
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 600;
   color: #e8eaf6;
   margin: 0;
@@ -76,7 +76,7 @@ body {
 }
 
 /* Keep the mute control in the header beside enable/disable, with the same compact Windows-style icon size. */
-.header-actions { gap: 5px; }
+.header-actions { gap: 5px; transform: translateX(4px); }
 .header-actions .icon-btn {
   width: 29px;
   height: 29px;
@@ -113,7 +113,7 @@ body {
   background: rgba(255, 255, 255, 0.055);
   color: #e8eaf6;
   font: inherit;
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 650;
   letter-spacing: 0.1px;
   cursor: pointer;
@@ -213,7 +213,7 @@ body {
 }
 
 .volume-value span {
-  font-size: 24px;
+  font-size: 25px;
 }
 
 .volume-value.boosted {
@@ -225,7 +225,7 @@ body {
 }
 
 .volume-label {
-  font-size: 11px;
+  font-size: 12px;
   color: #6b7280;
   text-transform: uppercase;
   letter-spacing: 1.5px;
@@ -289,7 +289,7 @@ body {
   display: flex;
   justify-content: space-between;
   margin-top: 12px;
-  font-size: 9px;
+  font-size: 10px;
   color: #4b5563;
   font-weight: 500;
   padding: 0 2px;
@@ -310,7 +310,7 @@ body {
   padding: 11px 0;
   min-width: 0;
   border-radius: 8px;
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s;
@@ -370,7 +370,7 @@ body {
 }
 
 .toggle-label {
-  font-size: 11px;
+  font-size: 12px;
   color: #9ca3af;
   font-weight: 500;
   white-space: nowrap;
@@ -378,7 +378,7 @@ body {
 
 .status {
   text-align: center;
-  font-size: 11px;
+  font-size: 12px;
   color: #4b5563;
   padding: 10px;
   background: rgba(255, 255, 255, 0.02);
@@ -404,7 +404,7 @@ body {
   justify-content: space-between;
   align-items: flex-end;
   gap: 12px;
-  font-size: 10px;
+  font-size: 11px;
   color: #6b7280;
   padding-top: 12px;
   border-top: 1px solid rgba(255, 255, 255, 0.05);
@@ -496,14 +496,14 @@ body {
 }
 
 .bass-title {
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 700;
   color: #e0e7ff;
   letter-spacing: 0.2px;
 }
 
 .bass-subtitle {
-  font-size: 10px;
+  font-size: 11px;
   line-height: 1.4;
   margin-top: 3px;
   color: #7e89a8;
@@ -519,12 +519,12 @@ body {
   align-items: center;
   margin-bottom: 8px;
   color: #9ca3af;
-  font-size: 10px;
+  font-size: 11px;
 }
 
 .bass-slider-header strong {
   color: #c4b5fd;
-  font-size: 11px;
+  font-size: 12px;
   font-variant-numeric: tabular-nums;
 }
 
@@ -547,7 +547,7 @@ body {
   padding: 2px 4px;
   color: #67e8f9;
   background: rgba(8, 145, 178, 0.16);
-  font-size: 8px;
+  font-size: 9px;
   font-weight: 800;
   line-height: 1.2;
   letter-spacing: 0.45px;
@@ -609,12 +609,12 @@ body {
   justify-content: space-between;
   margin-top: 7px;
   color: #59627d;
-  font-size: 9px;
+  font-size: 10px;
   font-variant-numeric: tabular-nums;
 }
 
 .bass-note {
-  font-size: 9px;
+  font-size: 10px;
   line-height: 1.45;
   color: #69738f;
   margin-top: 9px;
@@ -631,7 +631,7 @@ body {
 }
 
 .voice-title {
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 700;
   color: #cffafe;
   letter-spacing: 0.2px;
@@ -689,12 +689,24 @@ body {
 }
 
 body::-webkit-scrollbar {
-  width: 6px;
+  width: 7px;
+  height: 7px;
+}
+
+body::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.045);
+  border-radius: 999px;
 }
 
 body::-webkit-scrollbar-thumb {
-  background: rgba(165, 180, 252, 0.3);
-  border-radius: 6px;
+  background: var(--vcp-gta-gradient, linear-gradient(180deg, var(--vcp-cyan), var(--vcp-violet)));
+  border: 1px solid color-mix(in srgb, var(--vcp-gta-bright, var(--vcp-violet)) 58%, transparent);
+  border-radius: 999px;
+  box-shadow: 0 0 7px color-mix(in srgb, var(--vcp-gta-bright, var(--vcp-violet)) 35%, transparent);
+}
+
+body::-webkit-scrollbar-thumb:hover {
+  filter: brightness(1.18);
 }
 
 
@@ -716,14 +728,14 @@ body::-webkit-scrollbar-thumb {
 }
 .quick-settings-header h2 {
   color: #e8eaf6;
-  font-size: 11px;
+  font-size: 12px;
   line-height: 1.3;
   font-weight: 750;
 }
 .quick-settings-header p {
   margin-top: 3px;
   color: #929cba;
-  font-size: 9px;
+  font-size: 10px;
   line-height: 1.35;
 }
 .quick-settings-badge {
@@ -737,7 +749,7 @@ body::-webkit-scrollbar-thumb {
   border-radius: 8px;
   background: rgba(129, 140, 248, 0.1);
   color: #a5b4fc;
-  font-size: 13px;
+  font-size: 14px;
 }
 .quick-settings-grid {
   display: grid;
@@ -781,14 +793,14 @@ body::-webkit-scrollbar-thumb {
 }
 .quick-setting-copy strong {
   color: #e8eaf6;
-  font-size: 9px;
+  font-size: 10px;
   font-weight: 750;
   line-height: 1.25;
   overflow-wrap: anywhere;
 }
 .quick-setting-copy small {
   color: #8994b1;
-  font-size: 8px;
+  font-size: 9px;
   line-height: 1.3;
   overflow-wrap: anywhere;
 }
@@ -848,7 +860,7 @@ body[data-theme="light"] .quick-setting-night .quick-setting-icon { color: #7c3a
 
 .visualizer-title {
   color: #e3e8ff;
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 700;
   letter-spacing: 0.12px;
 }
@@ -856,7 +868,7 @@ body[data-theme="light"] .quick-setting-night .quick-setting-icon { color: #7c3a
 .visualizer-subtitle {
   margin-top: 4px;
   color: #848daf;
-  font-size: 9px;
+  font-size: 10px;
   line-height: 1.35;
 }
 
@@ -870,7 +882,7 @@ body[data-theme="light"] .quick-setting-night .quick-setting-icon { color: #7c3a
   border-radius: 7px;
   background: rgba(16, 185, 129, 0.08);
   color: #6ee7b7;
-  font-size: 8px;
+  font-size: 9px;
   font-weight: 800;
   letter-spacing: 0.9px;
   transition: color 0.2s ease, background 0.2s ease, border-color 0.2s ease;
@@ -924,7 +936,7 @@ body[data-theme="light"] .quick-setting-night .quick-setting-icon { color: #7c3a
   align-items: center;
   padding: 8px;
   color: #7983a3;
-  font-size: 10px;
+  font-size: 11px;
   letter-spacing: 0.15px;
   text-align: center;
   pointer-events: none;
@@ -940,7 +952,7 @@ body[data-theme="light"] .quick-setting-night .quick-setting-icon { color: #7c3a
   justify-content: space-between;
   padding: 7px 2px 0;
   color: #69718f;
-  font-size: 8px;
+  font-size: 9px;
   font-variant-numeric: tabular-nums;
 }
 
@@ -980,7 +992,7 @@ body[data-theme="light"] .quick-setting-night .quick-setting-icon { color: #7c3a
 
 .spectrogram-title {
   color: #e3f7ff;
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 750;
   letter-spacing: 0.12px;
 }
@@ -988,31 +1000,8 @@ body[data-theme="light"] .quick-setting-night .quick-setting-icon { color: #7c3a
 .spectrogram-subtitle {
   margin-top: 4px;
   color: #8297b6;
-  font-size: 9px;
+  font-size: 10px;
   line-height: 1.4;
-}
-
-.spectrogram-badge {
-  display: inline-flex;
-  flex: 0 0 auto;
-  align-items: center;
-  gap: 5px;
-  padding: 5px 7px;
-  border: 1px solid rgba(45, 212, 191, 0.18);
-  border-radius: 7px;
-  background: rgba(20, 184, 166, 0.075);
-  color: #7ee7db;
-  font-size: 7px;
-  font-weight: 800;
-  letter-spacing: 0.7px;
-}
-
-.spectrogram-badge-dot {
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: #5eead4;
-  box-shadow: 0 0 8px rgba(45, 212, 191, 0.62);
 }
 
 .spectrogram-stage {
@@ -1039,7 +1028,7 @@ body[data-theme="light"] .quick-setting-night .quick-setting-icon { color: #7c3a
   justify-content: center;
   padding: 8px 28px;
   color: #8b9ab7;
-  font-size: 9px;
+  font-size: 10px;
   line-height: 1.45;
   text-align: center;
   pointer-events: none;
@@ -1060,7 +1049,7 @@ body[data-theme="light"] .quick-setting-night .quick-setting-icon { color: #7c3a
   border-radius: 4px;
   color: #b8f8f1;
   background: rgba(7, 11, 27, 0.68);
-  font-size: 6px;
+  font-size: 7px;
   font-weight: 800;
   letter-spacing: 0.65px;
   pointer-events: none;
@@ -1080,7 +1069,7 @@ body[data-theme="light"] .quick-setting-night .quick-setting-icon { color: #7c3a
   justify-content: space-between;
   padding: 7px 2px 0;
   color: #7584a2;
-  font-size: 8px;
+  font-size: 9px;
   font-variant-numeric: tabular-nums;
 }
 
@@ -1090,7 +1079,7 @@ body[data-theme="light"] .quick-setting-night .quick-setting-icon { color: #7c3a
   gap: 6px;
   padding: 6px 2px 0;
   color: #657895;
-  font-size: 7px;
+  font-size: 8px;
   font-weight: 700;
   letter-spacing: 0.55px;
 }
@@ -1185,7 +1174,7 @@ body[data-theme="light"] .power-disable-btn.active { background: #ffe4e6; border
 
 .settings-heading-copy h2 {
   color: #edf0ff;
-  font-size: 13px;
+  font-size: 14px;
   line-height: 1.3;
   font-weight: 750;
 }
@@ -1193,7 +1182,7 @@ body[data-theme="light"] .power-disable-btn.active { background: #ffe4e6; border
 .settings-heading-copy p {
   margin-top: 3px;
   color: #8893b0;
-  font-size: 9px;
+  font-size: 10px;
   line-height: 1.4;
 }
 
@@ -1223,9 +1212,9 @@ body[data-theme="light"] .power-disable-btn.active { background: #ffe4e6; border
 }
 
 .settings-row:last-child { border-bottom: 0; padding-bottom: 2px; }
-.settings-label { color: #dce2f8; font-size: 10px; font-weight: 650; line-height: 1.35; }
+.settings-label { color: #dce2f8; font-size: 11px; font-weight: 650; line-height: 1.35; }
 .settings-option-copy { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
-.settings-help { color: #8a95b2; font-size: 8.5px; line-height: 1.4; }
+.settings-help { color: #8a95b2; font-size: 9.5px; line-height: 1.4; }
 .settings-control { position: relative; display: block; width: 180px; max-width: 54%; flex: 0 0 auto; min-width: 0; }
 .settings-control::after {
   content: '';
@@ -1253,7 +1242,7 @@ body[data-theme="light"] .power-disable-btn.active { background: #ffe4e6; border
   background: rgba(255, 255, 255, 0.055);
   color: #e8eaf6;
   font: inherit;
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 600;
   cursor: pointer;
 }
@@ -1275,14 +1264,14 @@ body[data-theme="light"] .power-disable-btn.active { background: #ffe4e6; border
 }
 .settings-subsection-heading h3 {
   color: #e9edff;
-  font-size: 10.5px;
+  font-size: 11.5px;
   line-height: 1.3;
   font-weight: 750;
 }
 .settings-subsection-heading p {
   margin-top: 3px;
   color: #8995b4;
-  font-size: 8.5px;
+  font-size: 9.5px;
   line-height: 1.4;
 }
 /* Fine-grained visualizer preferences are grouped to keep Settings scannable. */
@@ -1321,8 +1310,8 @@ body[data-theme="light"] .power-disable-btn.active { background: #ffe4e6; border
 .service-profile-card .settings-row { gap: 8px; padding: 6px 0; }
 .service-profile-card .settings-range-control { flex-basis: 125px; }
 .service-profile-card input[type="range"] { min-width: 0; }
-.service-profile-card .settings-label { font-size: 9px; }
-.service-profile-card .settings-help { font-size: 8px; }
+.service-profile-card .settings-label { font-size: 10px; }
+.service-profile-card .settings-help { font-size: 9px; }
 .service-profile-card input:disabled { opacity: 0.5; }
 body[data-theme="light"] .service-profiles-settings-section { border-color: #dfe2f3; background: rgba(34, 211, 238, 0.025); }
 body[data-theme="light"] .service-profile-card { border-color: #dfe2f3; background: rgba(255, 255, 255, 0.55); }
@@ -1359,7 +1348,7 @@ body[data-theme="light"] .service-profile-card { border-color: #dfe2f3; backgrou
 }
 .settings-range-control output {
   color: #c4b5fd;
-  font-size: 9px;
+  font-size: 10px;
   font-weight: 750;
   text-align: right;
   font-variant-numeric: tabular-nums;
@@ -1423,11 +1412,11 @@ body[data-theme="light"] .settings-range-control input[type="range"] { accent-co
   border-radius: 7px;
   background: rgba(129, 140, 248, 0.12);
   color: #b9c5ff;
-  font-size: 14px;
+  font-size: 15px;
 }
 .profile-preset-copy { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
-.profile-preset-copy strong { color: inherit; font-size: 9.5px; font-weight: 720; line-height: 1.2; }
-.profile-preset-copy small { color: #929db8; font-size: 7.8px; line-height: 1.25; }
+.profile-preset-copy strong { color: inherit; font-size: 10.5px; font-weight: 720; line-height: 1.2; }
+.profile-preset-copy small { color: #929db8; font-size: 8.8px; line-height: 1.25; }
 .factory-reset-section {
   display: flex;
   flex-direction: column;
@@ -1444,7 +1433,7 @@ body[data-theme="light"] .settings-range-control input[type="range"] { accent-co
   background: rgba(248, 113, 113, 0.075);
   color: #fca5a5;
   font: inherit;
-  font-size: 9.5px;
+  font-size: 10.5px;
   font-weight: 700;
   cursor: pointer;
   transition: background 0.16s ease, border-color 0.16s ease;
@@ -1481,7 +1470,7 @@ body[data-theme="light"] .factory-reset-btn:hover { background: #ffe5e8; border-
   background: rgba(129, 140, 248, 0.09);
   color: #dce2ff;
   font: inherit;
-  font-size: 9px;
+  font-size: 10px;
   line-height: 1.35;
   font-weight: 700;
   cursor: pointer;
@@ -1736,14 +1725,14 @@ body[data-theme="light"] .profile-preset-copy small { color: #626b80; }
 }
 .audio-protection-icon { flex: 0 0 auto; display: inline-flex; align-items: center; justify-content: center; }
 .audio-protection-copy { display: flex; flex: 1 1 auto; min-width: 0; flex-direction: column; gap: 3px; }
-.audio-protection-copy strong { font-size: 10px; line-height: 1.35; font-weight: 750; }
-.audio-protection-copy small { color: #a0abc6; font-size: 9px; line-height: 1.35; }
+.audio-protection-copy strong { font-size: 11px; line-height: 1.35; font-weight: 750; }
+.audio-protection-copy small { color: #a0abc6; font-size: 10px; line-height: 1.35; }
 .audio-protection-badge {
   flex: 0 0 auto;
   border: 1px solid rgba(52, 211, 153, 0.26);
   border-radius: 6px;
   padding: 4px 5px;
-  font-size: 7px;
+  font-size: 8px;
   font-weight: 800;
   letter-spacing: .25px;
   white-space: nowrap;
@@ -1822,14 +1811,14 @@ body[data-theme="light"] .audio-protection-indicator[data-state="limiter-off"] .
 }
 .capture-status-copy strong {
   color: #e8eaf6;
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 700;
   line-height: 1.35;
   overflow-wrap: anywhere;
 }
 .capture-status-copy small {
   color: #9aa6c3;
-  font-size: 10px;
+  font-size: 11px;
   line-height: 1.4;
   overflow-wrap: anywhere;
 }
@@ -1841,7 +1830,7 @@ body[data-theme="light"] .audio-protection-indicator[data-state="limiter-off"] .
   border-radius: 7px;
   color: #b7c1ef;
   background: rgba(129, 140, 248, 0.08);
-  font-size: 9px;
+  font-size: 10px;
   font-weight: 700;
   line-height: 1.25;
   text-align: center;
@@ -1938,11 +1927,11 @@ body[data-theme="light"] .capture-status-indicator[data-state="error"] {
 .auto-genre-status-card[hidden] { display: none !important; }
 .auto-genre-status-icon { display: inline-flex; align-items: center; justify-content: center; flex: 0 0 28px; width: 28px; height: 28px; border-radius: 9px; color: #67e8f9; background: rgba(8, 145, 178, 0.14); font-size: 19px; }
 .auto-genre-status-copy { display: flex; flex: 1 1 auto; flex-direction: column; min-width: 0; gap: 3px; }
-.auto-genre-status-copy strong { display: block; min-width: 0; max-width: 100%; color: #e8eaf6; font-size: 10px; font-weight: 750; line-height: 1.3; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.auto-genre-status-copy small { color: #9ba8c8; font-size: 8.5px; line-height: 1.4; }
-.auto-genre-status-copy .auto-genre-profile-details { color: #7dd3fc; font-size: 8px; line-height: 1.35; }
+.auto-genre-status-copy strong { display: block; min-width: 0; max-width: 100%; color: #e8eaf6; font-size: 11px; font-weight: 750; line-height: 1.3; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.auto-genre-status-copy small { color: #9ba8c8; font-size: 9.5px; line-height: 1.4; }
+.auto-genre-status-copy .auto-genre-profile-details { color: #7dd3fc; font-size: 9px; line-height: 1.35; }
 body[data-theme="light"] .auto-genre-status-copy .auto-genre-profile-details { color: #0369a1; }
-.auto-genre-status-badge { flex: 0 0 auto; max-width: 52px; padding: 4px 6px; border: 1px solid rgba(56, 189, 248, 0.22); border-radius: 7px; color: #67e8f9; font-size: 8px; font-weight: 800; letter-spacing: .35px; text-align: center; white-space: nowrap; }
+.auto-genre-status-badge { flex: 0 0 auto; max-width: 52px; padding: 4px 6px; border: 1px solid rgba(56, 189, 248, 0.22); border-radius: 7px; color: #67e8f9; font-size: 9px; font-weight: 800; letter-spacing: .35px; text-align: center; white-space: nowrap; }
 .auto-genre-status-card[data-state="detected"] .auto-genre-status-icon { color: #86efac; background: rgba(34, 197, 94, 0.12); }
 .auto-genre-status-card[data-state="detected"] .auto-genre-status-badge { color: #86efac; border-color: rgba(34, 197, 94, 0.26); }
 body[data-theme="light"] .auto-genre-status-card { border-color: #cceaf5; background: linear-gradient(135deg, #effcff, #f4f5ff); }
@@ -1956,7 +1945,7 @@ body[data-theme="light"] .auto-genre-status-icon, body[data-theme="light"] .auto
   max-width: 100%;
   margin-top: 3px;
   color: var(--text-secondary, #9ca3af);
-  font-size: 10px;
+  font-size: 11px;
   line-height: 1.35;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -2034,7 +2023,7 @@ body[data-theme="light"] {
   color: var(--vcp-cyan);
 }
 
-.logo > svg {
+.logo > .brand-mark {
   border: 1px solid rgba(92, 225, 244, 0.26);
   border-radius: 12px;
   color: #79edff;
@@ -2952,3 +2941,719 @@ body[data-theme="light"] .toggle input:checked + .toggle-slider::after {
 }
 
 
+
+
+/* GTA VI gradient palette selector and live accent theme overrides. */
+.gta-palette-settings {
+  padding: 0 0 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.055);
+}
+.gta-palette-heading {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 0 0 8px;
+}
+.gta-palette-gallery {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 7px;
+  max-height: 236px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: var(--vcp-gta-bright, var(--vcp-violet)) rgba(255,255,255,.07);
+  padding: 2px 4px 7px 1px;
+}
+.gta-palette-gallery::-webkit-scrollbar { width: 7px; }
+.gta-palette-gallery::-webkit-scrollbar-track { background: rgba(255,255,255,.045); border-radius: 999px; }
+.gta-palette-gallery::-webkit-scrollbar-thumb {
+  background: var(--vcp-gta-gradient, linear-gradient(180deg, var(--vcp-cyan), var(--vcp-violet)));
+  border: 1px solid color-mix(in srgb, var(--vcp-gta-bright, var(--vcp-violet)) 58%, transparent);
+  border-radius: 999px;
+  box-shadow: 0 0 6px color-mix(in srgb, var(--vcp-gta-bright, var(--vcp-violet)) 30%, transparent);
+}
+.gta-palette-gallery::-webkit-scrollbar-thumb:hover { filter: brightness(1.18); }
+.gta-palette-card {
+  position: relative;
+  display: flex;
+  min-width: 0;
+  min-height: 62px;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  gap: 4px;
+  padding: 5px;
+  border: 1px solid rgba(157,170,205,.20);
+  border-radius: 9px;
+  background: linear-gradient(150deg, rgba(255,255,255,.055), rgba(255,255,255,.018));
+  color: inherit;
+  cursor: pointer;
+  text-align: left;
+  transition: border-color .16s ease, background .16s ease, transform .16s ease, box-shadow .16s ease;
+}
+.gta-palette-card:hover { transform: translateY(-1px); border-color: rgba(239,75,167,.48); }
+.gta-palette-card:focus-visible { outline: 2px solid var(--vcp-gta-bright, #ef4ba7); outline-offset: 2px; }
+.gta-palette-card.is-selected,
+.gta-palette-card[aria-checked="true"] {
+  border-color: var(--vcp-gta-bright, #ef4ba7);
+  background: linear-gradient(145deg, rgba(136,81,204,.18), rgba(239,75,167,.10));
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--vcp-gta-bright, #ef4ba7) 35%, transparent), 0 0 12px color-mix(in srgb, var(--vcp-gta-bright, #ef4ba7) 16%, transparent);
+}
+.gta-palette-card-swatch {
+  display: block;
+  width: 100%;
+  height: 20px;
+  border-radius: 5px;
+  border: 1px solid rgba(255,255,255,.2);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.15);
+}
+.gta-palette-card-label {
+  color: var(--vcp-gta-bright, #ef4ba7);
+  font-size: 10px;
+  line-height: 1;
+  font-weight: 850;
+  letter-spacing: .055em;
+}
+.gta-palette-card-name {
+  display: -webkit-box;
+  min-height: 19px;
+  overflow: hidden;
+  color: #b7c2d9;
+  font-size: 8px;
+  line-height: 1.3;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+.gta-palette-preview-wrap {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 0 0 2px;
+}
+.gta-palette-preview {
+  height: 13px;
+  flex: 1 1 auto;
+  min-width: 0;
+  border: 1px solid rgba(255,255,255,.22);
+  border-radius: 999px;
+  background: linear-gradient(90deg, #4bd9ed, #7d91ff, #b88aff);
+  box-shadow: 0 0 12px rgba(120, 145, 255, .12);
+  transition: background .2s ease, box-shadow .2s ease;
+}
+.gta-palette-preview-name {
+  flex: 0 0 auto;
+  min-width: 68px;
+  color: #aab7d2;
+  font-size: 9px;
+  font-weight: 700;
+  text-align: right;
+}
+body[data-theme="light"] .gta-palette-card {
+  border-color: rgba(70,82,120,.18);
+  background: linear-gradient(150deg, #fff, #f6f7fc);
+}
+body[data-theme="light"] .gta-palette-card-name { color: #596783; }
+body[data-theme="light"] .gta-palette-card.is-selected,
+body[data-theme="light"] .gta-palette-card[aria-checked="true"] {
+  background: linear-gradient(145deg, rgba(136,81,204,.12), rgba(239,75,167,.09));
+}
+body[data-theme="light"] .gta-palette-settings { border-bottom-color: #e7eaf4; }
+body[data-theme="light"] .gta-palette-preview { border-color: rgba(70, 82, 120, .22); }
+body[data-theme="light"] .gta-palette-preview-name { color: #69738b; }
+
+body[data-accent-palette^="gta-"] {
+  --vcp-gta-soft: color-mix(in srgb, var(--vcp-gta-bright) 15%, transparent);
+  --vcp-gta-border: color-mix(in srgb, var(--vcp-gta-bright) 46%, transparent);
+}
+body[data-theme="dark"][data-accent-palette^="gta-"] { --vcp-gta-accent: var(--vcp-gta-bright); }
+body[data-theme="light"][data-accent-palette^="gta-"] { --vcp-gta-accent: var(--vcp-gta-deep); }
+
+body[data-accent-palette^="gta-"] .app::before {
+  background:
+    radial-gradient(circle at 0% 4%, color-mix(in srgb, var(--vcp-gta-bright) 20%, transparent), transparent 36%),
+    radial-gradient(circle at 100% 52%, color-mix(in srgb, var(--vcp-gta-deep) 18%, transparent), transparent 38%);
+  opacity: .82;
+}
+body[data-accent-palette^="gta-"] .logo,
+body[data-accent-palette^="gta-"] .mute-button,
+body[data-accent-palette^="gta-"] .github-link,
+body[data-accent-palette^="gta-"] .quick-setting-icon,
+body[data-accent-palette^="gta-"] .bass-slider-header strong,
+body[data-accent-palette^="gta-"] .voice-panel .bass-slider-header strong,
+body[data-accent-palette^="gta-"] .settings-control::after {
+  color: var(--vcp-gta-accent);
+}
+body[data-accent-palette^="gta-"] .logo > .brand-mark {
+  color: var(--vcp-gta-accent);
+  border-color: var(--vcp-gta-border);
+  background: linear-gradient(145deg, color-mix(in srgb, var(--vcp-gta-bright) 20%, transparent), color-mix(in srgb, var(--vcp-gta-deep) 19%, transparent));
+  box-shadow: 0 5px 16px color-mix(in srgb, var(--vcp-gta-bright) 13%, transparent), inset 0 1px 0 rgba(255,255,255,.07);
+}
+body[data-accent-palette^="gta-"] .header-actions .icon-btn:hover,
+body[data-accent-palette^="gta-"] .header-actions .mute-button:hover,
+body[data-accent-palette^="gta-"] .settings-btn.active,
+body[data-accent-palette^="gta-"] .settings-close-btn:hover {
+  background: var(--vcp-gta-soft);
+  border-color: var(--vcp-gta-border);
+}
+body[data-accent-palette^="gta-"] .volume-value:not(.boosted) {
+  background: var(--vcp-gta-gradient);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 3px 14px color-mix(in srgb, var(--vcp-gta-bright) 16%, transparent));
+}
+body[data-accent-palette^="gta-"] .volume-display::after {
+  background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--vcp-gta-bright) 45%, transparent), color-mix(in srgb, var(--vcp-gta-deep) 35%, transparent), transparent);
+}
+body[data-accent-palette^="gta-"] .slider-fill {
+  background: var(--vcp-gta-gradient);
+}
+body.rgb-glow[data-accent-palette^="gta-"] .slider-fill {
+  animation: none;
+  background: var(--vcp-gta-gradient);
+}
+body[data-accent-palette^="gta-"] #volumeSlider::-webkit-slider-thumb,
+body[data-accent-palette^="gta-"] #bassBoostSlider::-webkit-slider-thumb,
+body[data-accent-palette^="gta-"] #voiceBoostSlider::-webkit-slider-thumb {
+  border-color: var(--vcp-gta-bright);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--vcp-gta-bright) 14%, transparent), 0 0 15px color-mix(in srgb, var(--vcp-gta-bright) 34%, transparent);
+}
+body[data-accent-palette^="gta-"] #volumeSlider::-moz-range-thumb,
+body[data-accent-palette^="gta-"] #bassBoostSlider::-moz-range-thumb,
+body[data-accent-palette^="gta-"] #voiceBoostSlider::-moz-range-thumb {
+  border-color: var(--vcp-gta-bright);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--vcp-gta-bright) 14%, transparent), 0 0 15px color-mix(in srgb, var(--vcp-gta-bright) 34%, transparent);
+}
+body[data-accent-palette^="gta-"] .toggle input:checked + .toggle-slider {
+  background: var(--vcp-gta-gradient);
+  border-color: var(--vcp-gta-bright);
+  box-shadow: inset 0 1px 2px rgba(255,255,255,.22), 0 0 0 2px color-mix(in srgb, var(--vcp-gta-bright) 9%, transparent), 0 0 12px color-mix(in srgb, var(--vcp-gta-bright) 20%, transparent);
+}
+body[data-accent-palette^="gta-"] .preset-btn.active,
+body[data-accent-palette^="gta-"] .profile-preset.active {
+  border-color: var(--vcp-gta-border);
+  background: linear-gradient(135deg, color-mix(in srgb, var(--vcp-gta-bright) 20%, transparent), color-mix(in srgb, var(--vcp-gta-deep) 20%, transparent));
+}
+body[data-theme="light"][data-accent-palette^="gta-"] .preset-btn.active,
+body[data-theme="light"][data-accent-palette^="gta-"] .profile-preset.active {
+  color: var(--vcp-gta-deep);
+}
+body[data-accent-palette^="gta-"] .quick-setting-card:has(input:checked),
+body[data-accent-palette^="gta-"] .settings-select:focus-visible,
+body[data-accent-palette^="gta-"] .settings-file-btn:focus-visible {
+  border-color: var(--vcp-gta-border);
+  outline-color: var(--vcp-gta-bright);
+}
+body[data-accent-palette^="gta-"] .auto-genre-status-card {
+  border-color: var(--vcp-gta-border);
+  background: linear-gradient(115deg, color-mix(in srgb, var(--vcp-gta-bright) 15%, transparent), color-mix(in srgb, var(--vcp-gta-deep) 18%, transparent) 72%, rgba(25,32,56,.85));
+}
+body[data-accent-palette^="gta-"] .auto-genre-status-icon {
+  border-color: var(--vcp-gta-border);
+  color: var(--vcp-gta-accent);
+  background: linear-gradient(145deg, color-mix(in srgb, var(--vcp-gta-bright) 18%, transparent), color-mix(in srgb, var(--vcp-gta-deep) 15%, transparent));
+}
+body[data-accent-palette^="gta-"] .settings-select:focus-visible { outline: 2px solid var(--vcp-gta-bright); }
+body[data-theme="light"][data-accent-palette^="gta-"] .app::before { opacity: .52; }
+body[data-theme="light"][data-accent-palette^="gta-"] .logo > .brand-mark { box-shadow: 0 4px 12px color-mix(in srgb, var(--vcp-gta-deep) 12%, transparent); }
+
+
+/* Theme-aware volume milestones (200–600%) and current boosted value. */
+body[data-accent-palette^="gta-"] .slider-marks [data-volume-threshold],
+body[data-accent-palette^="gta-"] .preset-btn[data-volume-threshold] {
+  color: var(--vcp-volume-threshold-color) !important;
+  text-shadow: 0 0 8px color-mix(in srgb, var(--vcp-volume-threshold-color) 26%, transparent);
+}
+body[data-theme="light"][data-accent-palette^="gta-"] .slider-marks [data-volume-threshold],
+body[data-theme="light"][data-accent-palette^="gta-"] .preset-btn[data-volume-threshold] {
+  color: color-mix(in srgb, var(--vcp-volume-threshold-color) 76%, #20243a) !important;
+  text-shadow: none;
+}
+body[data-accent-palette^="gta-"] .volume-value.boosted {
+  background: none;
+  background-clip: border-box;
+  -webkit-background-clip: border-box;
+  -webkit-text-fill-color: var(--vcp-current-volume-color, var(--vcp-gta-bright));
+  color: var(--vcp-current-volume-color, var(--vcp-gta-bright));
+  filter: drop-shadow(0 0 12px color-mix(in srgb, var(--vcp-current-volume-color, var(--vcp-gta-bright)) 34%, transparent));
+}
+body[data-theme="light"][data-accent-palette^="gta-"] .volume-value.boosted {
+  -webkit-text-fill-color: color-mix(in srgb, var(--vcp-current-volume-color, var(--vcp-gta-deep)) 76%, #20243a);
+  color: color-mix(in srgb, var(--vcp-current-volume-color, var(--vcp-gta-deep)) 76%, #20243a);
+  filter: none;
+}
+
+
+/* GTA VI theme integration for the frequency spectrum and time-frequency waterfall. */
+body[data-accent-palette^="gta-"] .visualizer-panel {
+  border-color: color-mix(in srgb, var(--vcp-visualizer-mid, #a373d3) 38%, transparent);
+  background:
+    radial-gradient(ellipse at 12% 0%, color-mix(in srgb, var(--vcp-visualizer-start, #eb9998) 18%, transparent), transparent 56%),
+    linear-gradient(145deg, rgba(24, 25, 47, 0.97), rgba(18, 19, 37, 0.96));
+}
+body[data-accent-palette^="gta-"] .visualizer-stage {
+  border-color: color-mix(in srgb, var(--vcp-visualizer-mid, #a373d3) 42%, transparent);
+  background:
+    radial-gradient(ellipse at 50% 100%, color-mix(in srgb, var(--vcp-visualizer-end, #a373d3) 19%, transparent), transparent 70%),
+    linear-gradient(180deg, rgba(10, 10, 25, 0.9), rgba(22, 15, 35, 0.96));
+}
+body[data-accent-palette^="gta-"] .visualizer-live.active {
+  color: var(--vcp-visualizer-end, #a373d3);
+  border-color: color-mix(in srgb, var(--vcp-visualizer-end, #a373d3) 42%, transparent);
+  background: color-mix(in srgb, var(--vcp-visualizer-end, #a373d3) 11%, transparent);
+}
+body[data-accent-palette^="gta-"] .visualizer-live.active .visualizer-live-dot {
+  background: var(--vcp-visualizer-end, #a373d3);
+  box-shadow: 0 0 8px color-mix(in srgb, var(--vcp-visualizer-end, #a373d3) 78%, transparent);
+}
+body[data-accent-palette^="gta-"] .spectrogram-panel {
+  border-color: color-mix(in srgb, var(--vcp-visualizer-start, #eb9998) 36%, transparent);
+  background:
+    radial-gradient(ellipse at 0% 0%, color-mix(in srgb, var(--vcp-visualizer-start, #eb9998) 12%, transparent), transparent 52%),
+    linear-gradient(145deg, rgba(20, 22, 43, 0.98), rgba(18, 19, 37, 0.96));
+}
+body[data-accent-palette^="gta-"] .spectrogram-stage {
+  border-color: color-mix(in srgb, var(--vcp-visualizer-end, #a373d3) 42%, transparent);
+  background: #070b1b;
+  box-shadow: inset 0 0 20px color-mix(in srgb, var(--vcp-visualizer-start, #eb9998) 10%, transparent);
+}
+body[data-accent-palette^="gta-"] .spectrogram-now span:first-child,
+body[data-accent-palette^="gta-"] .spectrogram-time-line::after {
+  background: var(--vcp-visualizer-end, #a373d3);
+  box-shadow: 0 0 7px color-mix(in srgb, var(--vcp-visualizer-end, #a373d3) 75%, transparent);
+}
+body[data-accent-palette^="gta-"] .spectrogram-now {
+  color: var(--vcp-visualizer-end, #a373d3);
+}
+body[data-accent-palette^="gta-"] .spectrogram-time-line {
+  background: linear-gradient(90deg,
+    color-mix(in srgb, var(--vcp-visualizer-start, #eb9998) 16%, transparent),
+    color-mix(in srgb, var(--vcp-visualizer-end, #a373d3) 72%, transparent));
+}
+body[data-theme="light"][data-accent-palette^="gta-"] .visualizer-panel,
+body[data-theme="light"][data-accent-palette^="gta-"] .spectrogram-panel {
+  border-color: color-mix(in srgb, var(--vcp-visualizer-mid, #a373d3) 30%, #ffffff);
+  background:
+    radial-gradient(ellipse at 10% 0%, color-mix(in srgb, var(--vcp-visualizer-start, #eb9998) 12%, transparent), transparent 60%),
+    linear-gradient(145deg, #ffffff, #f7f4fb);
+}
+body[data-theme="light"][data-accent-palette^="gta-"] .visualizer-stage {
+  background: linear-gradient(180deg, #f2eff8, #ebeaf5);
+}
+body[data-theme="light"][data-accent-palette^="gta-"] .spectrogram-stage {
+  background: #111322;
+}
+
+
+/* GTA VI-inspired icon treatment: blue → purple → pink → peach. */
+.vcp-svg-defs {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+.brand-mark {
+  display: block;
+  flex: 0 0 36px;
+  width: 36px;
+  height: 36px;
+  object-fit: cover;
+  border: 1px solid rgba(237, 43, 153, .42);
+  border-radius: 10px;
+  background: #19031c;
+  box-shadow: 0 0 0 1px rgba(55, 2, 68, .85), 0 4px 15px rgba(239, 75, 167, .18);
+}
+body[data-accent-palette^="gta-"] .brand-mark {
+  border-color: rgba(237, 43, 153, .56);
+  box-shadow: 0 0 0 1px #370244, 0 0 14px rgba(239, 75, 167, .28), 0 4px 16px rgba(28, 107, 224, .18);
+}
+body[data-theme="light"] .brand-mark {
+  box-shadow: 0 2px 10px rgba(55, 2, 68, .16);
+}
+
+/* All classic inline SVG controls receive the same vertical neon ink as the VI mark. */
+body[data-accent-palette^="gta-"] svg [stroke="currentColor"] {
+  stroke: url(#vcpGtaIconGradient) !important;
+  filter: drop-shadow(0 0 1px rgba(239, 75, 167, .24));
+}
+body[data-accent-palette^="gta-"] svg [fill="currentColor"] {
+  fill: url(#vcpGtaIconGradient) !important;
+}
+body[data-accent-palette^="gta-"] .header-actions .icon-btn svg,
+body[data-accent-palette^="gta-"] .quick-setting-icon svg {
+  filter: drop-shadow(0 0 3px rgba(239, 75, 167, .16));
+}
+body[data-accent-palette^="gta-"] .quick-setting-icon,
+body[data-accent-palette^="gta-"] .auto-genre-status-icon,
+body[data-accent-palette^="gta-"] .profile-preset-icon,
+body[data-accent-palette^="gta-"] .audio-protection-icon {
+  text-shadow: 0 0 8px rgba(239, 75, 167, .34);
+}
+body[data-accent-palette^="gta-"] .profile-preset-icon {
+  border: 1px solid rgba(237, 43, 153, .38);
+  background: linear-gradient(155deg, rgba(28, 107, 224, .22), rgba(136, 81, 204, .23) 38%, rgba(239, 75, 167, .22) 72%, rgba(228, 132, 72, .20));
+  color: #fff;
+}
+body[data-accent-palette^="gta-"] .auto-genre-status-icon {
+  border: 1px solid rgba(237, 43, 153, .36);
+  background: linear-gradient(155deg, rgba(28, 107, 224, .22), rgba(136, 81, 204, .24) 42%, rgba(239, 75, 167, .20) 72%, rgba(228, 132, 72, .18));
+  color: #fff;
+}
+body[data-accent-palette^="gta-"] .quick-setting-icon {
+  filter: drop-shadow(0 0 4px rgba(239, 75, 167, .24));
+}
+body[data-theme="light"][data-accent-palette^="gta-"] .profile-preset-icon,
+body[data-theme="light"][data-accent-palette^="gta-"] .auto-genre-status-icon {
+  color: #370244;
+  box-shadow: 0 2px 8px rgba(55, 2, 68, .10);
+}
+
+
+/* Settings categories switch on click/tap or keyboard navigation only; hover is visual feedback and never opens a panel. */
+.settings-category-menu {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px;
+  padding: 10px 0 9px;
+  margin: 0 0 8px;
+  border-bottom: 1px solid rgba(145, 163, 213, 0.14);
+}
+.settings-category-tab {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  min-width: 0;
+  min-height: 36px;
+  padding: 7px 8px;
+  border: 1px solid var(--vcp-border, rgba(145, 163, 213, 0.18));
+  border-radius: 10px;
+  background: linear-gradient(145deg, rgba(255,255,255,.045), rgba(255,255,255,.018));
+  color: var(--vcp-muted, #9aa8c4);
+  text-align: left;
+  font: inherit;
+  font-size: 10px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: border-color .16s ease, background .16s ease, color .16s ease, box-shadow .16s ease;
+}
+.settings-category-tab:hover,
+.settings-category-tab:focus-visible {
+  border-color: var(--vcp-border-strong, rgba(127,150,255,.38));
+  color: var(--vcp-text, #edf2ff);
+  outline: none;
+}
+.settings-category-tab[aria-expanded="true"] {
+  border-color: rgba(239, 75, 167, .42);
+  background: linear-gradient(125deg, rgba(28,107,224,.18), rgba(136,81,204,.18) 48%, rgba(239,75,167,.16));
+  color: #f6eaff;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.06), 0 4px 12px rgba(136,81,204,.10);
+}
+.settings-category-icon {
+  display: inline-flex;
+  flex: 0 0 22px;
+  width: 22px;
+  height: 22px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(239,75,167,.20);
+  border-radius: 7px;
+  background: rgba(136,81,204,.12);
+  color: #e7a6ff;
+  font-size: 14px;
+  line-height: 1;
+}
+.settings-category-tab[aria-expanded="true"] .settings-category-icon {
+  border-color: rgba(239,75,167,.38);
+  background: linear-gradient(145deg, rgba(28,107,224,.28), rgba(239,75,167,.23));
+  color: #fff;
+}
+.settings-category-label { min-width: 0; flex: 1 1 auto; line-height: 1.2; }
+.settings-category-chevron {
+  flex: 0 0 auto;
+  margin-left: auto;
+  color: currentColor;
+  opacity: .65;
+  font-size: 12px;
+  transition: transform .16s ease, opacity .16s ease;
+}
+.settings-category-tab[aria-expanded="true"] .settings-category-chevron {
+  opacity: 1;
+  transform: rotate(180deg);
+}
+.settings-category-panels { min-width: 0; }
+.settings-category-panel[hidden] { display: none !important; }
+.settings-category-panel.is-active { animation: settings-category-drop .16s ease-out; }
+@keyframes settings-category-drop {
+  from { opacity: 0; transform: translateY(-5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+body[data-theme="light"] .settings-category-menu { border-bottom-color: #e1e6f1; }
+body[data-theme="light"] .settings-category-tab {
+  border-color: #e0e5f1;
+  background: linear-gradient(145deg, #fff, #f6f7fc);
+  color: #596783;
+}
+body[data-theme="light"] .settings-category-tab:hover,
+body[data-theme="light"] .settings-category-tab:focus-visible { border-color: #b9c4e5; color: #2e3854; }
+body[data-theme="light"] .settings-category-tab[aria-expanded="true"] {
+  border-color: rgba(136,81,204,.38);
+  background: linear-gradient(125deg, rgba(28,107,224,.10), rgba(136,81,204,.12) 48%, rgba(239,75,167,.10));
+  color: #33254f;
+}
+body[data-theme="light"] .settings-category-icon { color: #754caa; border-color: #e2d4f0; background: #f5effb; }
+body[data-theme="light"] .settings-category-tab[aria-expanded="true"] .settings-category-icon { color: #45245f; }
+body[data-accent-palette^="gta-"] .settings-category-tab[aria-expanded="true"] {
+  border-color: var(--vcp-gta-border);
+  background: linear-gradient(125deg,
+    color-mix(in srgb, var(--vcp-gta-bright) 19%, transparent),
+    color-mix(in srgb, var(--vcp-gta-deep) 18%, transparent));
+  color: var(--vcp-gta-accent);
+  box-shadow: 0 4px 14px color-mix(in srgb, var(--vcp-gta-bright) 10%, transparent), inset 0 1px 0 rgba(255,255,255,.06);
+}
+body[data-accent-palette^="gta-"] .settings-category-tab[aria-expanded="true"] .settings-category-icon {
+  border-color: var(--vcp-gta-border);
+  background: linear-gradient(145deg, color-mix(in srgb, var(--vcp-gta-bright) 24%, transparent), color-mix(in srgb, var(--vcp-gta-deep) 22%, transparent));
+  color: var(--vcp-gta-accent);
+}
+@media (prefers-reduced-motion: reduce) {
+  .settings-category-tab, .settings-category-chevron { transition: none; }
+  .settings-category-panel.is-active { animation: none; }
+}
+
+
+/* Main popup scroll order: source → quick settings → volume → visualization → detailed effects. */
+.main-content {
+  display: block;
+  min-width: 0;
+}
+.source-context-group,
+.main-volume-section,
+.main-monitoring-section,
+.main-audio-details-section {
+  display: block;
+  min-width: 0;
+}
+
+/* Persistent finish action at the end of the scrollable popup. */
+.done-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 40px;
+  margin: 0 0 15px;
+  padding: 10px 14px;
+  border: 1px solid rgba(136, 81, 204, .42);
+  border-radius: 11px;
+  color: #fff;
+  background: linear-gradient(110deg, #315fbd, #7650bd 38%, #d6479c 72%, #d77e4d);
+  box-shadow: 0 5px 16px rgba(96, 57, 154, .22), inset 0 1px 0 rgba(255,255,255,.18);
+  font: inherit;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: .25px;
+  cursor: pointer;
+  transition: transform .16s ease, filter .16s ease, box-shadow .16s ease;
+}
+.done-button:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.08);
+  box-shadow: 0 7px 19px rgba(96, 57, 154, .28), inset 0 1px 0 rgba(255,255,255,.2);
+}
+.done-button:active { transform: translateY(0); filter: brightness(.98); }
+.done-button:focus-visible { outline: 2px solid #ef4ba7; outline-offset: 3px; }
+body[data-accent-palette^="gta-"] .done-button {
+  background: var(--vcp-gta-gradient);
+  border-color: var(--vcp-gta-border);
+  box-shadow: 0 5px 16px color-mix(in srgb, var(--vcp-gta-bright) 22%, transparent), inset 0 1px 0 rgba(255,255,255,.2);
+}
+body[data-theme="light"] .done-button {
+  color: #fff;
+  box-shadow: 0 5px 14px rgba(68, 62, 133, .16);
+}
+body[data-theme="light"][data-accent-palette^="gta-"] .done-button { color: #fff; }
+@media (prefers-reduced-motion: reduce) {
+  .done-button { transition: none; }
+}
+
+
+/* 4.8.19: compact volume display for shorter popup viewports. */
+.volume-display { margin-bottom: 16px; }
+.volume-main-row { min-height: 52px; }
+.volume-value { font-size: 50px; }
+.volume-label { margin-top: 5px; }
+
+
+/* 4.8.22: scrollbar visibility is a display preference only; scroll input remains enabled. */
+body {
+  scrollbar-width: thin;
+  scrollbar-color: var(--vcp-gta-bright, var(--vcp-violet)) rgba(255, 255, 255, 0.045);
+}
+body[data-show-scrollbar="false"] {
+  scrollbar-width: none !important;
+  scrollbar-color: transparent transparent !important;
+}
+body[data-show-scrollbar="false"]::-webkit-scrollbar,
+body[data-show-scrollbar="false"] .gta-palette-gallery::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+}
+body:not([data-show-scrollbar="false"]) .gta-palette-gallery {
+  scrollbar-width: thin;
+}
+body[data-show-scrollbar="false"] .gta-palette-gallery {
+  scrollbar-width: none !important;
+  scrollbar-color: transparent transparent !important;
+}
+
+
+/* 4.8.24: GTA VI palette gallery can be collapsed from its own heading. */
+.gta-palette-heading {
+  appearance: none;
+  -webkit-appearance: none;
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  flex-direction: row;
+  gap: 10px;
+  margin: 0;
+  padding: 0 1px 9px;
+  border: 0;
+  border-radius: 7px;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.gta-palette-heading-copy {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 3px;
+}
+.gta-palette-heading:hover .settings-label { color: var(--vcp-gta-bright, var(--vcp-violet)); }
+.gta-palette-heading:focus-visible {
+  outline: 2px solid var(--vcp-gta-bright, var(--vcp-violet));
+  outline-offset: 3px;
+}
+.gta-palette-chevron {
+  display: inline-flex;
+  width: 22px;
+  height: 22px;
+  flex: 0 0 22px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--vcp-gta-border, rgba(157,170,205,.28));
+  border-radius: 7px;
+  color: var(--vcp-gta-bright, var(--vcp-violet));
+  background: var(--vcp-gta-soft, rgba(125,145,255,.08));
+  font-size: 16px;
+  line-height: 1;
+  transition: transform .18s ease, background .18s ease;
+}
+.gta-palette-heading[aria-expanded="true"] .gta-palette-chevron { transform: rotate(180deg); }
+.gta-palette-heading[aria-expanded="false"] { padding-bottom: 0; }
+.gta-palette-content { display: block; }
+.gta-palette-content[hidden] { display: none !important; }
+body[data-theme="light"] .gta-palette-heading:hover .settings-label { color: var(--vcp-gta-deep, var(--vcp-violet)); }
+@media (prefers-reduced-motion: reduce) {
+  .gta-palette-chevron { transition: none; }
+}
+
+
+/* Quick settings accordion: collapsed by default to preserve vertical space. */
+.quick-settings-grid[hidden] { display: none !important; }
+.quick-settings-panel[hidden] { display: none !important; }
+.quick-settings-disclosure {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  flex: 0 0 auto;
+  min-width: 42px;
+  min-height: 34px;
+  padding: 3px 5px;
+  border: 1px solid color-mix(in srgb, var(--vcp-gta-bright, #8851cc) 34%, transparent);
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--vcp-gta-bright, #8851cc) 9%, transparent);
+  color: var(--vcp-gta-bright, #c5a0ff);
+  cursor: pointer;
+  transition: background .16s ease, border-color .16s ease, color .16s ease, transform .16s ease;
+}
+.quick-settings-disclosure:hover {
+  background: color-mix(in srgb, var(--vcp-gta-bright, #8851cc) 16%, transparent);
+  border-color: color-mix(in srgb, var(--vcp-gta-bright, #8851cc) 58%, transparent);
+}
+.quick-settings-disclosure:focus-visible {
+  outline: 2px solid var(--vcp-gta-bright, #8851cc);
+  outline-offset: 2px;
+}
+.quick-settings-disclosure .quick-settings-badge {
+  border: 0;
+  background: transparent;
+}
+.quick-settings-chevron {
+  transition: transform .18s ease;
+}
+.quick-settings-disclosure.is-expanded .quick-settings-chevron {
+  transform: rotate(180deg);
+}
+body[data-theme="light"] .quick-settings-disclosure {
+  color: var(--vcp-gta-deep, #5d549c);
+  background: color-mix(in srgb, var(--vcp-gta-bright, #8851cc) 8%, white);
+}
+
+
+/* 4.8.27: Footer metadata follows the selected GTA VI palette, just like the rest of the popup. */
+body[data-accent-palette^="gta-"] .footer {
+  border-top-color: var(--vcp-gta-border);
+}
+body[data-accent-palette^="gta-"] .footer-author,
+body[data-accent-palette^="gta-"] .footer-version,
+body[data-accent-palette^="gta-"] .author-name,
+body[data-accent-palette^="gta-"] #extensionVersion {
+  color: var(--vcp-gta-accent);
+}
+body[data-accent-palette^="gta-"] .author-name,
+body[data-accent-palette^="gta-"] #extensionVersion {
+  font-weight: 750;
+  text-shadow: 0 0 9px color-mix(in srgb, var(--vcp-gta-bright) 17%, transparent);
+}
+body[data-theme="light"][data-accent-palette^="gta-"] .footer-author,
+body[data-theme="light"][data-accent-palette^="gta-"] .footer-version,
+body[data-theme="light"][data-accent-palette^="gta-"] .author-name,
+body[data-theme="light"][data-accent-palette^="gta-"] #extensionVersion {
+  color: var(--vcp-gta-deep);
+}
+body[data-theme="light"][data-accent-palette^="gta-"] .author-name,
+body[data-theme="light"][data-accent-palette^="gta-"] #extensionVersion {
+  text-shadow: none;
+}
+
+
+/* Version 4.8.28 — slightly wider popup.
+ * EN: Increase the extension popup width by 20px for better readability without changing its height or control sizing.
+ * RU: Увеличиваем ширину окна расширения на 20px для удобства чтения, не меняя высоту и размеры элементов управления.
+ * UK: Збільшуємо ширину вікна розширення на 20px для зручності читання, не змінюючи висоту та розміри елементів керування.
+ */
+
+
+/* Recommended balanced settings action */
+.recommended-settings-section {
+  margin: 0 0 14px;
+  padding: 12px;
+  border: 1px solid var(--vcp-gta-border, var(--border-color));
+  border-radius: 12px;
+  background: linear-gradient(135deg, color-mix(in srgb, var(--vcp-gta-accent, #ef4ba7) 10%, transparent), color-mix(in srgb, var(--vcp-gta-mid, #8851cc) 7%, transparent));
+}
+.recommended-settings-section .settings-subsection-heading { margin-bottom: 9px; }
+.recommended-settings-btn { width: 100%; min-height: 38px; border-color: var(--vcp-gta-accent, var(--border-color)); }
+.recommended-settings-section > .settings-help { margin: 8px 0 0; line-height: 1.4; }

@@ -65,1151 +65,22 @@ const AUTO_GENRE_PROFILE_FAMILIES = {
   world:      { bassBoostEnabled: true, bassBoostDb: 3, voiceBoostEnabled: true, voiceBoostDb: 2, volumeTrimDb: 0 },
   neutral:    { bassBoostEnabled: true, bassBoostDb: 2, voiceBoostEnabled: true, voiceBoostDb: 1, volumeTrimDb: 0 }
 };
-const AUTO_GENRE_CATALOG = [
-  {
-    "id": "hiphop",
-    "label": "autoGenreHipHop",
-    "family": "hiphop",
-    "aliases": [
-      "hip hop",
-      "hip-hop",
-      "hiphop",
-      "rap",
-      "boom bap",
-      "рэп",
-      "хип хоп",
-      "хип-хоп",
-      "hip-hop music",
-      "hip hop beats",
-      "uk hip hop",
-      "хіп хоп",
-      "хіпхоп",
-      "український реп",
-      "український хіп-хоп",
-      "український хіпхоп"
-    ]
-  },
-  {
-    "id": "trap",
-    "label": "autoGenreTrap",
-    "family": "bassHeavy",
-    "aliases": [
-      "trap music",
-      "trap mix",
-      "trap",
-      "трэп",
-      "трап",
-      "trap beats",
-      "trap playlist",
-      "треп музика",
-      "трап музика"
-    ]
-  },
-  {
-    "id": "drill",
-    "label": "autoGenreDrill",
-    "family": "bassHeavy",
-    "aliases": [
-      "drill rap",
-      "uk drill",
-      "drill music",
-      "drill",
-      "дрилл",
-      "drill beats",
-      "drill playlist",
-      "дріл",
-      "дрілл",
-      "дрил"
-    ]
-  },
-  {
-    "id": "grime",
-    "label": "autoGenreGrime",
-    "family": "hiphop",
-    "aliases": [
-      "grime music",
-      "grime",
-      "uk grime",
-      "uk grime music",
-      "ґрайм",
-      "грайм"
-    ]
-  },
-  {
-    "id": "phonk",
-    "label": "autoGenrePhonk",
-    "family": "bassHeavy",
-    "aliases": [
-      "drift phonk",
-      "memphis phonk",
-      "cowbell phonk",
-      "phonk",
-      "фонк",
-      "фонк микс",
-      "phonk music",
-      "phonk playlist",
-      "phonk beats",
-      "фонк музика",
-      "фонк плейлист"
-    ]
-  },
-  {
-    "id": "wave",
-    "label": "autoGenreWave",
-    "family": "atmosphere",
-    "aliases": [
-      "hardwave",
-      "chillwave",
-      "wave phonk",
-      "wave music",
-      "wave mix",
-      "wave",
-      "вейв",
-      "wave playlist",
-      "wave mix music",
-      "вейв музика",
-      "хардвейв",
-      "чилвейв"
-    ]
-  },
-  {
-    "id": "lofi",
-    "label": "autoGenreLofi",
-    "family": "atmosphere",
-    "aliases": [
-      "lo fi hip hop",
-      "lo fi",
-      "lofi hip hop",
-      "lofi beats",
-      "lofi",
-      "лоу фай",
-      "лоуфай",
-      "lo-fi music",
-      "lo-fi beats",
-      "low fidelity music",
-      "лоуфай музыка",
-      "лоу-фай музика",
-      "лоуфай музика"
-    ]
-  },
-  {
-    "id": "ambient",
-    "label": "autoGenreAmbient",
-    "family": "atmosphere",
-    "aliases": [
-      "dark ambient",
-      "ambient music",
-      "ambient",
-      "эмбиент",
-      "ambient soundtrack",
-      "ambient instrumental",
-      "ембієнт",
-      "атмосферна музика",
-      "атмосферная музыка",
-      "дарк эмбиент"
-    ]
-  },
-  {
-    "id": "newAge",
-    "label": "autoGenreNewAge",
-    "family": "atmosphere",
-    "aliases": [
-      "new age music",
-      "new age",
-      "нью эйдж",
-      "релакс музыка",
-      "релакс музика",
-      "музыка нью эйдж",
-      "музика нью-ейдж"
-    ]
-  },
-  {
-    "id": "chillout",
-    "label": "autoGenreChillout",
-    "family": "atmosphere",
-    "aliases": [
-      "chill out",
-      "chillout",
-      "chill mix",
-      "relaxing music",
-      "chill-out music",
-      "chillout music",
-      "чиллаут",
-      "чил-аут",
-      "чиллаут музика"
-    ]
-  },
-  {
-    "id": "pop",
-    "label": "autoGenrePop",
-    "family": "pop",
-    "aliases": [
-      "pop music",
-      "pop mix",
-      "pop song",
-      "pop",
-      "поп музыка",
-      "поп",
-      "pop playlist",
-      "pop hits",
-      "pop hits mix",
-      "city pop",
-      "synth-pop",
-      "electropop",
-      "поп-музика",
-      "поп-хиты",
-      "поп хіти"
-    ]
-  },
-  {
-    "id": "dancePop",
-    "label": "autoGenreDancePop",
-    "family": "pop",
-    "aliases": [
-      "dance pop",
-      "dance-pop",
-      "dance-pop music",
-      "денс-поп"
-    ]
-  },
-  {
-    "id": "kpop",
-    "label": "autoGenreKpop",
-    "family": "pop",
-    "aliases": [
-      "k pop",
-      "kpop",
-      "korean pop",
-      "кей поп",
-      "k-pop music",
-      "к-поп",
-      "корейская поп-музыка",
-      "корейський поп"
-    ]
-  },
-  {
-    "id": "jpop",
-    "label": "autoGenreJpop",
-    "family": "pop",
-    "aliases": [
-      "j pop",
-      "jpop",
-      "japanese pop",
-      "j-pop music",
-      "джей-поп",
-      "японская поп-музыка",
-      "японський поп"
-    ]
-  },
-  {
-    "id": "indiePop",
-    "label": "autoGenreIndiePop",
-    "family": "pop",
-    "aliases": [
-      "indie pop",
-      "indie pop music",
-      "інді-поп",
-      "инди-поп"
-    ]
-  },
-  {
-    "id": "hyperpop",
-    "label": "autoGenreHyperpop",
-    "family": "pop",
-    "aliases": [
-      "hyperpop",
-      "хайперпоп",
-      "hyper-pop",
-      "hyperpop music",
-      "хайпер-поп",
-      "хайперпоп музика"
-    ]
-  },
-  {
-    "id": "rock",
-    "label": "autoGenreRock",
-    "family": "rock",
-    "aliases": [
-      "classic rock",
-      "rock music",
-      "rock mix",
-      "rock",
-      "рок музыка",
-      "рок",
-      "rock playlist",
-      "rock and roll",
-      "rock n roll",
-      "rock & roll",
-      "garage rock",
-      "post-punk",
-      "рок-музика",
-      "рок-н-ролл",
-      "рок-н-рол"
-    ]
-  },
-  {
-    "id": "altRock",
-    "label": "autoGenreAltRock",
-    "family": "rock",
-    "aliases": [
-      "alternative rock",
-      "alt rock",
-      "альтернативный рок",
-      "alternative rock music",
-      "альт-рок",
-      "альтернативний рок"
-    ]
-  },
-  {
-    "id": "hardRock",
-    "label": "autoGenreHardRock",
-    "family": "rock",
-    "aliases": [
-      "hard rock",
-      "хард рок",
-      "hard rock music"
-    ]
-  },
-  {
-    "id": "postRock",
-    "label": "autoGenrePostRock",
-    "family": "rock",
-    "aliases": [
-      "post rock",
-      "post-rock",
-      "post-rock music",
-      "пост-рок"
-    ]
-  },
-  {
-    "id": "metal",
-    "label": "autoGenreMetal",
-    "family": "rock",
-    "aliases": [
-      "heavy metal",
-      "death metal",
-      "black metal",
-      "metal music",
-      "metal",
-      "метал",
-      "металл",
-      "metal playlist",
-      "heavy metal music",
-      "metal music mix",
-      "метал-музика",
-      "металева музика"
-    ]
-  },
-  {
-    "id": "metalcore",
-    "label": "autoGenreMetalcore",
-    "family": "rock",
-    "aliases": [
-      "metalcore",
-      "metal-core",
-      "metalcore music",
-      "металкор",
-      "металкор музика"
-    ]
-  },
-  {
-    "id": "punk",
-    "label": "autoGenrePunk",
-    "family": "rock",
-    "aliases": [
-      "punk rock",
-      "punk",
-      "панк",
-      "punk music",
-      "punk playlist",
-      "post-hardcore",
-      "панк-рок"
-    ]
-  },
-  {
-    "id": "indie",
-    "label": "autoGenreIndie",
-    "family": "rock",
-    "aliases": [
-      "indie rock",
-      "indie music",
-      "indie",
-      "indie music playlist",
-      "інді",
-      "інді-рок",
-      "инди-рок"
-    ]
-  },
-  {
-    "id": "grunge",
-    "label": "autoGenreGrunge",
-    "family": "rock",
-    "aliases": [
-      "grunge",
-      "гранж",
-      "grunge rock",
-      "гранж-рок"
-    ]
-  },
-  {
-    "id": "emo",
-    "label": "autoGenreEmo",
-    "family": "rock",
-    "aliases": [
-      "emo rock",
-      "emo",
-      "эмо",
-      "emo rock music",
-      "емо-рок"
-    ]
-  },
-  {
-    "id": "shoegaze",
-    "label": "autoGenreShoegaze",
-    "family": "rock",
-    "aliases": [
-      "shoegaze",
-      "shoe gaze",
-      "shoegaze music",
-      "шугейз",
-      "шугейз музика"
-    ]
-  },
-  {
-    "id": "jazz",
-    "label": "autoGenreJazz",
-    "family": "jazz",
-    "aliases": [
-      "smooth jazz",
-      "jazz music",
-      "jazz",
-      "джаз",
-      "jazz playlist",
-      "jazz fusion",
-      "джазова музика",
-      "джаз музика",
-      "джаз-фьюжн"
-    ]
-  },
-  {
-    "id": "blues",
-    "label": "autoGenreBlues",
-    "family": "vocal",
-    "aliases": [
-      "blues rock",
-      "blues music",
-      "blues",
-      "блюз",
-      "delta blues",
-      "electric blues",
-      "blues playlist",
-      "блюзова музика",
-      "блюз музика"
-    ]
-  },
-  {
-    "id": "funk",
-    "label": "autoGenreFunk",
-    "family": "vocal",
-    "aliases": [
-      "funk music",
-      "funk",
-      "фанк",
-      "funk playlist",
-      "фанк музика",
-      "фанкова музика"
-    ]
-  },
-  {
-    "id": "soul",
-    "label": "autoGenreSoul",
-    "family": "vocal",
-    "aliases": [
-      "neo soul",
-      "soul music",
-      "soul",
-      "соул",
-      "soul music playlist",
-      "нео-соул",
-      "соул музика"
-    ]
-  },
-  {
-    "id": "rnb",
-    "label": "autoGenreRnb",
-    "family": "vocal",
-    "aliases": [
-      "rhythm and blues",
-      "r and b",
-      "rnb",
-      "r&b",
-      "r&b music",
-      "r and b music",
-      "contemporary r&b",
-      "alternative r&b",
-      "uk r&b",
-      "ритм-н-блюз",
-      "ритм энд блюз",
-      "ритм-енд-блюз"
-    ]
-  },
-  {
-    "id": "disco",
-    "label": "autoGenreDisco",
-    "family": "pop",
-    "aliases": [
-      "disco music",
-      "disco",
-      "диско",
-      "nu-disco",
-      "disco playlist",
-      "диско музыка",
-      "диско музика",
-      "ню-диско"
-    ]
-  },
-  {
-    "id": "country",
-    "label": "autoGenreCountry",
-    "family": "acoustic",
-    "aliases": [
-      "country music",
-      "country",
-      "кантри",
-      "country playlist",
-      "alt-country",
-      "alternative country",
-      "country folk",
-      "country rock",
-      "кантрі музика",
-      "кантри музыка"
-    ]
-  },
-  {
-    "id": "folk",
-    "label": "autoGenreFolk",
-    "family": "acoustic",
-    "aliases": [
-      "folk music",
-      "folk",
-      "фолк",
-      "folk playlist",
-      "indie folk",
-      "современный фолк",
-      "сучасний фолк"
-    ]
-  },
-  {
-    "id": "bluegrass",
-    "label": "autoGenreBluegrass",
-    "family": "acoustic",
-    "aliases": [
-      "bluegrass",
-      "bluegrass music",
-      "блуграс",
-      "блюграсс"
-    ]
-  },
-  {
-    "id": "acoustic",
-    "label": "autoGenreAcoustic",
-    "family": "acoustic",
-    "aliases": [
-      "acoustic music",
-      "acoustic guitar",
-      "acoustic",
-      "acoustic playlist",
-      "acoustic guitar music",
-      "акустична музика",
-      "акустическая музыка"
-    ]
-  },
-  {
-    "id": "classical",
-    "label": "autoGenreClassical",
-    "family": "classical",
-    "aliases": [
-      "classical music",
-      "classic music",
-      "classical",
-      "классическая музыка",
-      "классика",
-      "classical piano",
-      "classical orchestra",
-      "класична музика",
-      "класика музика"
-    ]
-  },
-  {
-    "id": "orchestral",
-    "label": "autoGenreOrchestral",
-    "family": "classical",
-    "aliases": [
-      "orchestral music",
-      "orchestra",
-      "orchestral",
-      "orchestral soundtrack",
-      "orchestral score",
-      "оркестрова музика",
-      "оркестровая музыка"
-    ]
-  },
-  {
-    "id": "soundtrack",
-    "label": "autoGenreSoundtrack",
-    "family": "classical",
-    "aliases": [
-      "film soundtrack",
-      "movie soundtrack",
-      "original soundtrack",
-      "soundtrack",
-      "ost",
-      "саундтрек",
-      "film score",
-      "movie score",
-      "original score",
-      "motion picture soundtrack",
-      "ost music",
-      "музыка из фильма",
-      "музика з фільму",
-      "саундтрек до фільму",
-      "саундтрек к фильму"
-    ]
-  },
-  {
-    "id": "gameMusic",
-    "label": "autoGenreGameMusic",
-    "family": "classical",
-    "aliases": [
-      "video game music",
-      "game soundtrack",
-      "gaming soundtrack",
-      "video game ost",
-      "game ost",
-      "game music soundtrack",
-      "игровая музыка",
-      "музика з гри",
-      "ігрова музика",
-      "музыка из игры"
-    ]
-  },
-  {
-    "id": "animeMusic",
-    "label": "autoGenreAnimeMusic",
-    "family": "pop",
-    "aliases": [
-      "anime music",
-      "anime soundtrack",
-      "anime opening",
-      "anime ost",
-      "anime song",
-      "anime songs",
-      "music from anime",
-      "музыка из аниме",
-      "музика з аніме",
-      "аниме опенинг",
-      "аніме опенінг"
-    ]
-  },
-  {
-    "id": "opera",
-    "label": "autoGenreOpera",
-    "family": "classical",
-    "aliases": [
-      "opera music",
-      "opera",
-      "опера",
-      "оперная музыка",
-      "оперна музика"
-    ]
-  },
-  {
-    "id": "electronic",
-    "label": "autoGenreElectronic",
-    "family": "electronic",
-    "aliases": [
-      "electronic music",
-      "electronica",
-      "электронная музыка",
-      "электроника",
-      "edm",
-      "edm music",
-      "edm mix",
-      "electronic dance music",
-      "electronic music playlist",
-      "електронна музика"
-    ]
-  },
-  {
-    "id": "house",
-    "label": "autoGenreHouse",
-    "family": "electronic",
-    "aliases": [
-      "house music",
-      "house mix",
-      "house",
-      "house playlist",
-      "house beats",
-      "bass house",
-      "tech house",
-      "electro house",
-      "future house",
-      "afro house",
-      "хавс музика",
-      "хаус музика"
-    ]
-  },
-  {
-    "id": "deepHouse",
-    "label": "autoGenreDeepHouse",
-    "family": "electronic",
-    "aliases": [
-      "deep house",
-      "deep-house",
-      "deep house music",
-      "дип-хаус"
-    ]
-  },
-  {
-    "id": "progressiveHouse",
-    "label": "autoGenreProgressiveHouse",
-    "family": "electronic",
-    "aliases": [
-      "progressive house",
-      "prog house",
-      "progressive house music",
-      "прогрессив-хаус",
-      "прогресив-хаус"
-    ]
-  },
-  {
-    "id": "techno",
-    "label": "autoGenreTechno",
-    "family": "electronic",
-    "aliases": [
-      "techno music",
-      "techno",
-      "техно",
-      "melodic techno",
-      "minimal techno",
-      "industrial techno",
-      "techno playlist",
-      "техно музыка",
-      "техно музика",
-      "мелодік техно",
-      "мелодик техно"
-    ]
-  },
-  {
-    "id": "trance",
-    "label": "autoGenreTrance",
-    "family": "electronic",
-    "aliases": [
-      "psytrance",
-      "psy trance",
-      "uplifting trance",
-      "trance music",
-      "trance",
-      "транс",
-      "psy-trance music",
-      "goa trance",
-      "uplifting trance music",
-      "транс музика",
-      "транс музыка"
-    ]
-  },
-  {
-    "id": "dubstep",
-    "label": "autoGenreDubstep",
-    "family": "electronic",
-    "aliases": [
-      "dubstep",
-      "дабстеп",
-      "melodic dubstep",
-      "brostep",
-      "dubstep music",
-      "дабстеп музика"
-    ]
-  },
-  {
-    "id": "drumBass",
-    "label": "autoGenreDrumBass",
-    "family": "electronic",
-    "aliases": [
-      "drum and bass",
-      "drum n bass",
-      "drum bass",
-      "dnb",
-      "джангл днб",
-      "drum n bass music",
-      "dnb music",
-      "джангл-н-бейс",
-      "драм-н-бейс",
-      "драм-енд-бейс"
-    ]
-  },
-  {
-    "id": "jungle",
-    "label": "autoGenreJungle",
-    "family": "electronic",
-    "aliases": [
-      "jungle music",
-      "jungle",
-      "jungle playlist",
-      "jungle dnb",
-      "джангл музика"
-    ]
-  },
-  {
-    "id": "breakbeat",
-    "label": "autoGenreBreakbeat",
-    "family": "electronic",
-    "aliases": [
-      "breakbeat",
-      "break beat",
-      "breakbeat music",
-      "брейкбит музика"
-    ]
-  },
-  {
-    "id": "electro",
-    "label": "autoGenreElectro",
-    "family": "electronic",
-    "aliases": [
-      "electro music",
-      "electro",
-      "electro music playlist",
-      "электро музыка",
-      "електро музика"
-    ]
-  },
-  {
-    "id": "hardstyle",
-    "label": "autoGenreHardstyle",
-    "family": "electronic",
-    "aliases": [
-      "hardstyle",
-      "hard style",
-      "hardstyle music",
-      "хардстайл музика"
-    ]
-  },
-  {
-    "id": "synthwave",
-    "label": "autoGenreSynthwave",
-    "family": "electronic",
-    "aliases": [
-      "synthwave",
-      "ретровейв",
-      "синтвейв",
-      "retro wave",
-      "retrowave",
-      "outrun music",
-      "ретро-вейв",
-      "ретровейв музыка",
-      "синтвейв музыка"
-    ]
-  },
-  {
-    "id": "vaporwave",
-    "label": "autoGenreVaporwave",
-    "family": "atmosphere",
-    "aliases": [
-      "vaporwave",
-      "vapor wave",
-      "вейпорвейв",
-      "вейпорвейв музика"
-    ]
-  },
-  {
-    "id": "tripHop",
-    "label": "autoGenreTripHop",
-    "family": "hiphop",
-    "aliases": [
-      "trip hop",
-      "triphop"
-    ]
-  },
-  {
-    "id": "garage",
-    "label": "autoGenreGarage",
-    "family": "electronic",
-    "aliases": [
-      "uk garage",
-      "garage music",
-      "garage",
-      "ukg",
-      "uk garage music",
-      "garage music playlist",
-      "гараж музика"
-    ]
-  },
-  {
-    "id": "reggae",
-    "label": "autoGenreReggae",
-    "family": "world",
-    "aliases": [
-      "reggae",
-      "регги",
-      "roots reggae",
-      "dub reggae",
-      "reggae music",
-      "регги музыка",
-      "реггі музика"
-    ]
-  },
-  {
-    "id": "dancehall",
-    "label": "autoGenreDancehall",
-    "family": "world",
-    "aliases": [
-      "dancehall",
-      "dance hall",
-      "денсхолл",
-      "dancehall music",
-      "денс-холл",
-      "денсхол музика"
-    ]
-  },
-  {
-    "id": "ska",
-    "label": "autoGenreSka",
-    "family": "world",
-    "aliases": [
-      "ska",
-      "ска",
-      "ska punk",
-      "ska music",
-      "ска-панк",
-      "ска музика"
-    ]
-  },
-  {
-    "id": "reggaeton",
-    "label": "autoGenreReggaeton",
-    "family": "world",
-    "aliases": [
-      "reggaeton",
-      "реггетон",
-      "reggaeton music",
-      "реггетон музыка",
-      "регетон музика"
-    ]
-  },
-  {
-    "id": "salsa",
-    "label": "autoGenreSalsa",
-    "family": "world",
-    "aliases": [
-      "salsa music",
-      "salsa",
-      "сальса",
-      "salsa music playlist",
-      "сальса музика"
-    ]
-  },
-  {
-    "id": "bachata",
-    "label": "autoGenreBachata",
-    "family": "world",
-    "aliases": [
-      "bachata",
-      "бачата",
-      "bachata music",
-      "бачата музика"
-    ]
-  },
-  {
-    "id": "cumbia",
-    "label": "autoGenreCumbia",
-    "family": "world",
-    "aliases": [
-      "cumbia",
-      "кумбия",
-      "cumbia music",
-      "кумбия музыка",
-      "кумбія музика"
-    ]
-  },
-  {
-    "id": "afrobeats",
-    "label": "autoGenreAfrobeats",
-    "family": "world",
-    "aliases": [
-      "afrobeats",
-      "afro beats",
-      "afrobeat",
-      "афробит",
-      "afrobeat music",
-      "afrobeats music",
-      "afrobeats playlist",
-      "афробитс",
-      "афробітс",
-      "афробіт музика"
-    ]
-  },
-  {
-    "id": "amapiano",
-    "label": "autoGenreAmapiano",
-    "family": "world",
-    "aliases": [
-      "amapiano",
-      "amapiano music",
-      "amapiano mix"
-    ]
-  },
-  {
-    "id": "gospel",
-    "label": "autoGenreGospel",
-    "family": "vocal",
-    "aliases": [
-      "gospel music",
-      "gospel",
-      "госпел",
-      "gospel choir",
-      "gospel music playlist",
-      "євангельська музика",
-      "госпел музика"
-    ]
-  },
-  {
-    "id": "latin",
-    "label": "autoGenreLatin",
-    "family": "world",
-    "aliases": [
-      "latin music",
-      "latin pop",
-      "latin mix",
-      "латино",
-      "latin playlist",
-      "latin dance music",
-      "латино музика",
-      "латино музыка",
-      "латинська музика"
-    ]
-  },
-  {
-    "id": "bossaNova",
-    "label": "autoGenreBossaNova",
-    "family": "world",
-    "aliases": [
-      "bossa nova",
-      "bossanova",
-      "bossa nova music",
-      "босанова",
-      "боса-нова"
-    ]
-  },
-  {
-    "id": "samba",
-    "label": "autoGenreSamba",
-    "family": "world",
-    "aliases": [
-      "samba",
-      "самба",
-      "samba music",
-      "самба музика"
-    ]
-  },
-  {
-    "id": "tango",
-    "label": "autoGenreTango",
-    "family": "world",
-    "aliases": [
-      "tango",
-      "танго",
-      "tango music",
-      "танго музыка",
-      "танго музика"
-    ]
-  },
-  {
-    "id": "flamenco",
-    "label": "autoGenreFlamenco",
-    "family": "world",
-    "aliases": [
-      "flamenco",
-      "фламенко",
-      "flamenco music",
-      "фламенко музика"
-    ]
-  },
-  {
-    "id": "bollywood",
-    "label": "autoGenreBollywood",
-    "family": "world",
-    "aliases": [
-      "bollywood music",
-      "bollywood",
-      "bollywood songs",
-      "bollywood soundtrack",
-      "болливудская музыка",
-      "боллівудська музика"
-    ]
-  },
-  {
-    "id": "experimental",
-    "label": "autoGenreExperimental",
-    "family": "neutral",
-    "aliases": [
-      "experimental music",
-      "experimental",
-      "avant garde",
-      "avant-garde",
-      "experimental electronica",
-      "experimental hip hop",
-      "avant-garde music",
-      "авангардная музыка",
-      "авангардна музика"
-    ]
-  },
-  {
-    "id": "audioBassHeavy",
-    "label": "autoGenreAudioBassHeavy",
-    "family": "bassHeavy",
-    "aliases": []
-  },
-  {
-    "id": "audioElectronic",
-    "label": "autoGenreAudioElectronic",
-    "family": "electronic",
-    "aliases": []
-  },
-  {
-    "id": "audioAtmospheric",
-    "label": "autoGenreAudioAtmospheric",
-    "family": "atmosphere",
-    "aliases": []
-  },
-  {
-    "id": "audioVocal",
-    "label": "autoGenreAudioVocal",
-    "family": "vocal",
-    "aliases": []
-  },
-  {
-    "id": "audioOther",
-    "label": "autoGenreAudioOther",
-    "family": "neutral",
-    "aliases": []
-  }
-];
+const offscreenGenreApi = typeof VCPGenres !== 'undefined' && VCPGenres &&
+  Array.isArray(VCPGenres.catalog) && VCPGenres.catalog.every((item) => item &&
+    typeof item.id === 'string' && typeof item.family === 'string' && Array.isArray(item.aliases))
+  ? VCPGenres : null;
+if (!offscreenGenreApi || !offscreenGenreApi.catalog.length) {
+  // Fail open for audio capture: only automatic genre classification is unavailable.
+  console.error('Automatic genre catalogue is missing or invalid; audio capture and volume processing remain available.');
+}
+const AUTO_GENRE_CATALOG = offscreenGenreApi ? offscreenGenreApi.catalog : [];
 const AUTO_GENRE_PROFILES = Object.fromEntries(AUTO_GENRE_CATALOG.map((item) => [item.id, AUTO_GENRE_PROFILE_FAMILIES[item.family] || AUTO_GENRE_PROFILE_FAMILIES.neutral]));
 
 // Common words are not reliable genre tags when they appear inside a song or artist title.
 // Exact one-word titles and words adjacent to clear music context remain eligible.
-const AUTO_GENRE_AMBIGUOUS_WORDS = new Set([
-  'pop', 'rock', 'rap', 'metal', 'house', 'garage', 'jungle', 'indie', 'folk', 'country',
-  'acoustic', 'soul', 'funk', 'disco', 'opera', 'ska', 'latin', 'salsa', 'samba', 'tango',
-  'reggae', 'trance', 'techno', 'electronic', 'wave', 'ambient', 'jazz', 'blues', 'classical',
-  'gospel', 'electro', 'chillout', 'experimental', 'punk', 'trap', 'drill', 'grime', 'emo',
-  'поп', 'рок', 'рэп', 'реп', 'метал', 'хаус', 'гараж', 'джангл', 'инди', 'инди', 'фолк', 'кантри',
-  'акустика', 'соул', 'фанк', 'диско', 'опера', 'ска', 'сальса', 'самба', 'танго',
-  'регги', 'транс', 'техно', 'электроника', 'волна', 'эмбиент', 'джаз', 'блюз', 'классика',
-  'госпел', 'электро', 'чиллаут', 'экспериментальный',
-  'панк', 'трэп', 'дрилл', 'грайм', 'эмо',
-  'рок', 'реп', 'поп', 'метал', 'хаус', 'диско', 'опера', 'транc', 'джаз', 'блюз'
-].map(normalizeGenreText));
+const AUTO_GENRE_AMBIGUOUS_WORDS = new Set(
+  offscreenGenreApi && Array.isArray(offscreenGenreApi.ambiguousAliases) ? offscreenGenreApi.ambiguousAliases : []
+);
 const AUTO_GENRE_CONTEXT_WORDS = new Set([
   'music', 'mix', 'remix', 'playlist', 'beats', 'beat', 'radio', 'genre', 'soundtrack', 'song', 'songs',
   'style', 'version', 'type', 'session', 'set', 'compilation', 'hits', 'hit', 'album', 'track',
@@ -1276,17 +147,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   }
 
   if (message.type === 'UPDATE_VOLUME') {
-    const validSettings =
-      typeof message.volume === 'number' && Number.isFinite(message.volume) && message.volume >= 0 && message.volume <= 6 &&
-      typeof message.muted === 'boolean' &&
-      typeof message.bassBoostEnabled === 'boolean' &&
-      Number.isInteger(message.bassBoostDb) && message.bassBoostDb >= 0 && message.bassBoostDb <= 12 &&
-      typeof message.voiceBoostEnabled === 'boolean' &&
-      Number.isInteger(message.voiceBoostDb) && message.voiceBoostDb >= 0 && message.voiceBoostDb <= 8 &&
-      typeof message.peakLimiterEnabled === 'boolean' &&
-      typeof message.nightModeEnabled === 'boolean' &&
-      (message.bassManualOverride === undefined || typeof message.bassManualOverride === 'boolean') &&
-      (message.voiceManualOverride === undefined || typeof message.voiceManualOverride === 'boolean');
+    const validSettings = VCPValidation.isValidAudioSettingsMessage(message);
     if (!validSettings) {
       sendResponse({ success: false, error: 'Invalid audio settings.' });
       return false;
@@ -1308,9 +169,23 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   }
 
   if (message.type === 'STOP_CAPTURE') {
-    stopCapture();
-    sendResponse({ success: true });
-    return false;
+    // Do not acknowledge STOP until tracks are stopped and AudioContext.close() settles.
+    let cleanupPromise;
+    try {
+      cleanupPromise = stopCapture();
+    } catch (error) {
+      console.warn('Could not begin stopping audio capture:', errorMessage(error));
+      sendResponse({ success: false, error: errorMessage(error) });
+      return false;
+    }
+    Promise.resolve(cleanupPromise).then(
+      () => sendResponse({ success: true }),
+      (error) => {
+        console.warn('Could not finish stopping audio capture:', errorMessage(error));
+        sendResponse({ success: false, error: errorMessage(error) });
+      }
+    );
+    return true;
   }
 
   if (message.type === 'AUTO_GENRE_SETTINGS') {
@@ -1432,6 +307,8 @@ function stopCapture() {
   audioContext = null;
   if (contextToClose && contextToClose.state !== 'closed' && typeof contextToClose.close === 'function') {
     try {
+      // Keep this promise until this exact close operation settles. A second stopCapture()
+      // sees audioContext === null and must return the existing promise, not replace it.
       audioContextCleanupPromise = Promise.resolve(contextToClose.close()).catch((error) => {
         console.warn('Could not close audio context cleanly:', errorMessage(error));
       });
@@ -1440,10 +317,8 @@ function stopCapture() {
       // RU: Синхронная ошибка close записывается в журнал; отсоединённые узлы и остановленные треки всё равно очищены.
       // UK: Синхронну помилку close записуємо в журнал; від'єднані вузли й зупинені треки все одно очищені.
       console.warn('Could not close audio context cleanly:', errorMessage(error));
-      audioContextCleanupPromise = Promise.resolve();
+      // Keep the existing cleanup promise: it may belong to an earlier close still in flight.
     }
-  } else {
-    audioContextCleanupPromise = Promise.resolve();
   }
   currentTabId = null;
   currentSourceTitle = '';
@@ -1459,20 +334,20 @@ function stopCapture() {
   autoGenreCandidateStreak = 0;
   publishProtectionStatus(true);
   publishAutoGenreStatus(true);
+  return audioContextCleanupPromise;
 }
 
 // EN: Consume the single-use tab stream ID immediately, build one audible graph plus a silent source-analysis tap.
 // RU: Сразу использует одноразовый stream ID, создаёт один слышимый аудиограф и отдельную беззвучную ветку анализа.
 // UK: Одразу використовує одноразовий stream ID, створює один чутний аудіограф і окрему беззвучну гілку аналізу.
 async function startCapture(streamId, tabId, sourceTitle = '', enableAutoGenre = false, sourceTrackId = '', bassManualOverride = false, voiceManualOverride = false) {
-  stopCapture();
+  await stopCapture();
   currentSourceTitle = typeof sourceTitle === 'string' ? sourceTitle.slice(0, 500) : '';
   currentSourceTrackId = typeof sourceTrackId === 'string' ? sourceTrackId.slice(0, 280) : '';
   currentAutoGenreProfile = null;
   autoGenreEnabled = enableAutoGenre === true;
   autoGenreBassManualOverride = bassManualOverride === true;
   autoGenreVoiceManualOverride = voiceManualOverride === true;
-  await audioContextCleanupPromise;
 
   if (typeof streamId !== 'string' || streamId.length === 0) {
     const error = new Error('Не получен streamId. Запрос захвата не был адресован offscreen-документу правильно.');
@@ -1499,7 +374,9 @@ async function startCapture(streamId, tabId, sourceTitle = '', enableAutoGenre =
     // release the graph and timers even when the service worker has restarted.
     for (const track of stream.getTracks()) {
       track.addEventListener?.('ended', () => {
-        if (currentStream === stream) stopCapture();
+        if (currentStream === stream) {
+          stopCapture().catch((error) => console.debug('Cleanup after audio track end failed:', errorMessage(error)));
+        }
       }, { once: true });
     }
 
@@ -1608,6 +485,8 @@ async function startCapture(streamId, tabId, sourceTitle = '', enableAutoGenre =
     bassBoostFilter.connect(voiceBodyFilter);
     voiceBodyFilter.connect(voicePresenceFilter);
     voicePresenceFilter.connect(eqHeadroomGain);
+    // The programme compressor stays connected in every mode. Night Mode changes this
+    // compressor's dynamics; disabling the separate peak limiter below does not bypass it.
     // Compress the EQ-shaped source before master volume so the volume slider does not
     // change the compressor's behaviour. The master gain remains before the final limiter.
     eqHeadroomGain.connect(compressor);
@@ -1632,7 +511,7 @@ async function startCapture(streamId, tabId, sourceTitle = '', enableAutoGenre =
     });
     return { success: true, tabId: currentTabId };
   } catch (error) {
-    stopCapture();
+    await stopCapture();
     const detail = errorMessage(error);
     console.error('Offscreen capture failed:', detail, error);
     return {
@@ -1704,9 +583,9 @@ function createSafetyCeilingCurve(sampleCount = 32768) {
   return curve;
 }
 
-// EN: Routes the analyser through compressor + soft ceiling while protection is on; disabling the limiter deliberately bypasses both.
-// RU: При включённой защите направляет сигнал через компрессор и мягкий потолок; при выключении лимитера оба узла обходятся намеренно.
-// UK: Коли захист увімкнено, спрямовує сигнал через компресор і м'яку стелю; вимкнення лімітера навмисно обходить обидва вузли.
+// EN: Routes the optional final peak limiter + safety ceiling. The programme compressor used by Night Mode remains connected upstream.
+// RU: Управляет отдельным финальным ограничителем пиков и мягким потолком. Компрессор основного тракта, используемый ночным режимом, остаётся подключённым выше по цепи.
+// UK: Керує окремим фінальним обмежувачем піків і м'якою стелею. Компресор основного тракту, який використовує нічний режим, залишається підключеним вище за ланцюгом.
 function applyLimiterRouting() {
   if (!audioContext || !analyserNode || !limiter) return;
   // Disconnect previous output edges before reconnecting to prevent accidental parallel paths.
@@ -1856,9 +735,9 @@ function applyAudioSettings() {
   }
 }
 
-// EN: Persists genre-analysis mode and resets individual EQ overrides to AUTO.
-// RU: Сохраняет режим определения жанра и возвращает индивидуальные регуляторы EQ в AUTO.
-// UK: Зберігає режим визначення жанру та повертає індивідуальні регулятори EQ в AUTO.
+// EN: Persists global genre analysis without changing independent Bass/Voice AUTO/MANUAL choices.
+// RU: Сохраняет общий режим определения жанра, не меняя независимые режимы Bass/Voice AUTO/РУЧНОЙ.
+// UK: Зберігає загальний режим визначення жанру, не змінюючи незалежні режими Bass/Voice AUTO/РУЧНИЙ.
 function setAutoGenreEnabled(enabled) {
   const next = enabled === true;
   if (autoGenreEnabled === next) {
@@ -1868,9 +747,8 @@ function setAutoGenreEnabled(enabled) {
     return;
   }
   autoGenreEnabled = next;
-  // A deliberate global AUTO-enable/disable change resets per-effect mode to AUTO.
-  autoGenreBassManualOverride = false;
-  autoGenreVoiceManualOverride = false;
+  // Global genre detection is independent from the per-effect AUTO/MANUAL choices.
+  // Keep the user's Bass/Voice mode selections when detection is paused or resumed.
   autoGenreSamples = [];
   autoGenreLastCandidate = null;
   autoGenreCandidateStreak = 0;
@@ -1964,6 +842,8 @@ function normalizeGenreText(value) {
 // RU: Сопоставляет нормализованные слова/фразы и выбирает самый конкретный поджанр; неоднозначные названия передаются анализу звука.
 // UK: Зіставляє нормалізовані слова/фрази й обирає найконкретніший піджанр; неоднозначні назви передаються аналізу звуку.
 function classifyGenreFromTitle(title) {
+  // When the optional shared catalogue is unavailable, skip classification cheaply.
+  if (!AUTO_GENRE_MATCHERS.length) return null;
   const rawTitle = String(title || '');
   const normalized = normalizeGenreText(rawTitle);
   if (!normalized) return null;
@@ -2127,8 +1007,10 @@ function buildAdaptiveGenreProfile(genre) {
 // RU: Преобразует устойчиво определённый жанр в профиль EQ и поправки громкости.
 // UK: Перетворює стабільно визначений жанр на профіль EQ і поправки гучності.
 function getSelectedAutoGenreProfile() {
-  if (!currentAutoGenre) return null;
-  return currentAutoGenreProfile || AUTO_GENRE_PROFILES[currentAutoGenre] || null;
+  if (typeof currentAutoGenre !== 'string' ||
+      !Object.prototype.hasOwnProperty.call(AUTO_GENRE_PROFILES, currentAutoGenre)) return null;
+  const profile = currentAutoGenreProfile || AUTO_GENRE_PROFILES[currentAutoGenre];
+  return profile && typeof profile === 'object' ? profile : null;
 }
 
 // EN: Applies the accepted genre profile and publishes its effective values.
@@ -2193,16 +1075,18 @@ function runAutoGenreAnalysis() {
 // UK: Передає статус фоновому процесу; саме він зберігає стан, оскільки storage може бути недоступним у цьому контексті.
 function publishAutoGenreStatus(force = false) {
   const active = Boolean(currentStream && analyserNode);
-  const state = !autoGenreEnabled ? 'disabled' : (!active ? 'waiting-capture' : (currentAutoGenre ? 'detected' : 'detecting'));
-  const selectedProfile = getSelectedAutoGenreProfile();
+  const genreAvailable = typeof currentAutoGenre === 'string' &&
+    Object.prototype.hasOwnProperty.call(AUTO_GENRE_PROFILES, currentAutoGenre);
+  const state = !autoGenreEnabled ? 'disabled' : (!active ? 'waiting-capture' : (genreAvailable ? 'detected' : 'detecting'));
+  const selectedProfile = genreAvailable ? getSelectedAutoGenreProfile() : null;
   const status = {
     type: 'AUTO_GENRE_STATUS',
     target: 'popup',
     enabled: autoGenreEnabled,
     active,
-    genre: currentAutoGenre,
-    confidence: currentAutoGenreConfidence,
-    source: currentAutoGenreSource,
+    genre: genreAvailable ? currentAutoGenre : null,
+    confidence: genreAvailable ? currentAutoGenreConfidence : 0,
+    source: genreAvailable ? currentAutoGenreSource : null,
     trackId: currentSourceTrackId,
     trackTitle: currentSourceTitle,
     // Report the user's independent power toggles; report adaptive or manual dB
