@@ -18,19 +18,23 @@ Voice Boost is intended to improve speech clarity. The documented focus ranges a
 
 AUTO and MANUAL mode controls are available. In AUTO mode, an active automatic genre profile can determine the effective value; MANUAL mode lets the user keep a chosen value.
 
+## Independent AUTO/MANUAL modes
+
+Bass Boost and Voice Boost have independent AUTO/MANUAL preferences. AUTO allows the active genre profile to supply that effect's value during capture; MANUAL retains the user's selected value. Turning global genre detection off does not force either effect back to AUTO. Hiding an AUTO/MANUAL value readout does not change the mode or disable processing.
+
 ## Per-site audio profiles
 
 The extension keeps separate saved audio profiles for supported YouTube and Spotify Web Player pages. A profile can store its own enabled state, volume, Bass Boost, Voice Boost, Peak Limiter, Night Mode, and selected audio preset.
 
 The recommended balanced setup temporarily disables the YouTube and Spotify profiles without deleting their saved values. Re-enable a profile when you want its stored settings applied.
 
-## Peak Limiter
+## Peak Limiter and clipping warnings
 
-The Peak Limiter is the final peak/safety-ceiling stage. The interface recommends leaving it enabled to soften sharp peaks. It is separate from Night Mode.
+The Peak Limiter is the optional final peak/safety-ceiling stage. The interface recommends leaving it enabled to soften sharp peaks. Clipping monitoring can show a visual warning. A separate limiter-off warning can alert when the limiter is disabled and current gain/clipping conditions warrant attention.
 
 ## Night Mode
 
-Night Mode changes audio dynamics for quieter listening, aiming to soften louder sounds and make quieter dialogue easier to hear. In the v4.8.30+ signal path, the programme compressor remains connected for Night Mode even when the separate final Peak Limiter / Safety Ceiling stage is bypassed.
+Night Mode changes audio dynamics for quieter listening, aiming to soften louder sounds and make quieter dialogue easier to hear. In the v4.8.31 signal path, the programme compressor remains connected for Night Mode even when the separate final Peak Limiter / Safety Ceiling stage is bypassed.
 
 ## Automatic genre mode and manual overrides
 
