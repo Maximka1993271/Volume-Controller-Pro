@@ -50,7 +50,7 @@
             <path d="m4 4 16 16" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
           </svg>
         </button>
-        <button id="muteButton" class="icon-btn mute-button" type="button" title="Отключить звук" aria-label="Отключить звук" aria-pressed="false">
+        <button id="muteButton" class="icon-btn mute-button" type="button" title="Отключить звук" aria-label="Отключить звук" aria-pressed="false" data-i18n-title="muteAction" data-i18n-aria-label="muteAction">
           <svg viewBox="0 0 24 24" width="20" height="20" fill="none" aria-hidden="true">
             <path d="M3 10v4a1 1 0 0 0 1 1h3l4 4V5L7 9H4a1 1 0 0 0-1 1z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
             <path class="mute-waves" d="M16 8a5 5 0 0 1 0 8M18.8 5.5a8.5 8.5 0 0 1 0 13" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
@@ -108,7 +108,7 @@
         <div id="gtaPaletteContent" class="gta-palette-content">
           <div id="gtaPaletteGallery" class="gta-palette-gallery" role="radiogroup" aria-label="Цветовая палитра GTA VI" data-i18n-aria-label="gtaPaletteLabel"></div>
           <div class="gta-palette-preview-wrap">
-            <div id="gtaPalettePreview" class="gta-palette-preview" role="img" aria-label="Предпросмотр цветовой палитры"></div>
+            <div id="gtaPalettePreview" class="gta-palette-preview" role="img" aria-label="Предпросмотр цветовой палитры" data-i18n-aria-label="gtaPalettePreview"></div>
             <span id="gtaPalettePreviewName" class="gta-palette-preview-name" data-i18n="gtaPaletteClassic">Классическая</span>
           </div>
         </div>
@@ -126,7 +126,7 @@
       <div class="settings-row settings-animation-row">
         <div class="settings-option-copy">
           <span class="settings-label" data-i18n="showScrollbarLabel">Показывать полосу прокрутки</span>
-          <span class="settings-help" data-i18n="showScrollbarDescription">Тонкая полоса прокрутки в цветах выбранной палитры. При скрытии прокрутка остаётся доступной.</span>
+          <span class="settings-help" data-i18n="showScrollbarDescription">Тонкая полоса прокрутки в цветах выбранной палитры GTA VI. При скрытии прокрутка колёсиком и жестами остаётся доступной.</span>
         </div>
         <label class="toggle settings-rgb-toggle" title="Показывать полосу прокрутки" data-i18n-title="showScrollbarLabel">
           <input type="checkbox" id="showScrollbarToggle" checked data-i18n-aria-label="showScrollbarLabel">
@@ -135,7 +135,7 @@
       </div></section><section class="settings-category-panel" id="settingsCategoryAudio" role="region" aria-labelledby="settingsTabAudio" data-settings-category-panel="audio" hidden><section class="audio-effects-settings-section" aria-labelledby="audioEffectsSettingsHeading">
         <div class="settings-subsection-heading">
           <h3 id="audioEffectsSettingsHeading" data-i18n="audioEffectsSettingsTitle">Управление аудиоэффектами</h3>
-          <p data-i18n="audioEffectsSettingsDescription">Эти переключатели синхронизированы с кнопками на главном экране</p>
+          <p data-i18n="audioEffectsSettingsDescription">Переключатели эффектов управляют звуком; настройки AUTO · dB отдельно управляют отображением строк в карточках.</p>
         </div>
         <div class="settings-row settings-animation-row">
           <div class="settings-option-copy">
@@ -150,7 +150,7 @@
         <div class="settings-row settings-animation-row">
           <div class="settings-option-copy">
             <span class="settings-label" data-i18n="voiceEffectEnabledLabel">Включить Voice Boost</span>
-            <span class="settings-help" data-i18n="voiceEffectEnabledDescription">Включает или выключает усиление голоса, не сбрасывая значение</span>
+            <span class="settings-help" data-i18n="voiceEffectEnabledDescription">Включает или выключает усиление голоса, не сбрасывая сохранённый уровень. Переключатель синхронизирован с Voice Boost на главном экране.</span>
           </div>
           <label class="toggle settings-rgb-toggle" title="Включить Voice Boost" data-i18n-title="voiceEffectEnabledLabel">
             <input type="checkbox" id="settingsVoiceBoostToggle" data-i18n-aria-label="voiceEffectEnabledLabel">
@@ -180,7 +180,7 @@
         <div class="settings-row settings-animation-row">
           <div class="settings-option-copy">
             <span class="settings-label" data-i18n="autoGenreLabel">Автоопределение жанра</span>
-            <span class="settings-help" data-i18n="autoGenreDescription">Предположительно распознаёт Hip-Hop, Wave и Phonk по названию и звучанию. Корректирует Bass/Voice только во время ручного захвата.</span>
+            <span class="settings-help" data-i18n="autoGenreDescription">Распознаёт широкий каталог жанров по названию видео или трека. Если жанр не указан, приблизительно подбирает звуковой профиль по спектру. Работает только при ручном захвате.</span>
           </div>
           <label class="toggle settings-rgb-toggle" title="Автоопределение жанра" data-i18n-title="autoGenreLabel">
             <input type="checkbox" id="autoGenreEnabledToggle" data-i18n-aria-label="autoGenreLabel">
@@ -211,12 +211,12 @@
             <span class="settings-label" data-i18n="serviceProfileBassEnabledLabel">Bass Boost</span>
             <label class="toggle settings-rgb-toggle" title="Bass Boost YouTube" data-i18n-title="serviceProfileBassEnabledLabel"><input type="checkbox" id="youtubeProfileBassEnabledToggle" checked data-i18n-aria-label="serviceProfileBassEnabledLabel"><span class="toggle-slider"></span></label>
           </div>
-          <label class="settings-row" for="youtubeProfileBassDbSlider"><span class="settings-label" data-i18n="serviceProfileBassDbLabel">Bass Boost · dB</span><span class="settings-range-control"><output id="youtubeProfileBassDbValue">4 dB</output><input type="range" id="youtubeProfileBassDbSlider" min="0" max="12" value="4" step="1" data-i18n-aria-label="serviceProfileBassDbLabel"></span></label>
+          <label class="settings-row" for="youtubeProfileBassDbSlider"><span class="settings-label" data-i18n="serviceProfileBassDbLabel">Интенсивность Bass Boost</span><span class="settings-range-control"><output id="youtubeProfileBassDbValue">4 dB</output><input type="range" id="youtubeProfileBassDbSlider" min="0" max="12" value="4" step="1" data-i18n-aria-label="serviceProfileBassDbLabel"></span></label>
           <div class="settings-row">
             <span class="settings-label" data-i18n="serviceProfileVoiceEnabledLabel">Voice Boost</span>
             <label class="toggle settings-rgb-toggle" title="Voice Boost YouTube" data-i18n-title="serviceProfileVoiceEnabledLabel"><input type="checkbox" id="youtubeProfileVoiceEnabledToggle" checked data-i18n-aria-label="serviceProfileVoiceEnabledLabel"><span class="toggle-slider"></span></label>
           </div>
-          <label class="settings-row" for="youtubeProfileVoiceDbSlider"><span class="settings-label" data-i18n="serviceProfileVoiceDbLabel">Voice Boost · dB</span><span class="settings-range-control"><output id="youtubeProfileVoiceDbValue">2 dB</output><input type="range" id="youtubeProfileVoiceDbSlider" min="0" max="8" value="2" step="1" data-i18n-aria-label="serviceProfileVoiceDbLabel"></span></label>
+          <label class="settings-row" for="youtubeProfileVoiceDbSlider"><span class="settings-label" data-i18n="serviceProfileVoiceDbLabel">Интенсивность Voice Boost</span><span class="settings-range-control"><output id="youtubeProfileVoiceDbValue">2 dB</output><input type="range" id="youtubeProfileVoiceDbSlider" min="0" max="8" value="2" step="1" data-i18n-aria-label="serviceProfileVoiceDbLabel"></span></label>
           <div class="settings-row"><span class="settings-label" data-i18n="peakLimiterLabel">Ограничитель пиков</span><label class="toggle settings-rgb-toggle" title="Ограничитель пиков YouTube" data-i18n-title="peakLimiterLabel"><input type="checkbox" id="youtubeProfileLimiterToggle" checked data-i18n-aria-label="peakLimiterLabel"><span class="toggle-slider"></span></label></div>
           <div class="settings-row"><span class="settings-label" data-i18n="nightModeLabel">Ночной режим звука</span><label class="toggle settings-rgb-toggle" title="Ночной режим YouTube" data-i18n-title="nightModeLabel"><input type="checkbox" id="youtubeProfileNightToggle" data-i18n-aria-label="nightModeLabel"><span class="toggle-slider"></span></label></div>
         </div>
@@ -239,12 +239,12 @@
             <span class="settings-label" data-i18n="serviceProfileBassEnabledLabel">Bass Boost</span>
             <label class="toggle settings-rgb-toggle" title="Bass Boost Spotify" data-i18n-title="serviceProfileBassEnabledLabel"><input type="checkbox" id="spotifyProfileBassEnabledToggle" checked data-i18n-aria-label="serviceProfileBassEnabledLabel"><span class="toggle-slider"></span></label>
           </div>
-          <label class="settings-row" for="spotifyProfileBassDbSlider"><span class="settings-label" data-i18n="serviceProfileBassDbLabel">Bass Boost · dB</span><span class="settings-range-control"><output id="spotifyProfileBassDbValue">4 dB</output><input type="range" id="spotifyProfileBassDbSlider" min="0" max="12" value="4" step="1" data-i18n-aria-label="serviceProfileBassDbLabel"></span></label>
+          <label class="settings-row" for="spotifyProfileBassDbSlider"><span class="settings-label" data-i18n="serviceProfileBassDbLabel">Интенсивность Bass Boost</span><span class="settings-range-control"><output id="spotifyProfileBassDbValue">4 dB</output><input type="range" id="spotifyProfileBassDbSlider" min="0" max="12" value="4" step="1" data-i18n-aria-label="serviceProfileBassDbLabel"></span></label>
           <div class="settings-row">
             <span class="settings-label" data-i18n="serviceProfileVoiceEnabledLabel">Voice Boost</span>
             <label class="toggle settings-rgb-toggle" title="Voice Boost Spotify" data-i18n-title="serviceProfileVoiceEnabledLabel"><input type="checkbox" id="spotifyProfileVoiceEnabledToggle" checked data-i18n-aria-label="serviceProfileVoiceEnabledLabel"><span class="toggle-slider"></span></label>
           </div>
-          <label class="settings-row" for="spotifyProfileVoiceDbSlider"><span class="settings-label" data-i18n="serviceProfileVoiceDbLabel">Voice Boost · dB</span><span class="settings-range-control"><output id="spotifyProfileVoiceDbValue">2 dB</output><input type="range" id="spotifyProfileVoiceDbSlider" min="0" max="8" value="2" step="1" data-i18n-aria-label="serviceProfileVoiceDbLabel"></span></label>
+          <label class="settings-row" for="spotifyProfileVoiceDbSlider"><span class="settings-label" data-i18n="serviceProfileVoiceDbLabel">Интенсивность Voice Boost</span><span class="settings-range-control"><output id="spotifyProfileVoiceDbValue">2 dB</output><input type="range" id="spotifyProfileVoiceDbSlider" min="0" max="8" value="2" step="1" data-i18n-aria-label="serviceProfileVoiceDbLabel"></span></label>
           <div class="settings-row"><span class="settings-label" data-i18n="peakLimiterLabel">Ограничитель пиков</span><label class="toggle settings-rgb-toggle" title="Ограничитель пиков Spotify" data-i18n-title="peakLimiterLabel"><input type="checkbox" id="spotifyProfileLimiterToggle" checked data-i18n-aria-label="peakLimiterLabel"><span class="toggle-slider"></span></label></div>
           <div class="settings-row"><span class="settings-label" data-i18n="nightModeLabel">Ночной режим звука</span><label class="toggle settings-rgb-toggle" title="Ночной режим Spotify" data-i18n-title="nightModeLabel"><input type="checkbox" id="spotifyProfileNightToggle" data-i18n-aria-label="nightModeLabel"><span class="toggle-slider"></span></label></div>
         </div>
@@ -256,7 +256,7 @@
         <div class="settings-row settings-animation-row">
           <div class="settings-option-copy">
             <span class="settings-label" data-i18n="showAllMessagesLabel">Показывать все сообщения расширения</span>
-            <span class="settings-help" data-i18n="showAllMessagesDescription">Главный переключатель: скрывает временные сообщения и все статусные карточки, включая захват, жанр, защиту звука и индикатор громкости на странице. Не влияет на обработку аудио. Включён по умолчанию.</span>
+            <span class="settings-help" data-i18n="showAllMessagesDescription">Главный переключатель: скрывает временные сообщения, статусные метки и все карточки, включая захват, жанр и защиту звука, а также индикатор громкости на странице. Не влияет на обработку аудио. Включён по умолчанию.</span>
           </div>
           <label class="toggle settings-rgb-toggle" title="Показывать все сообщения расширения" data-i18n-title="showAllMessagesLabel">
             <input type="checkbox" id="showAllMessagesToggle" checked data-i18n-aria-label="showAllMessagesLabel">
@@ -266,7 +266,7 @@
         <div class="settings-row settings-animation-row">
           <div class="settings-option-copy">
             <span class="settings-label" data-i18n="showCaptureStatusIndicatorLabel">Показывать карточку состояния захвата</span>
-            <span class="settings-help" data-i18n="showCaptureStatusIndicatorDescription">Показывает карточку состояния захвата, источника и ошибок. При отключении скрывается целиком, не влияя на работу аудио.</span>
+            <span class="settings-help" data-i18n="showCaptureStatusIndicatorDescription">Показывает состояние захвата, источник аудио и ошибки. Можно отключить отдельно от остальных сообщений.</span>
           </div>
           <label class="toggle settings-rgb-toggle" title="Показывать сообщения о состоянии расширения" data-i18n-title="showCaptureStatusIndicatorLabel">
             <input type="checkbox" id="showCaptureStatusIndicatorToggle" checked data-i18n-aria-label="showCaptureStatusIndicatorLabel">
@@ -276,7 +276,7 @@
         <div class="settings-row settings-animation-row">
           <div class="settings-option-copy">
             <span class="settings-label" data-i18n="showQuickSettingsLabel">Показывать быстрые настройки</span>
-            <span class="settings-help" data-i18n="showQuickSettingsDescription">Скрывает блок быстрых переключателей на главном экране, не меняя сами аудионастройки</span>
+            <span class="settings-help" data-i18n="showQuickSettingsDescription">Показывает или скрывает блок быстрых переключателей на главном экране. Состояния аудиофункций не меняются.</span>
           </div>
           <label class="toggle settings-rgb-toggle" title="Показывать быстрые настройки" data-i18n-title="showQuickSettingsLabel">
             <input type="checkbox" id="showQuickSettingsToggle" checked data-i18n-aria-label="showQuickSettingsLabel">
@@ -285,8 +285,8 @@
         </div>
         <div class="settings-row settings-animation-row">
           <div class="settings-option-copy">
-            <span class="settings-label" data-i18n="showBassBoostPanelLabel">Показывать Bass Boost на главном экране</span>
-            <span class="settings-help" data-i18n="showBassBoostPanelDescription">Скрытие блока не выключает сам аудиоэффект</span>
+            <span class="settings-label" data-i18n="showBassBoostPanelLabel">Показывать панель Bass Boost на главном экране</span>
+            <span class="settings-help" data-i18n="showBassBoostPanelDescription">Скрывает только блок управления; аудиоэффект и выбранное значение сохраняются.</span>
           </div>
           <label class="toggle settings-rgb-toggle" title="Показывать Bass Boost на главном экране" data-i18n-title="showBassBoostPanelLabel">
             <input type="checkbox" id="showBassBoostPanelToggle" checked data-i18n-aria-label="showBassBoostPanelLabel">
@@ -295,8 +295,8 @@
         </div>
         <div class="settings-row settings-animation-row">
           <div class="settings-option-copy">
-            <span class="settings-label" data-i18n="showVoiceBoostPanelLabel">Показывать Voice Boost на главном экране</span>
-            <span class="settings-help" data-i18n="showVoiceBoostPanelDescription">Скрытие блока не выключает сам аудиоэффект</span>
+            <span class="settings-label" data-i18n="showVoiceBoostPanelLabel">Показывать панель Voice Boost на главном экране</span>
+            <span class="settings-help" data-i18n="showVoiceBoostPanelDescription">Скрывает только блок управления; аудиоэффект и выбранное значение сохраняются.</span>
           </div>
           <label class="toggle settings-rgb-toggle" title="Показывать Voice Boost на главном экране" data-i18n-title="showVoiceBoostPanelLabel">
             <input type="checkbox" id="showVoiceBoostPanelToggle" checked data-i18n-aria-label="showVoiceBoostPanelLabel">
@@ -306,7 +306,7 @@
         <div class="settings-row settings-animation-row">
           <div class="settings-option-copy">
             <span class="settings-label" data-i18n="hideInactiveEffectsLabel">Скрывать выключенные аудиоэффекты</span>
-            <span class="settings-help" data-i18n="hideInactiveEffectsDescription">Скрывает карточки Bass Boost и Voice Boost, когда соответствующий эффект выключен. Быстрые переключатели остаются доступными.</span>
+            <span class="settings-help" data-i18n="hideInactiveEffectsDescription">Скрывает карточки Bass Boost и Voice Boost, когда соответствующий эффект выключен. Быстрые переключатели и настройки остаются доступными.</span>
           </div>
           <label class="toggle settings-rgb-toggle" title="Скрывать выключенные аудиоэффекты" data-i18n-title="hideInactiveEffectsLabel">
             <input type="checkbox" id="hideInactiveEffectsToggle" data-i18n-aria-label="hideInactiveEffectsLabel">
@@ -316,7 +316,7 @@
       </section></section><section class="settings-category-panel" id="settingsCategoryVisualizers" role="region" aria-labelledby="settingsTabVisualizers" data-settings-category-panel="visualizers" hidden><section class="visualizer-settings-section" aria-labelledby="visualizerSettingsHeading">
         <div class="settings-subsection-heading">
           <h3 id="visualizerSettingsHeading" data-i18n="visualizerSettingsTitle">Настройки визуализатора</h3>
-          <p data-i18n="visualizerSettingsDescription">Внешний вид спектра и нагрузка</p>
+          <p data-i18n="visualizerSettingsDescription">Стиль спектра, цвета и нагрузка</p>
         </div>
         <div class="settings-row settings-animation-row">
           <div class="settings-option-copy">
@@ -367,7 +367,7 @@
         <div class="settings-row settings-animation-row">
           <div class="settings-option-copy">
             <span class="settings-label" data-i18n="visualizerGlowLabel">Свечение спектра</span>
-            <span class="settings-help" data-i18n="visualizerGlowDescription">Мягкое неоновое свечение столбцов и линии</span>
+            <span class="settings-help" data-i18n="visualizerGlowDescription">Мягкое неоновое свечение спектральных элементов</span>
           </div>
           <label class="toggle settings-rgb-toggle" title="Свечение спектра" data-i18n-title="visualizerGlowLabel">
             <input type="checkbox" id="visualizerGlowToggle" checked data-i18n-aria-label="visualizerGlowLabel">
@@ -377,7 +377,7 @@
         <div class="settings-row settings-animation-row">
           <div class="settings-option-copy">
             <span class="settings-label" data-i18n="visualizerPeakHoldLabel">Удержание пиков</span>
-            <span class="settings-help" data-i18n="visualizerPeakHoldDescription">Короткие маркеры показывают недавний максимум частот</span>
+            <span class="settings-help" data-i18n="visualizerPeakHoldDescription">Маркеры показывают недавний максимум каждой частоты</span>
           </div>
           <label class="toggle settings-rgb-toggle" title="Удержание пиков" data-i18n-title="visualizerPeakHoldLabel">
             <input type="checkbox" id="visualizerPeakHoldToggle" checked data-i18n-aria-label="visualizerPeakHoldLabel">
@@ -387,7 +387,7 @@
         <div class="settings-row settings-range-row">
           <div class="settings-option-copy">
             <label class="settings-label" for="visualizerSensitivitySlider" data-i18n="visualizerSensitivityLabel">Чувствительность</label>
-            <span class="settings-help" data-i18n="visualizerSensitivityDescription">Уровень реакции на тихие звуки</span>
+            <span class="settings-help" data-i18n="visualizerSensitivityDescription">Реакция на тихие звуки</span>
           </div>
           <div class="settings-range-control">
             <output id="visualizerSensitivityValue" for="visualizerSensitivitySlider">100%</output>
@@ -407,7 +407,7 @@
           </span>
         </label>
         <label class="settings-row" for="spectrogramPaletteSelect">
-          <span class="settings-label" data-i18n="spectrogramPaletteLabel">Цветовая палитра</span>
+          <span class="settings-label" data-i18n="spectrogramPaletteLabel">Палитра спектрограммы</span>
           <span class="settings-control">
             <select id="spectrogramPaletteSelect" class="settings-select" data-i18n-aria-label="spectrogramPaletteLabel">
               <option value="gta" data-i18n="paletteGtaTheme">Тема GTA VI</option>
@@ -443,7 +443,7 @@
         <div class="settings-row settings-animation-row">
           <div class="settings-option-copy">
             <span class="settings-label" data-i18n="spectrogramSmoothingLabel">Сглаживание водопада</span>
-            <span class="settings-help" data-i18n="spectrogramSmoothingDescription">Плавнее переходы между кадрами по времени</span>
+            <span class="settings-help" data-i18n="spectrogramSmoothingDescription">Плавные переходы между соседними кадрами по времени</span>
           </div>
           <label class="toggle settings-rgb-toggle" title="Сглаживание водопада" data-i18n-title="spectrogramSmoothingLabel">
             <input type="checkbox" id="spectrogramSmoothingToggle" checked data-i18n-aria-label="spectrogramSmoothingLabel">
@@ -453,7 +453,7 @@
         <div class="settings-row settings-animation-row">
           <div class="settings-option-copy">
             <span class="settings-label" data-i18n="spectrogramGlowLabel">Свечение текущей линии</span>
-            <span class="settings-help" data-i18n="spectrogramGlowDescription">Подсвечивать нижнюю границу — текущий звук</span>
+            <span class="settings-help" data-i18n="spectrogramGlowDescription">Подсветить нижнюю границу с текущим звуком</span>
           </div>
           <label class="toggle settings-rgb-toggle" title="Свечение текущей линии" data-i18n-title="spectrogramGlowLabel">
             <input type="checkbox" id="spectrogramGlowToggle" checked data-i18n-aria-label="spectrogramGlowLabel">
@@ -463,7 +463,7 @@
         <div class="settings-row settings-animation-row">
           <div class="settings-option-copy">
             <span class="settings-label" data-i18n="visualizerAnimationLabel">Анимация визуализатора</span>
-            <span class="settings-help" data-i18n="visualizerAnimationDescription">Отключи для снижения нагрузки</span>
+            <span class="settings-help" data-i18n="visualizerAnimationDescription">Отключи, чтобы снизить нагрузку</span>
           </div>
           <label class="toggle settings-rgb-toggle" title="Анимация визуализатора" data-i18n-title="visualizerAnimationLabel">
             <input type="checkbox" id="visualizerAnimationToggle" checked data-i18n-aria-label="visualizerAnimationLabel">
@@ -478,7 +478,7 @@
         <div class="settings-row settings-animation-row">
           <div class="settings-option-copy">
             <span class="settings-label" data-i18n="energySavingToggleLabel">Включить энергосбережение</span>
-            <span class="settings-help" data-i18n="energySavingToggleDescription">По умолчанию выключено</span>
+            <span class="settings-help" data-i18n="energySavingToggleDescription">По умолчанию выключено; снижает частоту анализа и отрисовки</span>
           </div>
           <label class="toggle settings-rgb-toggle" title="Энергосбережение" data-i18n-title="energySavingToggleLabel">
             <input type="checkbox" id="energySavingToggle" data-i18n-aria-label="energySavingToggleLabel">
@@ -486,7 +486,7 @@
           </label>
         </div>
         <label class="settings-row" for="energySavingModeSelect">
-          <span class="settings-label" data-i18n="energySavingModeLabel">Режим</span>
+          <span class="settings-label" data-i18n="energySavingModeLabel">Режим энергосбережения</span>
           <span class="settings-control">
             <select id="energySavingModeSelect" class="settings-select" data-i18n-aria-label="energySavingModeLabel" disabled>
               <option value="balanced" data-i18n="energySavingModeBalanced">Сбалансированный</option>
@@ -513,7 +513,7 @@
         <div class="settings-row settings-animation-row">
           <div class="settings-option-copy">
             <span class="settings-label" data-i18n="showClippingWarningLabel">Показывать предупреждения защиты звука на главном экране</span>
-            <span class="settings-help" data-i18n="showClippingWarningDescription">Скрывает все сообщения защиты. Контроль пиков продолжает работать.</span>
+            <span class="settings-help" data-i18n="showClippingWarningDescription">Скрывает все сообщения защиты, включая «Ограничитель пиков выключен». Контроль пиков продолжает работать.</span>
           </div>
           <label class="toggle settings-rgb-toggle" title="Предупреждение о клиппинге" data-i18n-title="showClippingWarningLabel">
             <input type="checkbox" id="showClippingWarningToggle" checked data-i18n-aria-label="showClippingWarningLabel">
@@ -523,7 +523,7 @@
         <div class="settings-row settings-animation-row">
           <div class="settings-option-copy">
             <span class="settings-label" data-i18n="showLimiterOffWarningLabel">Показывать предупреждение, если ограничитель выключен</span>
-            <span class="settings-help" data-i18n="showLimiterOffWarningDescription">Скрывает только постоянное сообщение об отключённом лимитере. Предупреждения о реальном клиппинге и высоком уровне усиления остаются.</span>
+            <span class="settings-help" data-i18n="showLimiterOffWarningDescription">Скрывает только постоянное сообщение об отключённом лимитере. Предупреждения о реальном клиппинге и высоком усилении остаются.</span>
           </div>
           <label class="toggle settings-rgb-toggle" title="Предупреждение об отключённом лимитере" data-i18n-title="showLimiterOffWarningLabel">
             <input type="checkbox" id="showLimiterOffWarningToggle" data-i18n-aria-label="showLimiterOffWarningLabel">
@@ -533,7 +533,7 @@
         <div class="settings-row settings-animation-row">
           <div class="settings-option-copy">
             <span class="settings-label" data-i18n="nightModeLabel">Ночной режим звука</span>
-            <span class="settings-help" data-i18n="nightModeDescription">Мягче подавляет резкие пики и делает тихие диалоги заметнее</span>
+            <span class="settings-help" data-i18n="nightModeDescription">Мягче подавляет резкие пики и делает тихие диалоги заметнее. Результат зависит от исходной записи.</span>
           </div>
           <label class="toggle settings-rgb-toggle" title="Ночной режим звука" data-i18n-title="nightModeLabel">
             <input type="checkbox" id="nightModeToggle" data-i18n-aria-label="nightModeLabel">
@@ -546,7 +546,7 @@
           <p data-i18n="recommendedSettingsDescription">Безопасная громкость, умеренный EQ, защита пиков и плавные визуализаторы.</p>
         </div>
         <button type="button" id="applyRecommendedSettingsBtn" class="settings-file-btn recommended-settings-btn" data-i18n="recommendedSettingsButton">Применить рекомендуемые настройки</button>
-        <p class="settings-help" data-i18n="recommendedSettingsPreserveNote">Язык и оформление сохраняются. Профили YouTube и Spotify временно отключаются, но их значения не удаляются.</p>
+        <p class="settings-help" data-i18n="recommendedSettingsPreserveNote">Язык, светлая/тёмная тема и выбранная палитра сохраняются. Профили YouTube и Spotify временно отключаются, но их значения не удаляются.</p>
       </section>
 <section class="profile-presets-section" aria-labelledby="audioPresetsHeading">
         <div class="settings-subsection-heading">
@@ -556,7 +556,7 @@
         <div class="profile-presets" role="group" aria-label="Аудиопрофили" data-i18n-aria-label="audioPresetsTitle">
           <button type="button" class="profile-preset active" data-profile="default" aria-pressed="true" title="По умолчанию" data-i18n-title="presetDefault">
             <span class="profile-preset-icon" aria-hidden="true">◉</span>
-            <span class="profile-preset-copy"><strong data-i18n="presetDefault">По умолчанию</strong><small data-i18n="presetDefaultHint">Стандартный звук без смены профиля</small></span>
+            <span class="profile-preset-copy"><strong data-i18n="presetDefault">По умолчанию</strong><small data-i18n="presetDefaultHint">Рекомендуемый сбалансированный звук</small></span>
           </button>
           <button type="button" class="profile-preset" data-profile="podcasts" aria-pressed="false" title="Подкасты" data-i18n-title="presetPodcasts">
             <span class="profile-preset-icon" aria-hidden="true">🎙</span>
@@ -580,7 +580,7 @@
           </button>
           <button type="button" class="profile-preset" data-profile="movies" aria-pressed="false" title="Фильмы" data-i18n-title="presetMovies">
             <span class="profile-preset-icon" aria-hidden="true">▣</span>
-            <span class="profile-preset-copy"><strong data-i18n="presetMovies">Фильмы</strong><small data-i18n="presetMoviesHint">Объёмный эффект</small></span>
+            <span class="profile-preset-copy"><strong data-i18n="presetMovies">Фильмы</strong><small data-i18n="presetMoviesHint">Глубокий звук и диалоги</small></span>
           </button>
           <button type="button" class="profile-preset" data-profile="games" aria-pressed="false" title="Игры" data-i18n-title="presetGames">
             <span class="profile-preset-icon" aria-hidden="true">🎮</span>
@@ -596,7 +596,7 @@
           </button>
           <button type="button" class="profile-preset" data-profile="streams" aria-pressed="false" title="Стримы" data-i18n-title="presetStreams">
             <span class="profile-preset-icon" aria-hidden="true">◉</span>
-            <span class="profile-preset-copy"><strong data-i18n="presetStreams">Стримы</strong><small data-i18n="presetStreamsHint">Голос и игра</small></span>
+            <span class="profile-preset-copy"><strong data-i18n="presetStreams">Стримы</strong><small data-i18n="presetStreamsHint">Голос и игровой звук</small></span>
           </button>
         </div>
       </section>
@@ -642,7 +642,7 @@
         <small id="autoGenreTrackTitle" class="auto-genre-track-title" hidden></small>
         <small id="autoGenreProfileDetails" class="auto-genre-profile-details" hidden></small>
       </span>
-      <span id="autoGenreStatusBadge" class="auto-genre-status-badge" data-i18n="autoGenreStatusOff">АВТО</span>
+      <span id="autoGenreStatusBadge" class="auto-genre-status-badge" data-i18n="autoGenreStatusOff">ВЫКЛ</span>
     </section>
 
       </div>
@@ -679,7 +679,7 @@
           </span>
           <span class="quick-setting-copy">
             <strong data-i18n="nightModeLabel">Ночной режим звука</strong>
-            <small data-i18n="quickNightModeHint">Мягче громкие звуки</small>
+            <small data-i18n="quickNightModeHint">Смягчение громких звуков</small>
           </span>
           <label class="toggle quick-setting-toggle" title="Ночной режим звука" data-i18n-title="nightModeLabel">
             <input type="checkbox" id="quickNightModeToggle" data-i18n-aria-label="nightModeLabel">
@@ -703,17 +703,17 @@
         </div>
         <div class="quick-setting-card quick-setting-rgb">
           <span class="quick-setting-icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="19" height="19" fill="none"><path d="M12 3a9 9 0 1 0 0 18h1.2a2.1 2.1 0 0 0 1.6-3.5c-.6-.7-.1-1.7.8-1.7H17a4 4 0 0 0 4-4c0-4.9-4-8.8-9-8.8Z" stroke="currentColor" stroke-width="1.7"/><circle cx="7.5" cy="10" r="1" fill="currentColor"/><circle cx="11" cy="6.8" r="1" fill="currentColor"/><circle cx="15.5" cy="8.2" r="1" fill="currentColor"/></svg></span>
-          <span class="quick-setting-copy"><strong data-i18n="rgbGlow">RGB-подсветка</strong><small data-i18n="quickRgbGlowHint">Цветовые акценты ползунков</small></span>
+          <span class="quick-setting-copy"><strong data-i18n="rgbGlow">RGB-подсветка ползунков</strong><small data-i18n="quickRgbGlowHint">Цветовые акценты ползунков</small></span>
           <label class="toggle quick-setting-toggle" title="RGB-подсветка" data-i18n-title="rgbGlow"><input type="checkbox" id="quickRgbGlowToggle" checked data-i18n-aria-label="rgbGlow"><span class="toggle-slider"></span></label>
         </div>
         <div class="quick-setting-card quick-setting-youtube">
           <span class="quick-setting-icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="19" height="19" fill="none"><rect x="3" y="5" width="18" height="14" rx="4" stroke="currentColor" stroke-width="1.7"/><path d="m10 9 5 3-5 3V9Z" fill="currentColor"/></svg></span>
-          <span class="quick-setting-copy"><strong data-i18n="youtubeAudioProfileTitle">YouTube</strong><small data-i18n="quickYoutubeProfileHint">Отдельный профиль YouTube</small></span>
+          <span class="quick-setting-copy"><strong data-i18n="youtubeAudioProfileTitle">YouTube</strong><small data-i18n="quickYoutubeProfileHint">Отдельные настройки YouTube</small></span>
           <label class="toggle quick-setting-toggle" title="Профиль YouTube" data-i18n-title="youtubeAudioProfileTitle"><input type="checkbox" id="quickYoutubeProfileToggle" data-i18n-aria-label="youtubeAudioProfileTitle"><span class="toggle-slider"></span></label>
         </div>
         <div class="quick-setting-card quick-setting-spotify">
           <span class="quick-setting-icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="19" height="19" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.7"/><path d="M6.5 9.3c4.2-1.1 8.6-.6 11.2 1.2M7.3 12.3c3.3-.8 6.8-.3 9.2 1.2M8.1 15.1c2.5-.5 4.6-.1 6.5 1" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg></span>
-          <span class="quick-setting-copy"><strong data-i18n="spotifyAudioProfileTitle">Spotify</strong><small data-i18n="quickSpotifyProfileHint">Отдельный профиль Spotify</small></span>
+          <span class="quick-setting-copy"><strong data-i18n="spotifyAudioProfileTitle">Spotify</strong><small data-i18n="quickSpotifyProfileHint">Отдельные настройки Spotify</small></span>
           <label class="toggle quick-setting-toggle" title="Профиль Spotify" data-i18n-title="spotifyAudioProfileTitle"><input type="checkbox" id="quickSpotifyProfileToggle" data-i18n-aria-label="spotifyAudioProfileTitle"><span class="toggle-slider"></span></label>
         </div>
       </div>
@@ -803,7 +803,7 @@
       <div class="spectrogram-header">
         <div class="spectrogram-copy">
           <div class="spectrogram-title" data-i18n="spectrogramTitle">Спектрограмма</div>
-          <div class="spectrogram-subtitle" data-i18n="spectrogramSubtitle">История частот во времени</div>
+          <div class="spectrogram-subtitle" data-i18n="spectrogramSubtitle">История частот во времени · {{seconds}} с</div>
         </div>
       </div>
       <div class="spectrogram-stage" id="spectrogramStage">
@@ -834,7 +834,7 @@
       </div>
       <div class="bass-slider-header">
         <span data-i18n="intensity">Интенсивность</span>
-        <span class="bass-value-wrap"><strong id="bassBoostValue">+4 dB</strong><button id="bassBoostAutoBadge" class="bass-auto-badge" type="button" hidden data-i18n="bassAutoBadge" aria-label="Автоматический режим Bass Boost">Авто</button></span>
+        <span class="bass-value-wrap"><strong id="bassBoostValue">+4 dB</strong><button id="bassBoostAutoBadge" class="bass-auto-badge" type="button" hidden data-i18n="bassAutoBadge" aria-label="Автоматический режим Bass Boost" data-i18n-aria-label="manualModeSwitchTitle">Авто</button></span>
       </div>
       <input type="range" id="bassBoostSlider" min="0" max="12" value="4" step="1" aria-label="Интенсивность Bass Boost в децибелах" data-i18n-aria-label="bassSliderLabel">
       <div class="bass-scale">
@@ -842,7 +842,7 @@
         <span>+6 dB</span>
         <span>+12 dB</span>
       </div>
-      <div class="bass-note" data-i18n="bassNote">Рекомендуемый уровень: +4–6 dB. Высокие значения могут давать гул на небольших динамиках.</div>
+      <div class="bass-note" data-i18n="bassNote">Сбалансированный уровень: +3–5 dB. Слишком сильный бас может давать гул на небольших динамиках.</div>
     </section>
 
     <section class="voice-panel" aria-label="Настройки Voice Boost" data-i18n-aria-label="voiceSettings">
@@ -858,7 +858,7 @@
       </div>
       <div class="bass-slider-header">
         <span data-i18n="voiceClarity">Чёткость голоса</span>
-        <span class="bass-value-wrap"><strong id="voiceBoostValue">+2 dB</strong><button id="voiceBoostAutoBadge" class="bass-auto-badge" type="button" hidden data-i18n="bassAutoBadge" aria-label="Автоматический режим Voice Boost">Авто</button></span>
+        <span class="bass-value-wrap"><strong id="voiceBoostValue">+2 dB</strong><button id="voiceBoostAutoBadge" class="bass-auto-badge" type="button" hidden data-i18n="bassAutoBadge" aria-label="Автоматический режим Voice Boost" data-i18n-aria-label="manualModeSwitchTitle">Авто</button></span>
       </div>
       <input type="range" id="voiceBoostSlider" min="0" max="8" value="2" step="1" aria-label="Интенсивность Voice Boost в децибелах" data-i18n-aria-label="voiceSliderLabel">
       <div class="bass-scale">
@@ -866,7 +866,7 @@
         <span>+3 dB</span>
         <span>+8 dB</span>
       </div>
-      <div class="bass-note" data-i18n="voiceNote">Рекомендуется +2–4 dB для речи и диалогов. Сильное усиление может сделать голос резким.</div>
+      <div class="bass-note" data-i18n="voiceNote">Сбалансированный уровень: +1–3 dB для речи и диалогов. Сильное усиление может сделать голос резким.</div>
     </section>
 
         </section>
