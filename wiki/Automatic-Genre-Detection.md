@@ -31,6 +31,10 @@ Audio analysis chooses broad EQ families rather than trying to infer a precise s
 
 The classifier requires multiple non-silent measurements. The documented implementation uses at least six measurements, applies a low-signal gate, and waits for three consecutive candidate matches with confidence of at least 0.60 before switching.
 
+## Status reliability in v4.8.31
+
+Genre status persistence is serialized. A delayed write for an earlier track cannot overwrite the status of a newer track, and failed status writes can be retried.
+
 ## Accuracy limits
 
 - Title matching can only infer from words present in the title; it is not provider-supplied genre metadata.

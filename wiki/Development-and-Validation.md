@@ -33,7 +33,7 @@ Run the production smoke suite:
 node tests/smoke.js
 ```
 
-The v4.8.31 package reports 134 smoke checks. The repository's GitHub Actions workflow also validates the manifest, locales, HTML resources, popup element references, and selected static safety invariants.
+The supplied v4.8.31 package completed **134 smoke checks** using `node tests/smoke.js`. The checks cover manifest/version alignment, locales, palette and genre data, backup compatibility, popup structure, audio/capture safeguards, acknowledgement handling, and selected signal-path behavior. The repository's GitHub Actions workflow also validates the manifest, locales, HTML resources, popup element references, and selected static safety invariants.
 
 ## Manual browser validation
 
@@ -43,7 +43,9 @@ Static tests do not replace runtime testing. The release process calls for insta
 - Switching and closing captured tabs.
 - YouTube and Spotify track changes.
 - Master volume and Bass/Voice Boost.
-- Peak Limiter and Night Mode.
+- Peak Limiter, clipping warnings, and Night Mode.
+- All spectrum styles and the spectrogram.
+- Theme, palette, Quick Settings, and appearance preferences.
 - Visualizers and spectrogram.
 - Settings export and import.
 
